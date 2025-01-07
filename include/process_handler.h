@@ -22,7 +22,7 @@ private:
         if (pid_ == 0)
         {
             setSleepDuration();
-            sendMessage(sleepDuration_);
+            sendCreationMessage(sleepDuration_);
             work();
         }
         else if (pid_ < 0)

@@ -35,9 +35,10 @@ public:
         std::cout << "DTOR ~Message queue with id " << msgid_ << " destroyed" << std::endl;
     }
 
-    void sendMessage(const std::string &text)
+    void sendMessage(const std::string &text, int msgType)
     {
         Message message;
+        message.msgType = msgType;
         std::snprintf(message.msgText, sizeof(message.msgText), "%s", text.c_str());
 
         if (msgsnd(msgid_, &message, sizeof(message.msgText), 0) == -1)

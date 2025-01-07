@@ -7,13 +7,13 @@ public:
 
 protected:
     ProcessHelper() = default;
-    void sendMessage(int sleepDuration, pid_t pid = getpid())
+    void sendCreationMessage(int sleepDuration, pid_t pid = getpid())
     {
         std::string messageText = "Child " + std::to_string(pid) +
                                   " created. Sleep duration: " + std::to_string(sleepDuration) + " seconds";
         try
         {
-            messenger_.sendMessage(messageText);
+            messenger_.sendMessage(messageText, Message::CREATION_MSG);
         }
         catch (const std::runtime_error &e)
         {
