@@ -47,10 +47,10 @@ public:
         }
     }
 
-    std::string receiveMessage()
+    std::string receiveMessage(int msgType)
     {
         Message message;
-        if (msgrcv(msgid_, &message, sizeof(message.msgText), Message::MESSAGE_TYPE, 0) == -1)
+        if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, 0) == -1)
         {
             perror("msgrcv");
             throw std::runtime_error("Failed to receive message");

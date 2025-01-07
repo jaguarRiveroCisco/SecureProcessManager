@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         {
             auto handler = std::make_unique<ProcessHandler>();
             handler->start(&synchro);
-            std::string messageText = handler->receiveMessage();
+            std::string messageText = handler->creationMessage();
             std::cout << messageText << std::endl;
             ProcessHandler::handlers_.push_back(std::move(handler));
         }

@@ -3,7 +3,7 @@
 class ProcessHelper 
 {
 public:
-    std::string receiveMessage() { return messenger_.receiveMessage(); }
+    std::string creationMessage() { return messenger_.receiveMessage(Message::CREATION_MSG); }
 
 protected:
     ProcessHelper() = default;
