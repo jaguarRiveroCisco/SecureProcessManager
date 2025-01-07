@@ -13,18 +13,13 @@ To build the project, follow these steps:
 
 1. Ensure you have CMake installed on your system.
 2. Open a terminal and navigate to the project directory.
-3. Create a build directory:
+3. Configure:
    ```
-   mkdir build
-   cd build
-   ```
-4. Run CMake to configure the project:
-   ```
-   cmake ..
+   cmake -B build -S .
    ```
 5. Build the project:
    ```
-   make
+   cmake --build build --parallel 3
    ```
 
 ## Running the Program
@@ -32,7 +27,7 @@ To build the project, follow these steps:
 After building the project, you can run the executable generated in the `build` directory:
 
 ```
-./waitPidProc
+build/waitPidProc [numprocs]
 ```
-
+Defaults to 4 processes
 This will execute the program, and you will see the output indicating the roles of the child and parent processes along with the exit status of the child process.
