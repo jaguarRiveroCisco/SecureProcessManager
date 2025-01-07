@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
 
-add_executable(waitPidProc src/waitPidProc.cpp)
+add_executable(waitPidProc src/waitPidProc.cpp src/messenger.cpp)
