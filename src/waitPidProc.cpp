@@ -1,16 +1,19 @@
+#include <atomic>
+#include <chrono>
 #include <iostream>
-#include <algorithm>
-#include "process_handler.h"
-#include "process.h"
-#include "simul_process.h"
+#include <string>
 #include <thread>
+#include "process.h"
+#include "process_handler.h"
+#include "simul_process.h"
 
 std::atomic<bool> g_display = true;
+std::atomic<bool> g_running = true;
 
 void consoleReader()
 {
     std::string input;
-    while (g_display)
+    while (g_running)
     {
         std::getline(std::cin, input);
         if (!input.empty())
@@ -25,23 +28,29 @@ void consoleReader()
                 g_display = false;
                 std::cout << "Display progress turned off." << std::endl;
             }
+            else if (input == "exit")
+            {
+                g_running = false; // Set running to false to signal the main thread
+                std::cout << "Exiting program." << std::endl;
+            }
             else
             {
                 std::cout << "You entered: " << input << std::endl;
             }
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
 auto main(int argc, char *argv[]) -> int
 {
     int         numProcesses = 4;
-    std::string processType = "simul";
-    int         rndUpper = 10; // Default value for rndUpper
+    std::string processType  = "simul";
+    int         rndUpper     = 10; // Default value for rndUpper
 
     auto parseArguments = [&](int argc, char *argv[]) {
         int opt;
-        while ((opt = getopt(argc, argv, "n:t:r:h")) != -1)
+        while ((opt = getopt(argc, argv, "n:t:r:d:h")) != -1)
         {
             switch (opt)
             {
@@ -54,10 +63,14 @@ auto main(int argc, char *argv[]) -> int
                 case 'r':
                     rndUpper = std::atoi(optarg);
                     break;
+                case 'd':
+                    g_display = std::atoi(optarg) != 0;
+                    break;
                 case 'h':
                 default:
                     std::cerr << "Usage: " << argv[0]
-                              << " -n <number of processes> -t <process type> -r <random upper limit> -h -> help\n";
+                              << " -n <number of processes> -t <process type> -r <random upper limit> -d <display (0 "
+                                 "or 1)> -h -> help\n";
                     std::exit(EXIT_SUCCESS);
             }
         }
@@ -85,14 +98,16 @@ auto main(int argc, char *argv[]) -> int
     };
 
     std::thread readerThread(consoleReader);
-    readerThread.detach();
 
     parseArguments(argc, argv);
 
-    ProcessHandler::createHandlers(numProcesses, processType);
+    // Create process handlers
+    while (g_running)
+    {
+        ProcessHandler::createHandlers(numProcesses, processType);
+        ProcessHandler::waitForEvents();
+    }
 
-    // Main thread waits for events
-    ProcessHandler::waitForEvents();
-
+    readerThread.join(); // Ensure the reader thread is joined before exiting
     return 0;
 }
