@@ -2,6 +2,17 @@
 #include <iostream>
 #include <thread>
 #include "process_base.h"
+#include <chrono>
+
+
+ProcessBase::ProcessBase() : startTime_(std::chrono::high_resolution_clock::now()) {}
+
+ProcessBase::~ProcessBase()
+{
+    auto endTime  = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
+    std::cout << "Instance lifetime for process " << pid_ << ": " << duration << " milliseconds." << std::endl;
+}
 
 void ProcessBase::displayProcessStatus(int &status)
 {
