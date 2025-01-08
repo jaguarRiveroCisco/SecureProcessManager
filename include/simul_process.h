@@ -2,11 +2,10 @@
 #define SIMUL_PROCESS_H
 #include "process_helper.h"
 #include "process_interface.h"
-class SimulProcess : public ProcessHelper, public ProcessInterface
+class SimulProcess : public ProcessInterface
 {
     public:
         void work() override;
-        std::string receiveCreationMessage() override;
         virtual ~SimulProcess() = default;
 
     protected:

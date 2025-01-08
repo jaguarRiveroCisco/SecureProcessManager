@@ -16,3 +16,5 @@ void ProcessHelper::sendCreationMessage(int sleepDuration, pid_t pid)
         std::cerr << "Failed to send message: " << e.what() << std::endl;
     }
 }
+
+std::string ProcessHelper::receiveCreationMessage() { return messenger_.receiveMessage(Message::CREATION_MSG); }

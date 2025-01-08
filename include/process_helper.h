@@ -7,7 +7,7 @@ class ProcessHelper
 {
 public:
      virtual ~ProcessHelper() = default;
-    virtual std::string receiveCreationMessage() = 0;
+    virtual std::string receiveCreationMessage();
 
 protected:
     ProcessHelper() = default;
