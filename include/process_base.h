@@ -1,5 +1,6 @@
 #ifndef PROCESS_BASE_H
 #define PROCESS_BASE_H
+#include "synchro.h"
 
 class ProcessBase 
 {

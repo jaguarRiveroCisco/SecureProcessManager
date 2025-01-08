@@ -8,8 +8,7 @@
 #include "process_handler.h"
 
 
-int ProcessHandler::numProcesses_ = 4; // Default number of processes
-std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
+
 
 int main(int argc, char *argv[])
 {

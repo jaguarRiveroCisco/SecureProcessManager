@@ -1,7 +1,6 @@
 #include <csignal>
 #include <iostream>
 #include <thread>
-#include "synchro.h"
 #include "process_base.h"
 
 void ProcessBase::displayProcessStatus(int &status)

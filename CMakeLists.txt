@@ -12,4 +12,5 @@ src/messenger.cpp
 src/process_base.cpp
 src/process_helper.cpp
 src/simul_process.cpp
+src/process_handler.cpp
 )
