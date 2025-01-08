@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Process Management Program is a C++ application designed to handle and monitor multiple child processes. It leverages threading, inter-process communication (IPC), and synchronization to efficiently manage process creation and lifecycle events.
+The Process Management Program is a C++ application designed to handle and monitor multiple child processes. It utilizes threading, inter-process communication (IPC), and synchronization to efficiently manage process creation and lifecycle events.
 
 ## Key Components
 
@@ -12,6 +12,31 @@ The Process Management Program is a C++ application designed to handle and monit
 - **SimulProcess**: Simulates workload for child processes with randomized sleep durations.
 - **ProcessHelper**: Offers utilities for messaging and other process management tasks.
 - **ProcessHandler**: Integrates the functionalities of all components to create, monitor, and manage child processes.
+
+## Intended Behavior
+
+### Intermediate and Leaf Processes
+
+- **Leaf Process**: A child process that performs specific tasks and can be terminated independently.
+- **Intermediate Process**: A parent or managing process that oversees leaf processes.
+
+### Desired Behaviors
+
+1. **Intermediate Process Dies if Leaf Dies**:
+   - If a leaf process (child) dies, the intermediate process (parent) should recognize this and terminate itself or take appropriate action.
+
+2. **Kill Leaf Process Without Intermediate Dying**:
+   - It should be possible to terminate a leaf process without automatically causing the intermediate process to terminate.
+
+### Implementation Considerations
+
+- **Monitoring and Signaling**:
+  - The intermediate process should actively monitor the state of its leaf processes. This can be achieved through signals or other IPC mechanisms.
+  - Implement logic to distinguish between different processes and handle their specific termination rules.
+
+- **Handling Process Termination**:
+  - When a leaf process terminates, the intermediate process should detect this (using `waitpid` with appropriate flags) and decide whether to terminate itself based on the program's logic.
+  - To allow killing a leaf process without affecting the intermediate process, use signal handlers or flags to manage and control the process termination flow.
 
 ## Features
 
@@ -24,6 +49,12 @@ The Process Management Program is a C++ application designed to handle and monit
 
 - **`src/waitPidProc.cpp`**: Implements the main process creation and management logic.
 - **`CMakeLists.txt`**: Configuration file for CMake, specifying project settings and build instructions.
+- **`src/messenger.cpp`**: Implements the messaging functionality.
+- **`src/process_base.cpp`**: Contains base process functionalities.
+- **`src/process_helper.cpp`**: Provides helper functions for process management.
+- **`src/simul_process.cpp`**: Simulates process workloads.
+- **`src/process_handler.cpp`**: Handles the integration and management of processes.
+
 
 ## Building the Project
 

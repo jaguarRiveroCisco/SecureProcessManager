@@ -1,8 +1,9 @@
 #ifndef SYNCHRO_H
 #define SYNCHRO_H
 
-#include <mutex>
 #include <condition_variable>
+#include <iostream>
+#include <mutex>
 #include <queue>
 
 struct Synchro final

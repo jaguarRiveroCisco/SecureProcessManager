@@ -1,40 +1,19 @@
 #ifndef PROCESS_HANDLER_H
 #define PROCESS_HANDLER_H
-
+#include "process_base.h"
+#include "process_helper.h"
+#include "simul_process.h"
 class ProcessHandler final : protected ProcessBase, protected SimulProcess, public ProcessHelper 
 {
 public:
-    void start(Synchro *synchro)
-    {
-        synchro_ = synchro;
-        createChild();
-    }
+    void start(Synchro *synchro);
+    static void numProcesses(int numProcesses);
+    static int numProcesses();
     static std::vector<std::unique_ptr<ProcessHandler>> handlers_;
-    static void                                         numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
-    static int                                          numProcesses() { return numProcesses_; }
 
 private:
     static int numProcesses_;
-
-    void createChild()
-    {
-        pid_ = fork();
-        if (pid_ == 0)
-        {
-            setSleepDuration();
-            sendMessage(sleepDuration_);
-            work();
-        }
-        else if (pid_ < 0)
-        {
-            // Fork failed
-            perror("fork");
-        }
-        else
-        {
-            createCheckProcessThread();
-        }
-    }
+    void       createChild();
 };
 
 #endif // PROCESS_HANDLER_H

@@ -3,9 +3,9 @@
 
 struct Message 
 {
-    long      msgType = MESSAGE_TYPE;
+    long      msgType = CREATION_MSG;
     char msgText[100];
-    static const int MESSAGE_TYPE = 1; // Type for our messages
+    static const int CREATION_MSG = 1; // Type for our messages
 };
 
 #endif // MESSAGE_H

@@ -1,24 +1,5 @@
-#include <condition_variable>
-#include <cstdlib>
-#include <cstring>
 #include <iostream>
-#include <memory>
-#include <signal.h>
-#include <sys/types.h>
-#include <thread>
-#include <unistd.h>
-#include <utility>
-#include "messenger.h"
-#include "synchro.h"
-#include "process_base.h"
-#include "simul_process.h"
-#include "process_helper.h"
 #include "process_handler.h"
-
-
-Messenger ProcessHelper::messenger_;
-int ProcessHandler::numProcesses_ = 4; // Default number of processes
-std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
 
 int main(int argc, char *argv[])
 {
@@ -42,7 +23,7 @@ int main(int argc, char *argv[])
         {
             auto handler = std::make_unique<ProcessHandler>();
             handler->start(&synchro);
-            std::string messageText = handler->receiveMessage();
+            std::string messageText = handler->creationMessage();
             std::cout << messageText << std::endl;
             ProcessHandler::handlers_.push_back(std::move(handler));
         }
