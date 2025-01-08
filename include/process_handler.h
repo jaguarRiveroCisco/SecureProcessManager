@@ -6,7 +6,8 @@
 class ProcessHandler final : protected ProcessBase, protected SimulProcess, public ProcessHelper 
 {
 public:
-    void start(Synchro *synchro);
+    void init(Synchro *synchro);
+    void start();
     static void numProcesses(int numProcesses);
     static int numProcesses();
     static std::vector<std::unique_ptr<ProcessHandler>> handlers_;

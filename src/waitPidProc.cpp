@@ -1,7 +1,7 @@
 #include <iostream>
 #include "process_handler.h"
 
-int main(int argc, char *argv[])
+auto main(int argc, char *argv[]) -> int
 {
     if (argc == 2)
     {
@@ -22,9 +22,10 @@ int main(int argc, char *argv[])
         try 
         {
             auto handler = std::make_unique<ProcessHandler>();
-            handler->start(&synchro);
+            handler->init(&synchro);
             std::string messageText = handler->creationMessage();
             std::cout << messageText << std::endl;
+            handler->start();
             ProcessHandler::handlers_.push_back(std::move(handler));
         }
         catch (const std::exception &e)
