@@ -1,12 +1,18 @@
 #include <iostream>
 #include "process_handler.h"
+#include "process.h"
+#include "simul_process.h"
 
 auto main(int argc, char *argv[]) -> int
 {
-    if (argc == 2)
+    if (argc < 3)
     {
-        ProcessHandler::numProcesses(::atoi(argv[1]));
+        std::cerr << "Usage: " << argv[0] << " <num_processes> <process_type>\n";
+        std::cerr << "process_type: 'real' for Process, 'simul' for SimulProcess\n";
+        return 1;
     }
+
+    ProcessHandler::numProcesses(::atoi(argv[1]));
 
     if (ProcessHandler::numProcesses() <= 0)
     {
@@ -14,14 +20,29 @@ auto main(int argc, char *argv[]) -> int
         return 1;
     }
 
-    std::cout << "Creating " << ProcessHandler::numProcesses() << " child processes.\n";
+    std::string processType = argv[2];
+
+    std::cout << "Creating " << ProcessHandler::numProcesses() << " child processes of type " << processType << ".\n";
 
     for (int i = 0; i < ProcessHandler::numProcesses(); ++i)
     {
         try 
         {
             auto handler = std::make_unique<ProcessHandler>();
-            handler->init(ProcessHandler::synchro(), std::make_unique<Process>());
+            if (processType == "real")
+            {
+                handler->init(ProcessHandler::synchro(), std::make_unique<Process>());
+            }
+            else if (processType == "simul")
+            {
+                handler->init(ProcessHandler::synchro(), std::make_unique<SimulProcess>());
+            }
+            else
+            {
+                std::cerr << "Invalid process type: " << processType << ". Use 'real' or 'simul'.\n";
+                return 1;
+            }
+
             std::string messageText = handler->receiveCreationMessage();
             std::cout << messageText << std::endl;
             handler->start();
