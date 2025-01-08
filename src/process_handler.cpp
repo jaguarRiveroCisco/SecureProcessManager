@@ -93,6 +93,7 @@ void ProcessHandler::createHandlers(int numProcesses, const std::string &process
         }
     }
 }
+
 void ProcessHandler::waitForEvents()
 {
     std::atomic<int> processedEvents = 0;
@@ -107,7 +108,7 @@ void ProcessHandler::waitForEvents()
             pid_t pid = synchro()->getAndPopFront();
             if (pid != -1)
             {
-                std::cout << "Event processed for PID: " << pid << std::endl;
+                //std::cout << "Event processed for PID: " << pid << std::endl;
                 ++processedEvents;
 
                 // Find and remove the handler with the matching PID

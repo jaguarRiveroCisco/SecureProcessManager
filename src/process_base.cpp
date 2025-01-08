@@ -11,7 +11,7 @@ ProcessBase::~ProcessBase()
 {
     auto endTime  = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-    std::cout << "Instance lifetime for process " << pid_ << ": " << duration << " milliseconds." << std::endl;
+    std::cout << "Child process " << pid_ << " lifetime: " << duration << " milliseconds." << std::endl;
 }
 
 void ProcessBase::displayProcessStatus(int &status)
@@ -19,7 +19,7 @@ void ProcessBase::displayProcessStatus(int &status)
     // Child finished
     if (WIFEXITED(status))
     {
-        std::cout << "Child process " << pid_ << " exited normally with status " << WEXITSTATUS(status) << ".\n";
+        //std::cout << "Child process " << pid_ << " exited normally with status " << WEXITSTATUS(status) << ".\n";
     }
     else if (WIFSIGNALED(status))
     {
@@ -71,7 +71,6 @@ void ProcessBase::createCheckProcessThread()
 void ProcessBase::checkProcessState()
 {
     int status  = -1;
-    int counter = 0;
     while (true)
     {
         // Check if the process with PID = pid_ is running
@@ -82,10 +81,7 @@ void ProcessBase::checkProcessState()
         if (result == 0)
         {
             // Child still running
-            if (++counter % 500000 == 0)
-            {
-                std::cout << "checking pid: " << pid_ << std::endl;
-            }
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
         else if (result == pid_)
         {
