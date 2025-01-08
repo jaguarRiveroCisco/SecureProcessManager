@@ -2,7 +2,6 @@
 #include <ctime>
 #include <thread>
 #include <chrono>
-#include <iostream>
 #include <unistd.h>
 #include "synchro.h"
 #include "process_base.h"
