@@ -5,22 +5,36 @@
 
 auto main(int argc, char *argv[]) -> int
 {
-    if (argc < 3)
+    int         numProcesses = 4;
+    std::string processType = "simul";
+
+    auto parseArguments = [&](int argc, char *argv[]) 
     {
-        std::cerr << "Usage: " << argv[0] << " <num_processes> <process_type>\n";
-        std::cerr << "process_type: 'real' for Process, 'simul' for SimulProcess\n";
-        return 1;
-    }
+        if (argc >= 2)
+        {
+            numProcesses = ::atoi(argv[1]);
+        }
+        if (argc >= 3)
+        {
+            processType  = argv[2];
+        }
+        if (numProcesses <= 0)
+        {
+            std::cerr << "Number of processes must be greater than 0. Defaulting to 4.\n";
+            numProcesses = 4;
+        }
 
-    ProcessHandler::numProcesses(::atoi(argv[1]));
+        if (processType != "real" && processType != "simul")
+        {
+            std::cerr << "Invalid process type: " << processType << ". Defaulting to 'simul'.\n";
+            processType = "simul";
+        }
+    };
 
-    if (ProcessHandler::numProcesses() <= 0)
-    {
-        std::cerr << "Number of processes must be greater than 0.\n";
-        return 1;
-    }
+ 
+    parseArguments(argc, argv);
 
-    std::string processType = argv[2];
+    ProcessHandler::numProcesses(numProcesses);
 
     std::cout << "Creating " << ProcessHandler::numProcesses() << " child processes of type " << processType << ".\n";
 
@@ -36,11 +50,6 @@ auto main(int argc, char *argv[]) -> int
             else if (processType == "simul")
             {
                 handler->init(ProcessHandler::synchro(), std::make_unique<SimulProcess>());
-            }
-            else
-            {
-                std::cerr << "Invalid process type: " << processType << ". Use 'real' or 'simul'.\n";
-                return 1;
             }
 
             std::string messageText = handler->receiveCreationMessage();
