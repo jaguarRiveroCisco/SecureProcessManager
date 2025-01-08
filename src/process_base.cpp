@@ -1,9 +1,6 @@
 #include <csignal>
 #include <iostream>
-#include <sys/wait.h>
-#include <system_error>
 #include <thread>
-#include <unistd.h>
 #include "synchro.h"
 #include "process_base.h"
 
