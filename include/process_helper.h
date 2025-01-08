@@ -11,7 +11,7 @@ public:
 
 protected:
     ProcessHelper() = default;
-    void sendCreationMessage(int sleepDuration, pid_t pid = getpid());
+    void sendCreationMessage(int sleepDuration = 0, pid_t pid = getpid());
     static Messenger messenger_;
 
 };

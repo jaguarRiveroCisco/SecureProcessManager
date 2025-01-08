@@ -3,6 +3,7 @@
 #include "process_base.h"
 #include "process_helper.h"
 #include "simul_process.h"
+#include "process.h"
 class ProcessHandler final : protected ProcessBase
 {
 public:
