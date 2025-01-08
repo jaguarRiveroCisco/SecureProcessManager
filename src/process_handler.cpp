@@ -59,3 +59,5 @@ void ProcessHandler::createChild()
         //std::cout << "Parent process created child process with PID: " << pid_ << std::endl;
     }
 }
+
+pid_t ProcessHandler::getPid() const { return pid_; }

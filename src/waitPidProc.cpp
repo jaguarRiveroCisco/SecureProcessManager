@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "process_handler.h"
 #include "process.h"
 #include "simul_process.h"
@@ -31,7 +32,6 @@ auto main(int argc, char *argv[]) -> int
         }
     };
 
- 
     parseArguments(argc, argv);
 
     ProcessHandler::numProcesses(numProcesses);
@@ -78,6 +78,13 @@ auto main(int argc, char *argv[]) -> int
             {
                 std::cout << "Event processed for PID: " << pid << std::endl;
                 ++processedEvents;
+
+                // Find and remove the handler with the matching PID
+                auto it = std::remove_if(ProcessHandler::handlers_.begin(), ProcessHandler::handlers_.end(),
+                                         [pid](const std::unique_ptr<ProcessHandler>& handler) {
+                                             return handler->getPid() == pid;
+                                         });
+                ProcessHandler::handlers_.erase(it, ProcessHandler::handlers_.end());
             }
         }
     }

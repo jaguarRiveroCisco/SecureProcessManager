@@ -14,6 +14,7 @@ public:
     static std::vector<std::unique_ptr<ProcessHandler>> handlers_;
     static Synchro *synchro();
     std::string receiveCreationMessage();
+    pid_t getPid() const;
 
 private:
     static int numProcesses_;
