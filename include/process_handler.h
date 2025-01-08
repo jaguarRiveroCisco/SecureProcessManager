@@ -15,6 +15,7 @@ public:
     static Synchro *synchro();
     std::string receiveCreationMessage();
     pid_t getPid() const;
+    static void createHandlers(int numProcesses, const std::string &processType);
 
 private:
     static int numProcesses_;

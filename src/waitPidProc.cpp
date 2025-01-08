@@ -34,35 +34,8 @@ auto main(int argc, char *argv[]) -> int
 
     parseArguments(argc, argv);
 
-    ProcessHandler::numProcesses(numProcesses);
-
-    std::cout << "Creating " << ProcessHandler::numProcesses() << " child processes of type " << processType << ".\n";
-
-    for (int i = 0; i < ProcessHandler::numProcesses(); ++i)
-    {
-        try 
-        {
-            auto handler = std::make_unique<ProcessHandler>();
-            if (processType == "real")
-            {
-                handler->init(ProcessHandler::synchro(), std::make_unique<Process>());
-            }
-            else if (processType == "simul")
-            {
-                handler->init(ProcessHandler::synchro(), std::make_unique<SimulProcess>());
-            }
-
-            std::string messageText = handler->receiveCreationMessage();
-            std::cout << messageText << std::endl;
-            handler->start();
-            ProcessHandler::handlers_.push_back(std::move(handler));
-        }
-        catch (const std::exception &e)
-        {
-            std::cerr << "Error creating process handler: " << e.what() << std::endl;
-        }
-    }
-
+    ProcessHandler::createHandlers(numProcesses, processType);
+    
     // Main thread waits for events
     std::atomic<int> processedEvents = 0;
     while (processedEvents < ProcessHandler::numProcesses())
