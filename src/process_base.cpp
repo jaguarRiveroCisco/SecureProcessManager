@@ -4,6 +4,7 @@
 #include "process_base.h"
 #include <chrono>
 
+extern std::atomic<bool> g_display;
 
 ProcessBase::ProcessBase() : startTime_(std::chrono::high_resolution_clock::now()) {}
 
@@ -11,23 +12,23 @@ ProcessBase::~ProcessBase()
 {
     auto endTime  = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-    std::cout << "Child process " << pid_ << " lifetime: " << duration << " milliseconds." << std::endl;
+    if(g_display)
+        std::cout << "Child process " << pid_ << " lifetime: " << duration << " milliseconds." << std::endl;
 }
 
 void ProcessBase::displayProcessStatus(int &status)
 {
     // Child finished
-    if (WIFEXITED(status))
+    if (!WIFEXITED(status))
     {
-        //std::cout << "Child process " << pid_ << " exited normally with status " << WEXITSTATUS(status) << ".\n";
-    }
-    else if (WIFSIGNALED(status))
-    {
-        std::cout << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".\n";
-    }
-    else
-    {
-        std::cout << "Child process " << pid_ << " exited with status " << status << ".\n";
+        if (WIFSIGNALED(status))
+        {
+            std::cout << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".\n";
+        }
+        else
+        {
+            std::cerr << "Child process " << pid_ << " exited with status " << status << ".\n";
+        }
     }
 }
 

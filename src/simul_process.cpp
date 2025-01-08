@@ -7,11 +7,12 @@
 #include "process_base.h"
 #include "simul_process.h"
 
+int SimulProcess::rndUpper_ = 10;
+constexpr int baseSleepDuration = 5;
 void SimulProcess::setSleepDuration()
 {
     std::srand(std::time(nullptr) ^ getpid()); // Seed using time and PID to ensure different seeds
-    int x          = 10;
-    sleepDuration_ = std::rand() % x + 1; // Random sleep duration between 1 and x seconds
+    sleepDuration_ = std::rand() % rndUpper_ + baseSleepDuration ; // Random sleep duration between 1 and x seconds
 }
 
 void SimulProcess::work()

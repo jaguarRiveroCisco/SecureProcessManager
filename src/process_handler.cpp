@@ -5,6 +5,7 @@
 
 int ProcessHandler::numProcesses_ = 4; // Default number of processes
 std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
+extern std::atomic<bool> g_display;
 
 Synchro *ProcessHandler::synchro()
 {
@@ -83,7 +84,8 @@ void ProcessHandler::createHandlers(int numProcesses, const std::string &process
             }
 
             std::string messageText = handler->receiveCreationMessage();
-            std::cout << messageText << std::endl;
+            if (g_display)
+                std::cout << messageText << std::endl;
             handler->start();
             handlers_.push_back(std::move(handler));
         }
