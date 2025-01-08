@@ -22,6 +22,8 @@ void ProcessHandler::init(Synchro *synchro, std::unique_ptr<SimulProcess> proces
     process_ = std::move(process);
     createChild();
 }
+
+std::string ProcessHandler::receiveCreationMessage() { return process_->receiveCreationMessage(); }
 void ProcessHandler::start() { createCheckProcessThread(); }
 
 void ProcessHandler::numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
@@ -35,8 +37,7 @@ void ProcessHandler::createChild()
     {
         try
         {
-            process_->setSleepDuration();
-            sendCreationMessage(process_->sleepDuration());
+
             process_->work();
         }
         catch (const std::exception &e)

@@ -16,6 +16,8 @@ void SimulProcess::setSleepDuration()
 
 void SimulProcess::work()
 {
+    setSleepDuration();
+    sendCreationMessage(sleepDuration_);
     // Child process
     std::this_thread::sleep_for(std::chrono::seconds(sleepDuration_)); // Simulate some work
     _exit(0); // Ensure the child process exits immediately

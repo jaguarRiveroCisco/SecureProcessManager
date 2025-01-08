@@ -1,17 +1,15 @@
 #ifndef SIMUL_PROCESS_H
 #define SIMUL_PROCESS_H
-
-class SimulProcess 
+#include "process_helper.h"
+class SimulProcess : public ProcessHelper
 {
     public:
-        void         setSleepDuration();
         virtual void work();
-        int sleepDuration() const { return sleepDuration_; }
-        SimulProcess()          = default;
         virtual ~SimulProcess() = default;
 
     protected:
-        int sleepDuration_      = 0;
+        void setSleepDuration();
+        int  sleepDuration_ = 0;
 };
 
 #endif // SIMUL_PROCESS_H

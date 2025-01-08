@@ -3,7 +3,7 @@
 #include "process_base.h"
 #include "process_helper.h"
 #include "simul_process.h"
-class ProcessHandler final : protected ProcessBase, public ProcessHelper 
+class ProcessHandler final : protected ProcessBase
 {
 public:
     void init(Synchro *synchro, std::unique_ptr<SimulProcess> process);
@@ -12,6 +12,7 @@ public:
     static int numProcesses();
     static std::vector<std::unique_ptr<ProcessHandler>> handlers_;
     static Synchro *synchro();
+    std::string receiveCreationMessage();
 
 private:
     static int numProcesses_;
