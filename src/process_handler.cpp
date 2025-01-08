@@ -32,17 +32,28 @@ void ProcessHandler::createChild()
     pid_ = fork();
     if (pid_ == 0)
     {
-        setSleepDuration();
-        sendCreationMessage(sleepDuration_);
-        work();
+        try
+        {
+            setSleepDuration();
+            sendCreationMessage(sleepDuration_);
+            work();
+        }
+        catch (const std::exception &e)
+        {
+            // Handle exceptions in child process
+            std::cerr << "Exception in child process: " << e.what() << std::endl;
+            _exit(EXIT_FAILURE); // Ensure child process exits
+        }
     }
     else if (pid_ < 0)
     {
         // Fork failed
         perror("fork");
+        throw std::runtime_error("Failed to fork process");
     }
     else
     {
-        std::cout << "Parent process created child process with PID: " << pid_ << std::endl;
+        // Parent process
+        //std::cout << "Parent process created child process with PID: " << pid_ << std::endl;
     }
 }

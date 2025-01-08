@@ -43,10 +43,12 @@ auto main(int argc, char *argv[]) -> int
         // Process all events
         while (!ProcessHandler::synchro()->eventQueue.empty())
         {
-            pid_t pid = ProcessHandler::synchro()->eventQueue.front();
-            std::cout << "Event processed for PID: " << pid << std::endl;
-            ProcessHandler::synchro()->eventQueue.pop();
-            ++processedEvents;
+            pid_t pid = ProcessHandler::synchro()->getAndPopFront();
+            if (pid != -1)
+            {
+                std::cout << "Event processed for PID: " << pid << std::endl;
+                ++processedEvents;
+            }
         }
     }
 
