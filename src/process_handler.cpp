@@ -12,13 +12,14 @@ Synchro *ProcessHandler::synchro()
     return &instance;
 }
 
-void ProcessHandler::init(Synchro *synchro)
+void ProcessHandler::init(Synchro *synchro, std::unique_ptr<SimulProcess> process)
 {
-    synchro_ = synchro;
-    if (synchro_ == nullptr)
+    if (synchro == nullptr)
     {
         throw std::runtime_error("Synchro object is null");
     }
+    synchro_ = synchro;
+    process_ = std::move(process);
     createChild();
 }
 void ProcessHandler::start() { createCheckProcessThread(); }
@@ -34,9 +35,9 @@ void ProcessHandler::createChild()
     {
         try
         {
-            setSleepDuration();
-            sendCreationMessage(sleepDuration_);
-            work();
+            process_->setSleepDuration();
+            sendCreationMessage(process_->sleepDuration());
+            process_->work();
         }
         catch (const std::exception &e)
         {

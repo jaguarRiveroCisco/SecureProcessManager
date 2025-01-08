@@ -3,12 +3,15 @@
 
 class SimulProcess 
 {
-protected:
-    SimulProcess()              = default;
-    virtual ~SimulProcess()     = default;
-    int          sleepDuration_ = 0;
-    void         setSleepDuration();
-    virtual void work();
+    public:
+        void         setSleepDuration();
+        virtual void work();
+        int sleepDuration() const { return sleepDuration_; }
+        SimulProcess()          = default;
+        virtual ~SimulProcess() = default;
+
+    protected:
+        int sleepDuration_      = 0;
 };
 
 #endif // SIMUL_PROCESS_H
