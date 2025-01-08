@@ -126,6 +126,7 @@ void ProcessHandler::waitForEvents()
                         handlers_.begin(), handlers_.end(),
                         [pid](const std::unique_ptr<ProcessHandler> &handler) { return handler->getPid() == pid; });
                 handlers_.erase(it, handlers_.end());
+                createHandler();
             }
         }
     }
