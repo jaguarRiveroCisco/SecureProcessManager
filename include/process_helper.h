@@ -6,12 +6,14 @@
 class ProcessHelper 
 {
 public:
-    std::string receiveCreationMessage();
+     virtual ~ProcessHelper() = default;
+    virtual std::string receiveCreationMessage() = 0;
 
 protected:
     ProcessHelper() = default;
-    void             sendCreationMessage(int sleepDuration, pid_t pid = getpid());
+    void sendCreationMessage(int sleepDuration, pid_t pid = getpid());
     static Messenger messenger_;
+
 };
 
 #endif // PROCESS_HELPER_H

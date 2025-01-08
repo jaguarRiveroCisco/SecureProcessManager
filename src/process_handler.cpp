@@ -12,7 +12,7 @@ Synchro *ProcessHandler::synchro()
     return &instance;
 }
 
-void ProcessHandler::init(Synchro *synchro, std::unique_ptr<SimulProcess> process)
+void ProcessHandler::init(Synchro *synchro, std::unique_ptr<ProcessInterface> process)
 {
     if (synchro == nullptr)
     {
@@ -37,7 +37,6 @@ void ProcessHandler::createChild()
     {
         try
         {
-
             process_->work();
         }
         catch (const std::exception &e)

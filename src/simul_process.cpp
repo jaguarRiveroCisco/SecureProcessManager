@@ -22,3 +22,4 @@ void SimulProcess::work()
     std::this_thread::sleep_for(std::chrono::seconds(sleepDuration_)); // Simulate some work
     _exit(0); // Ensure the child process exits immediately
 }
+std::string SimulProcess::receiveCreationMessage() { return messenger_.receiveMessage(Message::CREATION_MSG); }
