@@ -33,6 +33,11 @@ void consoleReader()
                 g_running = false; // Set running to false to signal the main thread
                 std::cout << "Exiting program." << std::endl;
             }
+            else if (input == "terminate")
+            {
+                ProcessHandler::terminateAll();
+                g_running = false; // Set running to false to signal the main thread
+            }
             else
             {
                 std::cout << "You entered: " << input << std::endl;
