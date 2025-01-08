@@ -3,7 +3,7 @@
 
 Messenger ProcessHelper::messenger_;
 
-std::string ProcessHelper::creationMessage() 
+std::string ProcessHelper::receiveCreationMessage() 
 {
     return messenger_.receiveMessage(Message::CREATION_MSG);
 }

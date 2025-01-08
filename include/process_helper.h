@@ -6,7 +6,7 @@
 class ProcessHelper 
 {
 public:
-    std::string creationMessage();
+    std::string receiveCreationMessage();
 
 protected:
     ProcessHelper() = default;
