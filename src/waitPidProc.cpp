@@ -35,32 +35,9 @@ auto main(int argc, char *argv[]) -> int
     parseArguments(argc, argv);
 
     ProcessHandler::createHandlers(numProcesses, processType);
-    
+
     // Main thread waits for events
-    std::atomic<int> processedEvents = 0;
-    while (processedEvents < ProcessHandler::numProcesses())
-    {
-        std::unique_lock<std::mutex> lock(ProcessHandler::synchro()->mtx);
-        ProcessHandler::synchro()->cv.wait(lock, [&] { return !ProcessHandler::synchro()->eventQueue.empty(); });
-
-        // Process all events
-        while (!ProcessHandler::synchro()->eventQueue.empty())
-        {
-            pid_t pid = ProcessHandler::synchro()->getAndPopFront();
-            if (pid != -1)
-            {
-                std::cout << "Event processed for PID: " << pid << std::endl;
-                ++processedEvents;
-
-                // Find and remove the handler with the matching PID
-                auto it = std::remove_if(ProcessHandler::handlers_.begin(), ProcessHandler::handlers_.end(),
-                                         [pid](const std::unique_ptr<ProcessHandler>& handler) {
-                                             return handler->getPid() == pid;
-                                         });
-                ProcessHandler::handlers_.erase(it, ProcessHandler::handlers_.end());
-            }
-        }
-    }
+    ProcessHandler::waitForEvents();
 
     return 0;
 }

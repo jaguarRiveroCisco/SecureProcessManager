@@ -93,3 +93,29 @@ void ProcessHandler::createHandlers(int numProcesses, const std::string &process
         }
     }
 }
+void ProcessHandler::waitForEvents()
+{
+    std::atomic<int> processedEvents = 0;
+    while (processedEvents < numProcesses())
+    {
+        std::unique_lock<std::mutex> lock(synchro()->mtx);
+        synchro()->cv.wait(lock, [&] { return !synchro()->eventQueue.empty(); });
+
+        // Process all events
+        while (!synchro()->eventQueue.empty())
+        {
+            pid_t pid = synchro()->getAndPopFront();
+            if (pid != -1)
+            {
+                std::cout << "Event processed for PID: " << pid << std::endl;
+                ++processedEvents;
+
+                // Find and remove the handler with the matching PID
+                auto it = std::remove_if(
+                        handlers_.begin(), handlers_.end(),
+                        [pid](const std::unique_ptr<ProcessHandler> &handler) { return handler->getPid() == pid; });
+                handlers_.erase(it, handlers_.end());
+            }
+        }
+    }
+}

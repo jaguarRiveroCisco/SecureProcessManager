@@ -16,7 +16,7 @@ public:
     std::string receiveCreationMessage();
     pid_t getPid() const;
     static void createHandlers(int numProcesses, const std::string &processType);
-
+    static void waitForEvents();
 private:
     static int numProcesses_;
     void       createChild();
