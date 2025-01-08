@@ -49,6 +49,12 @@ The Process Management Program is a C++ application designed to handle and monit
 
 - **`src/waitPidProc.cpp`**: Implements the main process creation and management logic.
 - **`CMakeLists.txt`**: Configuration file for CMake, specifying project settings and build instructions.
+- **`src/messenger.cpp`**: Implements the messaging functionality.
+- **`src/process_base.cpp`**: Contains base process functionalities.
+- **`src/process_helper.cpp`**: Provides helper functions for process management.
+- **`src/simul_process.cpp`**: Simulates process workloads.
+- **`src/process_handler.cpp`**: Handles the integration and management of processes.
+
 
 ## Building the Project
 
