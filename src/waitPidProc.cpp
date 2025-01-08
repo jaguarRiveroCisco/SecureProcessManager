@@ -1,14 +1,5 @@
 #include <iostream>
-#include <thread>
-#include <unistd.h>
-#include "synchro.h"
-#include "process_base.h"
-#include "simul_process.h"
-#include "process_helper.h"
 #include "process_handler.h"
-
-
-
 
 int main(int argc, char *argv[])
 {

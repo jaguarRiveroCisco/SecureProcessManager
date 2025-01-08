@@ -1,8 +1,6 @@
 
 #include <unistd.h>
-#include "process_base.h"
-#include "process_helper.h"
-#include "simul_process.h"
+#include "synchro.h"
 #include "process_handler.h"
 
 int ProcessHandler::numProcesses_ = 4; // Default number of processes

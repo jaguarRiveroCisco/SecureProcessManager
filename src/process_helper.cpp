@@ -1,5 +1,4 @@
 #include <iostream>
-#include <unistd.h>
 #include "process_helper.h"
 
 Messenger ProcessHelper::messenger_;
