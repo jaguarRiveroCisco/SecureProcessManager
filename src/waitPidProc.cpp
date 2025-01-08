@@ -59,6 +59,7 @@ auto main(int argc, char *argv[]) -> int
                     break;
                 case 't':
                     processType = optarg;
+                    ProcessHandler::setProcessType(processType); // Call to setProcessType with the parsed value
                     break;
                 case 'r':
                     rndUpper = std::atoi(optarg);
@@ -69,7 +70,7 @@ auto main(int argc, char *argv[]) -> int
                 case 'h':
                 default:
                     std::cerr << "Usage: " << argv[0]
-                              << " -n <number of processes> -t <process type> -r <random upper limit> -d <display (0 "
+                              << " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 "
                                  "or 1)> -h -> help\n";
                     std::exit(EXIT_SUCCESS);
             }
@@ -104,7 +105,7 @@ auto main(int argc, char *argv[]) -> int
     // Create process handlers
     while (g_running)
     {
-        ProcessHandler::createHandlers(numProcesses, processType);
+        ProcessHandler::createHandlers(numProcesses);
         ProcessHandler::waitForEvents();
     }
 

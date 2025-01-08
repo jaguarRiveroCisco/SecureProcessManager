@@ -6,6 +6,7 @@
 int ProcessHandler::numProcesses_ = 4; // Default number of processes
 std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
 extern std::atomic<bool> g_display;
+std::string ProcessHandler::processType_ = "simul"; // Default process type
 
 Synchro *ProcessHandler::synchro()
 {
@@ -63,37 +64,44 @@ void ProcessHandler::createChild()
 
 pid_t ProcessHandler::getPid() const { return pid_; }
 
-void ProcessHandler::createHandlers(int numProcesses, const std::string &processType)
+void ProcessHandler::setProcessType(const std::string &processType) { processType_ = processType; }
+
+void ProcessHandler::createHandlers(int numProcesses)
 {
     numProcesses_ = numProcesses;
 
-    std::cout << "Creating " << numProcesses_ << " child processes of type " << processType << ".\n";
+    std::cout << "Creating " << numProcesses_ << " child processes of type " << processType_ << ".\n";
 
     for (int i = 0; i < numProcesses_; ++i)
     {
         try
         {
-            auto handler = std::make_unique<ProcessHandler>();
-            if (processType == "real")
-            {
-                handler->init(synchro(), std::make_unique<Process>());
-            }
-            else if (processType == "simul")
-            {
-                handler->init(synchro(), std::make_unique<SimulProcess>());
-            }
-
-            std::string messageText = handler->receiveCreationMessage();
-            if (g_display)
-                std::cout << messageText << std::endl;
-            handler->start();
-            handlers_.push_back(std::move(handler));
+            createHandler();
         }
         catch (const std::exception &e)
         {
             std::cerr << "Error creating process handler: " << e.what() << std::endl;
         }
     }
+}
+
+void ProcessHandler::createHandler()
+{
+    auto handler = std::make_unique<ProcessHandler>();
+    if (processType_ == "real")
+    {
+        handler->init(synchro(), std::make_unique<Process>());
+    }
+    else if (processType_ == "simul")
+    {
+        handler->init(synchro(), std::make_unique<SimulProcess>());
+    }
+
+    std::string messageText = handler->receiveCreationMessage();
+    if (g_display)
+        std::cout << messageText << std::endl;
+    handler->start();
+    handlers_.push_back(std::move(handler));
 }
 
 void ProcessHandler::waitForEvents()

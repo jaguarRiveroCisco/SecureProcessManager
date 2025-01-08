@@ -15,11 +15,14 @@ public:
     static Synchro *synchro();
     std::string receiveCreationMessage();
     pid_t getPid() const;
-    static void createHandlers(int numProcesses, const std::string &processType);
+    static void createHandlers(int numProcesses);
     static void waitForEvents();
+    static void setProcessType(const std::string &processType);
 private:
+    static void createHandler();
     static int numProcesses_;
-    void       createChild();
+    static std::string processType_; 
+    void createChild();
     std::unique_ptr<ProcessInterface> process_;
 };
 
