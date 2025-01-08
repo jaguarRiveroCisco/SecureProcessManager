@@ -6,6 +6,12 @@
 int ProcessHandler::numProcesses_ = 4; // Default number of processes
 std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
 
+Synchro *ProcessHandler::synchro()
+{
+    static Synchro instance;
+    return &instance;
+}
+
 void ProcessHandler::init(Synchro *synchro)
 {
     synchro_ = synchro;

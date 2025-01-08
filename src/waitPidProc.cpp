@@ -15,14 +15,13 @@ auto main(int argc, char *argv[]) -> int
     }
 
     std::cout << "Creating " << ProcessHandler::numProcesses() << " child processes.\n";
-    Synchro synchro;
 
     for (int i = 0; i < ProcessHandler::numProcesses(); ++i)
     {
         try 
         {
             auto handler = std::make_unique<ProcessHandler>();
-            handler->init(&synchro);
+            handler->init(ProcessHandler::synchro());
             std::string messageText = handler->creationMessage();
             std::cout << messageText << std::endl;
             handler->start();
@@ -38,15 +37,15 @@ auto main(int argc, char *argv[]) -> int
     std::atomic<int> processedEvents = 0;
     while (processedEvents < ProcessHandler::numProcesses())
     {
-        std::unique_lock<std::mutex> lock(synchro.mtx);
-        synchro.cv.wait(lock, [&] { return !synchro.eventQueue.empty(); });
+        std::unique_lock<std::mutex> lock(ProcessHandler::synchro()->mtx);
+        ProcessHandler::synchro()->cv.wait(lock, [&] { return !ProcessHandler::synchro()->eventQueue.empty(); });
 
         // Process all events
-        while (!synchro.eventQueue.empty())
+        while (!ProcessHandler::synchro()->eventQueue.empty())
         {
-            pid_t pid = synchro.eventQueue.front();
+            pid_t pid = ProcessHandler::synchro()->eventQueue.front();
             std::cout << "Event processed for PID: " << pid << std::endl;
-            synchro.eventQueue.pop();
+            ProcessHandler::synchro()->eventQueue.pop();
             ++processedEvents;
         }
     }

@@ -11,6 +11,7 @@ public:
     static void numProcesses(int numProcesses);
     static int numProcesses();
     static std::vector<std::unique_ptr<ProcessHandler>> handlers_;
+    static Synchro *synchro();
 
 private:
     static int numProcesses_;
