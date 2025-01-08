@@ -1,25 +1,16 @@
 #ifndef PROCESS_HELPER_H
 #define PROCESS_HELPER_H
+
+#include "messenger.h"
+
 class ProcessHelper 
 {
 public:
-    std::string creationMessage() { return messenger_.receiveMessage(Message::CREATION_MSG); }
+    std::string creationMessage();
 
 protected:
     ProcessHelper() = default;
-    void sendCreationMessage(int sleepDuration, pid_t pid = getpid())
-    {
-        std::string messageText = "Child " + std::to_string(pid) +
-                                  " created. Sleep duration: " + std::to_string(sleepDuration) + " seconds";
-        try
-        {
-            messenger_.sendMessage(messageText, Message::CREATION_MSG);
-        }
-        catch (const std::runtime_error &e)
-        {
-            std::cerr << "Failed to send message: " << e.what() << std::endl;
-        }
-    }
+    void             sendCreationMessage(int sleepDuration, pid_t pid = getpid());
     static Messenger messenger_;
 };
 

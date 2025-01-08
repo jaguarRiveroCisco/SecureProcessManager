@@ -1,14 +1,6 @@
-#include <condition_variable>
-#include <cstdlib>
-#include <cstring>
 #include <iostream>
-#include <memory>
-#include <signal.h>
-#include <sys/types.h>
 #include <thread>
 #include <unistd.h>
-#include <utility>
-#include "messenger.h"
 #include "synchro.h"
 #include "process_base.h"
 #include "simul_process.h"
@@ -16,7 +8,6 @@
 #include "process_handler.h"
 
 
-Messenger ProcessHelper::messenger_;
 int ProcessHandler::numProcesses_ = 4; // Default number of processes
 std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
 
