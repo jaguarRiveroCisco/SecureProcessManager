@@ -3,10 +3,12 @@
 #include "synchro.h"
 #include "process_handler.h"
 
-int ProcessHandler::numProcesses_ = 4; // Default number of processes
 std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
-extern std::atomic<bool> g_display;
+int ProcessHandler::numProcesses_ = 4; // Default number of processes
 std::string ProcessHandler::processType_ = "simul"; // Default process type
+
+extern std::atomic<bool> g_display;
+extern std::atomic<bool> g_running;
 
 Synchro *ProcessHandler::synchro()
 {
@@ -97,7 +99,7 @@ void ProcessHandler::createHandler()
         handler->init(synchro(), std::make_unique<SimulProcess>());
     }
 
-    std::string messageText = handler->receiveCreationMessage();
+    std::string messageText = handler->receiveCreationMessage() + " Number of processes: " + std::to_string(numProcesses_);
     if (g_display)
         std::cout << messageText << std::endl;
     handler->start();
@@ -106,8 +108,7 @@ void ProcessHandler::createHandler()
 
 void ProcessHandler::waitForEvents()
 {
-    std::atomic<int> processedEvents = 0;
-    while (processedEvents < numProcesses())
+    while (g_running)
     {
         std::unique_lock<std::mutex> lock(synchro()->mtx);
         synchro()->cv.wait(lock, [&] { return !synchro()->eventQueue.empty(); });
@@ -118,9 +119,6 @@ void ProcessHandler::waitForEvents()
             pid_t pid = synchro()->getAndPopFront();
             if (pid != -1)
             {
-                //std::cout << "Event processed for PID: " << pid << std::endl;
-                ++processedEvents;
-
                 // Find and remove the handler with the matching PID
                 auto it = std::remove_if(
                         handlers_.begin(), handlers_.end(),

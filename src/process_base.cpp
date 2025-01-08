@@ -6,14 +6,21 @@
 
 extern std::atomic<bool> g_display;
 
-ProcessBase::ProcessBase() : startTime_(std::chrono::high_resolution_clock::now()) {}
+size_t ProcessBase::processCounter_ = 0;
+
+ProcessBase::ProcessBase() : startTime_(std::chrono::high_resolution_clock::now()) 
+{
+    ++processCounter_;
+
+}
 
 ProcessBase::~ProcessBase()
 {
+    --processCounter_;
     auto endTime  = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
     if(g_display)
-        std::cout << "Child process " << pid_ << " lifetime: " << duration << " milliseconds." << std::endl;
+        std::cout << "Child process " << pid_ << " lifetime: " << duration << " milliseconds. Number of processes " << processCounter_ << std::endl;
 }
 
 void ProcessBase::displayProcessStatus(int &status)

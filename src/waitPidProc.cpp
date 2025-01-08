@@ -103,11 +103,8 @@ auto main(int argc, char *argv[]) -> int
     parseArguments(argc, argv);
 
     // Create process handlers
-    while (g_running)
-    {
-        ProcessHandler::createHandlers(numProcesses);
-        ProcessHandler::waitForEvents();
-    }
+    ProcessHandler::createHandlers(numProcesses);
+    ProcessHandler::waitForEvents();
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
     return 0;
