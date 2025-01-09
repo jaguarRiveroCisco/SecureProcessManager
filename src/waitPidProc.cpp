@@ -35,8 +35,8 @@ void processControl()
             }
             else if (input == "terminate all")
             {
-                ProcessHandler::terminateAll();
                 g_running = false; // Set running to false to signal the main thread
+                ProcessHandler::terminateAll();
             }
             else if (input.rfind("terminate ", 0) == 0) // Check if input starts with "terminate "
             {
@@ -56,8 +56,8 @@ void processControl()
             }
             else if (input == "kill all")
             {
-                ProcessHandler::killAll();
                 g_running = false; // Set running to false to signal the main thread
+                ProcessHandler::killAll();
             }
             else if (input.rfind("kill ", 0) == 0) // Check if input starts with "kill "
             {
@@ -118,7 +118,6 @@ auto main(int argc, char *argv[]) -> int
                     break;
                 case 't':
                     processType = optarg;
-                    ProcessHandler::setProcessType(processType); // Call to setProcessType with the parsed value
                     break;
                 case 'r':
                     rndUpper = std::atoi(optarg);
@@ -153,8 +152,10 @@ auto main(int argc, char *argv[]) -> int
             rndUpper = 10;
         }
 
-        SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
     };
+
+    SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
+    ProcessHandler::setProcessType(processType); // Call to setProcessType with the parsed value
 
     std::thread readerThread(processControl);
 
