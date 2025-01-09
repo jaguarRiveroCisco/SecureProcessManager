@@ -31,12 +31,38 @@ void consoleReader()
             else if (input == "exit")
             {
                 g_running = false; // Set running to false to signal the main thread
-                std::cout << "Exiting program." << std::endl;
+                std::cout << "Exiting program once all processes are done" << std::endl;
             }
             else if (input == "terminate")
             {
                 ProcessHandler::terminateAll();
                 g_running = false; // Set running to false to signal the main thread
+            }
+            else if (input.rfind("terminate ", 0) == 0) // Check if input starts with "terminate "
+            {
+                try
+                {
+                    pid_t pid = std::stoi(input.substr(10)); // Extract PID from input
+                    ProcessHandler::terminateProcessByPid(pid);
+                }
+                catch (const std::invalid_argument &)
+                {
+                    std::cerr << "Invalid PID format." << std::endl;
+                }
+                catch (const std::out_of_range &)
+                {
+                    std::cerr << "PID out of range." << std::endl;
+                }
+            }
+            else if (input == "help")
+            {
+                std::cout << "Available commands:\n"
+                          << "  print on       - Turn on display progress\n"
+                          << "  print off      - Turn off display progress\n"
+                          << "  exit           - Exit the program once all processes are done\n"
+                          << "  terminate      - Terminate all processes and exit the program\n"
+                          << "  terminate <pid> - Terminate a specific process by PID\n"
+                          << "  help           - Display this help message\n";
             }
             else
             {
@@ -99,7 +125,7 @@ auto main(int argc, char *argv[]) -> int
             rndUpper = 10;
         }
 
-        std::cout << "Random upper limit: " << rndUpper << std::endl;
+        std::cout << "Random delta upper limit: " << rndUpper << std::endl;
         SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
     };
 

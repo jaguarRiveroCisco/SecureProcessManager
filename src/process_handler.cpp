@@ -138,3 +138,16 @@ void ProcessHandler::terminateAll()
         handler->terminateProcess();
     }
 }
+void ProcessHandler::terminateProcessByPid(pid_t pid)
+{
+    auto it = std::find_if(handlers_.begin(), handlers_.end(),
+                           [pid](const std::unique_ptr<ProcessHandler> &handler) { return handler->getPid() == pid; });
+    if (it != handlers_.end())
+    {
+        (*it)->terminateProcess();
+    }
+    else
+    {
+        std::cerr << "Process with PID: " << pid << " not found." << std::endl;
+    }
+}

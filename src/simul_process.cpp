@@ -8,7 +8,7 @@
 #include "simul_process.h"
 
 int SimulProcess::rndUpper_ = 10;
-constexpr int baseSleepDuration = 5;
+constexpr int baseSleepDuration = 20;
 void SimulProcess::setSleepDuration()
 {
     std::srand(std::time(nullptr) ^ getpid()); // Seed using time and PID to ensure different seeds

@@ -19,6 +19,7 @@ public:
     static void waitForEvents();
     static void setProcessType(const std::string &processType);
     static void terminateAll();
+    static void terminateProcessByPid(pid_t pid);
 private:
     static void createHandler();
     static int numProcesses_;
