@@ -9,7 +9,7 @@
 namespace process
 {
     int           ProcessSimulator::rndUpper_ = 10;
-    constexpr int baseSleepDuration       = 20;
+    constexpr int baseSleepDuration       = 2;
 
     void ProcessSimulator::setRndUpper(int rndUpper)
     {

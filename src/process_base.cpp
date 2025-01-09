@@ -18,7 +18,7 @@ namespace process
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
         if (g_display)
-            std::cout << "Child process " << pid_ << " lifetime: " << duration << " milliseconds. Number of processes "
+            std::cout << " :( Child process " << pid_ << " lifetime: " << duration << " milliseconds. Number of processes "
                       << processCounter_ << std::endl;
     }
 

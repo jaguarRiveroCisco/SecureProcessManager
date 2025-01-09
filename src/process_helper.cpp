@@ -7,7 +7,7 @@ namespace process
 
     void Communicator::sendCreationMessage(int sleepDuration, pid_t pid)
     {
-        std::string messageText = "Child " + std::to_string(pid) +
+        std::string messageText = ":) Child " + std::to_string(pid) +
                                   " created. Sleep duration: " + std::to_string(sleepDuration) + " seconds";
         try
         {

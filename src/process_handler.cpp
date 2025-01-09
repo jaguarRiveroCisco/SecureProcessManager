@@ -137,7 +137,11 @@ namespace process
                             [pid](const std::unique_ptr<Controller> &handler) { return handler->getPid() == pid; });
                     handlers_.erase(it, handlers_.end());
                     if (g_running)
+                    {
+                        if(g_display)
+                            std::cout << "\trespawn!  ";
                         createHandler();
+                    }
                 }
             }
         }
