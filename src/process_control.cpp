@@ -10,8 +10,8 @@ extern std::atomic<bool> g_running;
 
 namespace process
 {
-    void killPid(std::__1::string &input);
-    void terminatePid(std::__1::string &input);
+    void killPid(const std::string &input);
+    void terminatePid(const std::string &input);
     void printHelp();
 
     void controller()
@@ -35,7 +35,7 @@ namespace process
                 else if (input == "exit")
                 {
                     g_running = false; // Set running to false to signal the main thread
-                    std::cout << "Exiting program once all processes are done" << std::endl;
+                    std::cout << "Gracefully exiting program once the first process is done" << std::endl;
                 }
                 else if (input == "terminate all")
                 {
@@ -82,7 +82,7 @@ namespace process
                   << "  help           - Display this help message\n";
     }
 
-    void killPid(std::__1::string &input)
+    void killPid(const std::string &input)
     {
         {
             try
@@ -101,7 +101,7 @@ namespace process
         }
     }
 
-    void terminatePid(std::__1::string &input)
+    void terminatePid(const std::string &input)
     {
         {
             try
