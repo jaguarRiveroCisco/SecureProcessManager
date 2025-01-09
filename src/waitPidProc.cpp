@@ -33,7 +33,7 @@ void consoleReader()
                 g_running = false; // Set running to false to signal the main thread
                 std::cout << "Exiting program once all processes are done" << std::endl;
             }
-            else if (input == "terminate")
+            else if (input == "terminate all")
             {
                 ProcessHandler::terminateAll();
                 g_running = false; // Set running to false to signal the main thread
@@ -54,6 +54,27 @@ void consoleReader()
                     std::cerr << "PID out of range." << std::endl;
                 }
             }
+            else if (input == "kill all")
+            {
+                ProcessHandler::killAll();
+                g_running = false; // Set running to false to signal the main thread
+            }
+            else if (input.rfind("kill ", 0) == 0) // Check if input starts with "kill "
+            {
+                try
+                {
+                    pid_t pid = std::stoi(input.substr(5)); // Extract PID from input
+                    ProcessHandler::killProcessByPid(pid);
+                }
+                catch (const std::invalid_argument &)
+                {
+                    std::cerr << "Invalid PID format." << std::endl;
+                }
+                catch (const std::out_of_range &)
+                {
+                    std::cerr << "PID out of range." << std::endl;
+                }
+            }
             else if (input == "display pids")
             {
                 ProcessHandler::displayAllPids();
@@ -64,8 +85,10 @@ void consoleReader()
                           << "  print on       - Turn on display progress\n"
                           << "  print off      - Turn off display progress\n"
                           << "  exit           - Exit the program once all processes are done\n"
-                          << "  terminate      - Terminate all processes and exit the program\n"
+                          << "  terminate all  - Terminate all processes and exit the program\n"
                           << "  terminate <pid> - Terminate a specific process by PID\n"
+                          << "  kill all       - Kill all processes and exit the program\n"
+                          << "  kill <pid>     - Kill a specific process by PID\n"
                           << "  display pids   - Display all current PIDs\n"
                           << "  help           - Display this help message\n";
             }

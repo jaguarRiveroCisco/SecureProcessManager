@@ -160,3 +160,23 @@ void ProcessHandler::displayAllPids()
     }
     std::cout << "Total number of processes: " << handlers_.size() << std::endl;
 }
+void ProcessHandler::killAll()
+{
+    for (auto &handler : handlers_)
+    {
+        handler->killProcess();
+    }
+}
+void ProcessHandler::killProcessByPid(pid_t pid)
+{
+    auto it = std::find_if(handlers_.begin(), handlers_.end(),
+                           [pid](const std::unique_ptr<ProcessHandler> &handler) { return handler->getPid() == pid; });
+    if (it != handlers_.end())
+    {
+        (*it)->killProcess();
+    }
+    else
+    {
+        std::cerr << "Process with PID: " << pid << " not found." << std::endl;
+    }
+}
