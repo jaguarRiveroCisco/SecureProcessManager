@@ -6,100 +6,10 @@
 #include "process.h"
 #include "process_handler.h"
 #include "simul_process.h"
+#include "process_control.h"
 
 std::atomic<bool> g_display = true;
 std::atomic<bool> g_running = true;
-
-void processControl()
-{
-    std::string input;
-    while (g_running)
-    {
-        std::getline(std::cin, input);
-        if (!input.empty())
-        {
-            if (input == "print on")
-            {
-                g_display = true;
-                std::cout << "Display progress turned on." << std::endl;
-            }
-            else if (input == "print off")
-            {
-                g_display = false;
-                std::cout << "Display progress turned off." << std::endl;
-            }
-            else if (input == "exit")
-            {
-                g_running = false; // Set running to false to signal the main thread
-                std::cout << "Exiting program once all processes are done" << std::endl;
-            }
-            else if (input == "terminate all")
-            {
-                g_running = false; // Set running to false to signal the main thread
-                ProcessHandler::terminateAll();
-            }
-            else if (input.rfind("terminate ", 0) == 0) // Check if input starts with "terminate "
-            {
-                try
-                {
-                    pid_t pid = std::stoi(input.substr(10)); // Extract PID from input
-                    ProcessHandler::terminateProcessByPid(pid);
-                }
-                catch (const std::invalid_argument &)
-                {
-                    std::cerr << "Invalid PID format." << std::endl;
-                }
-                catch (const std::out_of_range &)
-                {
-                    std::cerr << "PID out of range." << std::endl;
-                }
-            }
-            else if (input == "kill all")
-            {
-                g_running = false; // Set running to false to signal the main thread
-                ProcessHandler::killAll();
-            }
-            else if (input.rfind("kill ", 0) == 0) // Check if input starts with "kill "
-            {
-                try
-                {
-                    pid_t pid = std::stoi(input.substr(5)); // Extract PID from input
-                    ProcessHandler::killProcessByPid(pid);
-                }
-                catch (const std::invalid_argument &)
-                {
-                    std::cerr << "Invalid PID format." << std::endl;
-                }
-                catch (const std::out_of_range &)
-                {
-                    std::cerr << "PID out of range." << std::endl;
-                }
-            }
-            else if (input == "display pids")
-            {
-                ProcessHandler::displayAllPids();
-            }
-            else if (input == "help")
-            {
-                std::cout << "Available commands:\n"
-                          << "  print on       - Turn on display progress\n"
-                          << "  print off      - Turn off display progress\n"
-                          << "  exit           - Exit the program once all processes are done\n"
-                          << "  terminate all  - Terminate all processes and exit the program\n"
-                          << "  terminate <pid> - Terminate a specific process by PID\n"
-                          << "  kill all       - Kill all processes and exit the program\n"
-                          << "  kill <pid>     - Kill a specific process by PID\n"
-                          << "  display pids   - Display all current PIDs\n"
-                          << "  help           - Display this help message\n";
-            }
-            else
-            {
-                std::cout << "You entered: " << input << std::endl;
-            }
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-}
 
 auto main(int argc, char *argv[]) -> int
 {
@@ -107,26 +17,31 @@ auto main(int argc, char *argv[]) -> int
     std::string processType  = "simul";
     int         rndUpper     = 10; // Default value for rndUpper
 
-    auto parseArguments = [&](int argc, char *argv[]) {
+    auto parseArguments = [&]() {
         int opt;
         while ((opt = getopt(argc, argv, "n:t:r:d:h")) != -1)
         {
             switch (opt)
             {
-                case 'n':
-                    numProcesses = std::atoi(optarg);
-                    break;
-                case 't':
-                    processType = optarg;
-                    break;
-                case 'r':
-                    rndUpper = std::atoi(optarg);
-                    break;
-                case 'd':
-                    g_display = std::atoi(optarg) != 0;
-                    break;
-                case 'h':
-                default:
+            case 'n':
+                // Set the number of processes from the argument
+                numProcesses = std::atoi(optarg);
+                break;
+            case 't':
+                // Set the process type from the argument
+                processType = optarg;
+                break;
+            case 'r':
+                // Set the random upper limit from the argument
+                rndUpper = std::atoi(optarg);
+                break;
+            case 'd':
+                // Set the display flag from the argument (0 or 1)
+                g_display = std::atoi(optarg) != 0;
+                break;
+            case 'h':
+            default:
+                // Display usage information and exit
                     std::cerr << "Usage: " << argv[0]
                               << " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 "
                                  "or 1)> -h -> help\n";
@@ -153,17 +68,13 @@ auto main(int argc, char *argv[]) -> int
         }
 
     };
+    parseArguments();
 
-    SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
-    ProcessHandler::setProcessType(processType); // Call to setProcessType with the parsed value
+    process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
 
-    std::thread readerThread(processControl);
+    std::thread readerThread(process::controller);
 
-    parseArguments(argc, argv);
-
-    // Create process handlers
-    ProcessHandler::createHandlers(numProcesses);
-    ProcessHandler::waitForEvents();
+    process::Controller::run(processType, numProcesses);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
     return 0;

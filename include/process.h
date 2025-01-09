@@ -3,12 +3,15 @@
 
 #include "process_interface.h"
 
-class Process : public ProcessInterface
+namespace process
 {
-public:
-    Process() = default;
-    virtual ~Process() = default;
-    void work() override;
-};
+    class Process : public IProcess 
+    {
+    public:
+        Process()          = default;
+        virtual ~Process() = default;
+        void work() override;
+    };
+} // namespace process
 
 #endif // PROCESS_H
