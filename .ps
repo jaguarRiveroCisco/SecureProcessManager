@@ -8,8 +8,13 @@ while true; do
   if [[ "$current_output" != "$previous_output" ]]; then
     echo  # Print an empty line to indicate a change
     echo "$current_output"
+    
+    # Print the total number of lines
+    line_count=$(echo "$current_output" | wc -l)
+    echo "Total number of child processes: $(( $(echo "$current_output" | wc -l) - 1 ))"
+
     previous_output="$current_output"
   fi
 
-  sleep 1
+  sleep 0.01  # Sleep for 100 milliseconds
 done

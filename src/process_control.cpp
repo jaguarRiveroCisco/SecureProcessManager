@@ -34,7 +34,7 @@ namespace process::controller
                 else if (input == "exit")
                 {
                     g_running = false; // Set running to false to signal the main thread
-                    std::cout << "Gracefully exiting program once the first process is done" << std::endl;
+                    std::cout << "Gracefully exiting program once the next process is done" << std::endl;
                 }
                 else if (input == "terminate all")
                 {
@@ -83,7 +83,7 @@ namespace process::controller
                   << "Available commands:\n"
                   << "  print on        - Turn on display progress\n"
                   << "  print off       - Turn off display progress\n"
-                  << "  exit            - Gracefully exits the program once the first process is done\n"
+                  << "  exit            - Gracefully exits the program once the next process is done\n"
                   << "  terminate all   - Terminate all processes and exit the program\n"
                   << "  terminate <pid> - Terminate a specific process by PID\n"
                   << "  kill all        - Kill all processes and exit the program\n"
