@@ -66,13 +66,10 @@ auto main(int argc, char *argv[]) -> int
     parseArguments(argc, argv);
 
     process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
-    process::Controller::setProcessType(processType); // Call to setProcessType with the parsed value
 
     std::thread readerThread(process::processControl);
 
-    // Create process handlers
-    process::Controller::createHandlers(numProcesses);
-    process::Controller::waitForEvents();
+    process::Controller::run(processType, numProcesses);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
     return 0;

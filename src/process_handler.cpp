@@ -91,6 +91,13 @@ namespace process
         }
     }
 
+    void Controller::run(const std::string &processType, int numProcesses)
+    {
+        setProcessType(processType);
+        createHandlers(numProcesses);
+        waitForEvents();
+    }
+    
     void Controller::createHandler()
     {
         auto handler = std::make_unique<Controller>();

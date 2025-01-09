@@ -16,16 +16,17 @@ namespace process
         static Synchro                                     *synchro();
         std::string                                         receiveCreationMessage();
         pid_t                                               getPid() const;
-        static void                                         createHandlers(int numProcesses);
-        static void                                         waitForEvents();
-        static void                                         setProcessType(const std::string &processType);
         static void                                         terminateAll();
         static void                                         terminateProcessByPid(pid_t pid);
         static void                                         killAll();
         static void                                         killProcessByPid(pid_t pid);
         static void                                         displayAllPids();
+        static void                                         run(const std::string &processType, int numProcesses);
 
     private:
+        static void                       waitForEvents();
+        static void                       createHandlers(int numProcesses);
+        static void                       setProcessType(const std::string &processType);
         static void                       createHandler();
         static int                        numProcesses_;
         static std::string                processType_;
