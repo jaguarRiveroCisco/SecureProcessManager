@@ -3,7 +3,7 @@
 previous_output=""
 
 while true; do
-  current_output=$(ps -ax | egrep "ProcessController" | grep -v grep)
+  current_output=$(ps -ax -o pid,tty,stat,comm,args | egrep "ProcessController" | grep -v grep)
 
   if [[ "$current_output" != "$previous_output" ]]; then
     echo  # Print an empty line to indicate a change
