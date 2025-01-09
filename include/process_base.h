@@ -16,6 +16,7 @@ protected:
     void checkProcessState();
     pid_t    pid_ {0};
     Synchro *synchro_ {nullptr};
+    static size_t processCounter_;
 
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime_;

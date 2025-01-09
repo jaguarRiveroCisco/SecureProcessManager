@@ -22,21 +22,21 @@ The Process Management Program is a C++ application designed to handle and monit
 
 ### Desired Behaviors
 
-1. **Intermediate Process Dies if Leaf Dies**:
-   - If a leaf process (child) dies, the intermediate process (parent) should recognize this and terminate itself or take appropriate action.
+1. **Intermediate Process Dies if Leaf Dies**:  
+   If a leaf process (child) dies, the intermediate process (parent) should recognize this and terminate itself or take appropriate action.
 
-2. **Kill Leaf Process Without Intermediate Dying**:
-   - It should be possible to terminate a leaf process without automatically causing the intermediate process to terminate.
+2. **Kill Leaf Process Without Intermediate Dying**:  
+   It should be possible to terminate a leaf process without automatically causing the intermediate process to terminate.
 
 ### Implementation Considerations
 
-- **Monitoring and Signaling**:
-  - The intermediate process should actively monitor the state of its leaf processes. This can be achieved through signals or other IPC mechanisms.
-  - Implement logic to distinguish between different processes and handle their specific termination rules.
+- **Monitoring and Signaling**:  
+  The intermediate process should actively monitor the state of its leaf processes through signals or other IPC mechanisms.  
+  Implement logic to distinguish between different processes and handle their specific termination rules.
 
-- **Handling Process Termination**:
-  - When a leaf process terminates, the intermediate process should detect this (using `waitpid` with appropriate flags) and decide whether to terminate itself based on the program's logic.
-  - To allow killing a leaf process without affecting the intermediate process, use signal handlers or flags to manage and control the process termination flow.
+- **Handling Process Termination**:  
+  When a leaf process terminates, the intermediate process should detect this (using `waitpid` with appropriate flags) and decide whether to terminate itself based on the program's logic.  
+  To allow killing a leaf process without affecting the intermediate process, use signal handlers or flags to manage and control the process termination flow.
 
 ## Features
 
@@ -44,6 +44,20 @@ The Process Management Program is a C++ application designed to handle and monit
 - **Threaded Monitoring**: Each child process is monitored in its own thread to track its status and handle termination effectively.
 - **IPC and Synchronization**: Ensures smooth communication and synchronization between processes using Messenger and Synchro.
 - **Event Handling**: The main thread waits for and processes events as child processes exit.
+
+## User Commands
+
+Once the program is running, you can use the following commands to control processes:
+
+- **`print on`**: Turn on the display of process progress.
+- **`print off`**: Turn off the display of process progress.
+- **`exit`**: Exit the program once all processes are done.
+- **`terminate all`**: Terminate all processes and exit the program.
+- **`terminate <pid>`**: Terminate a specific process by PID.
+- **`kill all`**: Kill all processes and exit the program.
+- **`kill <pid>`**: Kill a specific process by PID.
+- **`display pids`**: Display all current process IDs (PIDs).
+- **`help`**: Display the help message with available commands.
 
 ## Files
 
@@ -54,7 +68,6 @@ The Process Management Program is a C++ application designed to handle and monit
 - **`src/process_helper.cpp`**: Provides helper functions for process management.
 - **`src/simul_process.cpp`**: Simulates process workloads.
 - **`src/process_handler.cpp`**: Handles the integration and management of processes.
-
 
 ## Building the Project
 
@@ -76,9 +89,28 @@ To build the project, perform the following steps:
 Once the project is built, execute the program using the command below. This will run the executable located in the `build` directory:
 
 ```bash
-build/waitPidProc [numprocs]
+build/waitPidProc <command line options>
 ```
+### Command-Line Options
 
-- **`[numprocs]`**: Optional parameter to specify the number of child processes to create. Defaults to 4 if not provided.
+The following command-line options can be used when running the program to customize its behavior:
 
-Upon execution, the program will display output detailing the roles of the child and parent processes, along with the exit status of each child process.
+- **`-n <number of processes>`**:  
+  Specify the number of child processes to create. Defaults to 4 if not provided.  
+  Example: `-n 5` to create 5 child processes.
+
+- **`-t <process type>`**:  
+  Specify the process type ('real' or 'simul'). Defaults to 'simul'.  
+  Example: `-t real` to use real processes instead of simulated ones.
+
+- **`-r <random upper limit>`**:  
+  Set the upper limit for randomized sleep durations. Must be greater than 10.  
+  Example: `-r 15` to set the random upper limit to 15.
+
+- **`-d <display>`**:  
+  Set display mode (0 for off, 1 for on).  
+  Example: `-d 1` to turn on the display of process progress.
+
+- **`-h`**:  
+  Display usage information and exit the program.  
+  Example: `-h` to show the help message with usage instructions.

@@ -3,17 +3,32 @@
 #include "process_base.h"
 #include "process_helper.h"
 #include "simul_process.h"
-class ProcessHandler final : protected ProcessBase, protected SimulProcess, public ProcessHelper 
+#include "process.h"
+class ProcessHandler final : protected ProcessBase
 {
 public:
-    void start(Synchro *synchro);
+    void init(Synchro *synchro, std::unique_ptr<ProcessInterface> process);
+    void start();
     static void numProcesses(int numProcesses);
     static int numProcesses();
     static std::vector<std::unique_ptr<ProcessHandler>> handlers_;
-
+    static Synchro *synchro();
+    std::string receiveCreationMessage();
+    pid_t getPid() const;
+    static void createHandlers(int numProcesses);
+    static void waitForEvents();
+    static void setProcessType(const std::string &processType);
+    static void terminateAll();
+    static void terminateProcessByPid(pid_t pid);
+    static void killAll();
+    static void killProcessByPid(pid_t pid);
+    static void displayAllPids();
 private:
+    static void createHandler();
     static int numProcesses_;
-    void       createChild();
+    static std::string processType_; 
+    void createChild();
+    std::unique_ptr<ProcessInterface> process_;
 };
 
 #endif // PROCESS_HANDLER_H
