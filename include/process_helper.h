@@ -3,17 +3,19 @@
 #include <unistd.h>
 #include "messenger.h"
 
-class ProcessHelper 
+namespace process
 {
-public:
-     virtual ~ProcessHelper() = default;
-    virtual std::string receiveCreationMessage();
+    class ProcessHelper 
+    {
+    public:
+        virtual ~ProcessHelper() = default;
+        virtual std::string receiveCreationMessage();
 
-protected:
-    ProcessHelper() = default;
-    void sendCreationMessage(int sleepDuration = 0, pid_t pid = getpid());
-    static Messenger messenger_;
-
-};
+    protected:
+        ProcessHelper() = default;
+        void             sendCreationMessage(int sleepDuration = 0, pid_t pid = getpid());
+        static Messenger messenger_;
+    };
+} // namespace process
 
 #endif // PROCESS_HELPER_H

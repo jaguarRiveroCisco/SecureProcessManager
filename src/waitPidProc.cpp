@@ -36,14 +36,14 @@ void processControl()
             else if (input == "terminate all")
             {
                 g_running = false; // Set running to false to signal the main thread
-                ProcessHandler::terminateAll();
+                process::ProcessHandler::terminateAll();
             }
             else if (input.rfind("terminate ", 0) == 0) // Check if input starts with "terminate "
             {
                 try
                 {
                     pid_t pid = std::stoi(input.substr(10)); // Extract PID from input
-                    ProcessHandler::terminateProcessByPid(pid);
+                    process::ProcessHandler::terminateProcessByPid(pid);
                 }
                 catch (const std::invalid_argument &)
                 {
@@ -57,14 +57,14 @@ void processControl()
             else if (input == "kill all")
             {
                 g_running = false; // Set running to false to signal the main thread
-                ProcessHandler::killAll();
+                process::ProcessHandler::killAll();
             }
             else if (input.rfind("kill ", 0) == 0) // Check if input starts with "kill "
             {
                 try
                 {
                     pid_t pid = std::stoi(input.substr(5)); // Extract PID from input
-                    ProcessHandler::killProcessByPid(pid);
+                    process::ProcessHandler::killProcessByPid(pid);
                 }
                 catch (const std::invalid_argument &)
                 {
@@ -77,7 +77,7 @@ void processControl()
             }
             else if (input == "display pids")
             {
-                ProcessHandler::displayAllPids();
+                process::ProcessHandler::displayAllPids();
             }
             else if (input == "help")
             {
@@ -155,14 +155,14 @@ auto main(int argc, char *argv[]) -> int
     };
     parseArguments(argc, argv);
 
-    SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
-    ProcessHandler::setProcessType(processType); // Call to setProcessType with the parsed value
+    process::SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
+    process::ProcessHandler::setProcessType(processType); // Call to setProcessType with the parsed value
 
     std::thread readerThread(processControl);
 
     // Create process handlers
-    ProcessHandler::createHandlers(numProcesses);
-    ProcessHandler::waitForEvents();
+    process::ProcessHandler::createHandlers(numProcesses);
+    process::ProcessHandler::waitForEvents();
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
     return 0;
