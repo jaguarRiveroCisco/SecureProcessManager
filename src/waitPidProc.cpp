@@ -10,7 +10,7 @@
 std::atomic<bool> g_display = true;
 std::atomic<bool> g_running = true;
 
-void consoleReader()
+void processControl()
 {
     std::string input;
     while (g_running)
@@ -156,7 +156,7 @@ auto main(int argc, char *argv[]) -> int
         SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
     };
 
-    std::thread readerThread(consoleReader);
+    std::thread readerThread(processControl);
 
     parseArguments(argc, argv);
 
