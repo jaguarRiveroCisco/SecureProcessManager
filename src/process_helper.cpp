@@ -3,9 +3,9 @@
 
 namespace process
 {
-    Messenger ProcessHelper::messenger_;
+    Messenger Communicator::messenger_;
 
-    void ProcessHelper::sendCreationMessage(int sleepDuration, pid_t pid)
+    void Communicator::sendCreationMessage(int sleepDuration, pid_t pid)
     {
         std::string messageText = "Child " + std::to_string(pid) +
                                   " created. Sleep duration: " + std::to_string(sleepDuration) + " seconds";
@@ -19,5 +19,5 @@ namespace process
         }
     }
 
-    std::string ProcessHelper::receiveCreationMessage() { return messenger_.receiveMessage(Message::CREATION_MSG); }
+    std::string Communicator::receiveCreationMessage() { return messenger_.receiveMessage(Message::CREATION_MSG); }
 } // namespace process

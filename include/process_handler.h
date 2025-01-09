@@ -5,14 +5,14 @@
 
 namespace process
 {
-    class ProcessHandler final : protected ProcessBase 
+    class Controller final : protected BaseHandler 
     {
     public:
-        void        init(Synchro *synchro, std::unique_ptr<ProcessInterface> process);
+        void        init(Synchro *synchro, std::unique_ptr<IProcess> process);
         void        start();
         static void numProcesses(int numProcesses);
         static int  numProcesses();
-        static std::vector<std::unique_ptr<ProcessHandler>> handlers_;
+        static std::vector<std::unique_ptr<Controller>> handlers_;
         static Synchro                                     *synchro();
         std::string                                         receiveCreationMessage();
         pid_t                                               getPid() const;
@@ -30,7 +30,7 @@ namespace process
         static int                        numProcesses_;
         static std::string                processType_;
         void                              createChild();
-        std::unique_ptr<ProcessInterface> process_;
+        std::unique_ptr<IProcess> process_;
     };
 } // namespace process
 

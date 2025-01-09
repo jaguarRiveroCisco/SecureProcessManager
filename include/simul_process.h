@@ -4,11 +4,11 @@
 
 namespace process
 {
-    class SimulProcess : public ProcessInterface 
+    class ProcessSimulator : public IProcess 
     {
     public:
         void work() override;
-        virtual ~SimulProcess() = default;
+        virtual ~ProcessSimulator() = default;
         static void setRndUpper(int rndUpper);
 
     private:

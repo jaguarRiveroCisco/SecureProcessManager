@@ -4,10 +4,10 @@
 
 namespace process
 {
-    class ProcessInterface : public ProcessHelper 
+    class IProcess : public Communicator 
     {
     public:
-        virtual ~ProcessInterface() = default;
+        virtual ~IProcess() = default;
         virtual void work()         = 0;
     };
 } // namespace process

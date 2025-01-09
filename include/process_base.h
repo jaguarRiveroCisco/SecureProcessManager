@@ -4,11 +4,11 @@
 
 namespace process
 {
-    class ProcessBase 
+    class BaseHandler 
     {
     protected:
-        ProcessBase();
-        virtual ~ProcessBase();
+        BaseHandler();
+        virtual ~BaseHandler();
         void          displayProcessStatus(int &status);
         bool          isProcessRunning() const;
         void          terminateProcess();

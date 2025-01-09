@@ -9,18 +9,18 @@ extern std::atomic<bool> g_display;
 extern std::atomic<bool> g_running;
 namespace process
 {
-    std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;
-    int                                          ProcessHandler::numProcesses_ = 4; // Default number of processes
-    std::string                                  ProcessHandler::processType_  = "simul"; // Default process type
+    std::vector<std::unique_ptr<Controller>> Controller::handlers_;
+    int                                          Controller::numProcesses_ = 4; // Default number of processes
+    std::string                                  Controller::processType_  = "simul"; // Default process type
 
 
-    Synchro *ProcessHandler::synchro()
+    Synchro *Controller::synchro()
     {
         static Synchro instance;
         return &instance;
     }
 
-    void ProcessHandler::init(Synchro *synchro, std::unique_ptr<ProcessInterface> process)
+    void Controller::init(Synchro *synchro, std::unique_ptr<IProcess> process)
     {
         if (synchro == nullptr)
         {
@@ -31,15 +31,15 @@ namespace process
         createChild();
     }
 
-    std::string ProcessHandler::receiveCreationMessage() { return process_->receiveCreationMessage(); }
+    std::string Controller::receiveCreationMessage() { return process_->receiveCreationMessage(); }
 
-    void ProcessHandler::start() { createCheckProcessThread(); }
+    void Controller::start() { createCheckProcessThread(); }
 
-    void ProcessHandler::numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
+    void Controller::numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
 
-    int ProcessHandler::numProcesses() { return numProcesses_; }
+    int Controller::numProcesses() { return numProcesses_; }
 
-    void ProcessHandler::createChild()
+    void Controller::createChild()
     {
         pid_ = fork();
         if (pid_ == 0)
@@ -68,11 +68,11 @@ namespace process
         }
     }
 
-    pid_t ProcessHandler::getPid() const { return pid_; }
+    pid_t Controller::getPid() const { return pid_; }
 
-    void ProcessHandler::setProcessType(const std::string &processType) { processType_ = processType; }
+    void Controller::setProcessType(const std::string &processType) { processType_ = processType; }
 
-    void ProcessHandler::createHandlers(int numProcesses)
+    void Controller::createHandlers(int numProcesses)
     {
         numProcesses_ = numProcesses;
 
@@ -91,16 +91,16 @@ namespace process
         }
     }
 
-    void ProcessHandler::createHandler()
+    void Controller::createHandler()
     {
-        auto handler = std::make_unique<ProcessHandler>();
+        auto handler = std::make_unique<Controller>();
         if (processType_ == "real")
         {
             handler->init(synchro(), std::make_unique<Process>());
         }
         else if (processType_ == "simul")
         {
-            handler->init(synchro(), std::make_unique<SimulProcess>());
+            handler->init(synchro(), std::make_unique<ProcessSimulator>());
         }
 
         std::string messageText =
@@ -111,7 +111,7 @@ namespace process
         handlers_.push_back(std::move(handler));
     }
 
-    void ProcessHandler::waitForEvents()
+    void Controller::waitForEvents()
     {
         while (g_running)
         {
@@ -127,7 +127,7 @@ namespace process
                     // Find and remove the handler with the matching PID
                     auto it = std::remove_if(
                             handlers_.begin(), handlers_.end(),
-                            [pid](const std::unique_ptr<ProcessHandler> &handler) { return handler->getPid() == pid; });
+                            [pid](const std::unique_ptr<Controller> &handler) { return handler->getPid() == pid; });
                     handlers_.erase(it, handlers_.end());
                     if (g_running)
                         createHandler();
@@ -136,17 +136,17 @@ namespace process
         }
     }
 
-    void ProcessHandler::terminateAll()
+    void Controller::terminateAll()
     {
         for (auto &handler: handlers_)
         {
             handler->terminateProcess();
         }
     }
-    void ProcessHandler::terminateProcessByPid(pid_t pid)
+    void Controller::terminateProcessByPid(pid_t pid)
     {
         auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessHandler> &handler) {
+                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<Controller> &handler) {
                     return handler->getPid() == pid;
                 });
         if (it != handlers_.end())
@@ -158,7 +158,7 @@ namespace process
             std::cerr << "Process with PID: " << pid << " not found." << std::endl;
         }
     }
-    void ProcessHandler::displayAllPids()
+    void Controller::displayAllPids()
     {
         std::cout << "Current PIDs:" << std::endl;
         for (const auto &handler: handlers_)
@@ -167,17 +167,17 @@ namespace process
         }
         std::cout << "Total number of processes: " << handlers_.size() << std::endl;
     }
-    void ProcessHandler::killAll()
+    void Controller::killAll()
     {
         for (auto &handler: handlers_)
         {
             handler->killProcess();
         }
     }
-    void ProcessHandler::killProcessByPid(pid_t pid)
+    void Controller::killProcessByPid(pid_t pid)
     {
         auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessHandler> &handler) {
+                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<Controller> &handler) {
                     return handler->getPid() == pid;
                 });
         if (it != handlers_.end())

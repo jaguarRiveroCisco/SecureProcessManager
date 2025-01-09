@@ -5,7 +5,7 @@
 
 namespace process
 {
-    class Process : public ProcessInterface 
+    class Process : public IProcess 
     {
     public:
         Process()          = default;

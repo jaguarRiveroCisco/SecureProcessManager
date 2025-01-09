@@ -8,11 +8,11 @@ extern std::atomic<bool> g_display;
 
 namespace process
 {
-    size_t ProcessBase::processCounter_ = 0;
+    size_t BaseHandler::processCounter_ = 0;
 
-    ProcessBase::ProcessBase() : startTime_(std::chrono::high_resolution_clock::now()) { ++processCounter_; }
+    BaseHandler::BaseHandler() : startTime_(std::chrono::high_resolution_clock::now()) { ++processCounter_; }
 
-    ProcessBase::~ProcessBase()
+    BaseHandler::~BaseHandler()
     {
         --processCounter_;
         auto endTime  = std::chrono::high_resolution_clock::now();
@@ -22,7 +22,7 @@ namespace process
                       << processCounter_ << std::endl;
     }
 
-    void ProcessBase::displayProcessStatus(int &status)
+    void BaseHandler::displayProcessStatus(int &status)
     {
         // Child finished
         if (!WIFEXITED(status))
@@ -38,7 +38,7 @@ namespace process
         }
     }
 
-    bool ProcessBase::isProcessRunning() const
+    bool BaseHandler::isProcessRunning() const
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
@@ -48,11 +48,11 @@ namespace process
         return true;
     }
 
-    void ProcessBase::terminateProcess() { sendSignal(SIGTERM); }
+    void BaseHandler::terminateProcess() { sendSignal(SIGTERM); }
 
-    void ProcessBase::killProcess() { sendSignal(SIGKILL); }
+    void BaseHandler::killProcess() { sendSignal(SIGKILL); }
 
-    void ProcessBase::sendSignal(int signal)
+    void BaseHandler::sendSignal(int signal)
     {
         if (kill(pid_, signal) == -1)
         {
@@ -60,13 +60,13 @@ namespace process
         }
     }
 
-    void ProcessBase::createCheckProcessThread()
+    void BaseHandler::createCheckProcessThread()
     {
         // Parent process
         // Create a thread to check the state of the child process
         try
         {
-            std::thread checkThread(&ProcessBase::checkProcessState, this);
+            std::thread checkThread(&BaseHandler::checkProcessState, this);
             checkThread.detach();
         }
         catch (const std::system_error &e)
@@ -75,7 +75,7 @@ namespace process
         }
     }
 
-    void ProcessBase::checkProcessState()
+    void BaseHandler::checkProcessState()
     {
         int status = -1;
         while (true)

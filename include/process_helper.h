@@ -5,14 +5,14 @@
 
 namespace process
 {
-    class ProcessHelper 
+    class Communicator 
     {
     public:
-        virtual ~ProcessHelper() = default;
+        virtual ~Communicator() = default;
         virtual std::string receiveCreationMessage();
 
     protected:
-        ProcessHelper() = default;
+        Communicator() = default;
         void             sendCreationMessage(int sleepDuration = 0, pid_t pid = getpid());
         static Messenger messenger_;
     };

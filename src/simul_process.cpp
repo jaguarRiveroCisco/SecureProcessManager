@@ -8,22 +8,22 @@
 
 namespace process
 {
-    int           SimulProcess::rndUpper_ = 10;
+    int           ProcessSimulator::rndUpper_ = 10;
     constexpr int baseSleepDuration       = 20;
 
-    void SimulProcess::setRndUpper(int rndUpper)
+    void ProcessSimulator::setRndUpper(int rndUpper)
     {
         rndUpper_ = rndUpper;
         std::cout << "Children process will simulate work for a random duration between " << baseSleepDuration
                   << " and " << baseSleepDuration + rndUpper_ << " seconds." << std::endl;
     }
-    void SimulProcess::setSleepDuration()
+    void ProcessSimulator::setSleepDuration()
     {
         std::srand(std::time(nullptr) ^ getpid()); // Seed using time and PID to ensure different seeds
         sleepDuration_ = std::rand() % rndUpper_ + baseSleepDuration; // Random sleep duration between 1 and x seconds
     }
 
-    void SimulProcess::work()
+    void ProcessSimulator::work()
     {
         setSleepDuration();
         sendCreationMessage(sleepDuration_);
