@@ -68,6 +68,13 @@ Once the program is running, you can use the following commands to control proce
 - **`src/process_helper.cpp`**: Provides helper functions for process management.
 - **`src/simul_process.cpp`**: Simulates process workloads.
 - **`src/process_handler.cpp`**: Handles the integration and management of processes.
+- **`include/messenger.h`**: Header file for the Messenger class.
+- **`include/process_base.h`**: Header file for the ProcessBase class.
+- **`include/process_helper.h`**: Header file for the ProcessHelper class.
+- **`include/simul_process.h`**: Header file for the SimulProcess class.
+- **`include/process_handler.h`**: Header file for the ProcessHandler class.
+- **`include/synchro.h`**: Header file for synchronization utilities.
+- **`src/synchro.cpp`**: Implements synchronization utilities.
 
 ## Building the Project
 
