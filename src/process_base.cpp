@@ -88,7 +88,7 @@ namespace process
             if (result == 0)
             {
                 // Child still running
-                std::this_thread::sleep_for(std::chrono::seconds(1));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
             else if (result == pid_)
             {
