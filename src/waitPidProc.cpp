@@ -17,7 +17,7 @@ auto main(int argc, char *argv[]) -> int
     std::string processType  = "simul";
     int         rndUpper     = 10; // Default value for rndUpper
 
-    auto parseArguments = [&](int argc, char *argv[]) {
+    auto parseArguments = [&]() {
         int opt;
         while ((opt = getopt(argc, argv, "n:t:r:d:h")) != -1)
         {
@@ -68,7 +68,7 @@ auto main(int argc, char *argv[]) -> int
         }
 
     };
-    parseArguments(argc, argv);
+    parseArguments();
 
     process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
 
