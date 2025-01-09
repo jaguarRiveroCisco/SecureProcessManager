@@ -20,6 +20,7 @@ public:
     static void setProcessType(const std::string &processType);
     static void terminateAll();
     static void terminateProcessByPid(pid_t pid);
+    static void displayAllPids();
 private:
     static void createHandler();
     static int numProcesses_;

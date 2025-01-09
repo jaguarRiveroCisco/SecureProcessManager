@@ -54,6 +54,10 @@ void consoleReader()
                     std::cerr << "PID out of range." << std::endl;
                 }
             }
+            else if (input == "display pids")
+            {
+                ProcessHandler::displayAllPids();
+            }
             else if (input == "help")
             {
                 std::cout << "Available commands:\n"
@@ -62,6 +66,7 @@ void consoleReader()
                           << "  exit           - Exit the program once all processes are done\n"
                           << "  terminate      - Terminate all processes and exit the program\n"
                           << "  terminate <pid> - Terminate a specific process by PID\n"
+                          << "  display pids   - Display all current PIDs\n"
                           << "  help           - Display this help message\n";
             }
             else
@@ -125,7 +130,6 @@ auto main(int argc, char *argv[]) -> int
             rndUpper = 10;
         }
 
-        std::cout << "Random delta upper limit: " << rndUpper << std::endl;
         SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
     };
 

@@ -7,8 +7,7 @@ class SimulProcess : public ProcessInterface
     public:
         void work() override;
         virtual ~SimulProcess() = default;
-        static void setRndUpper(int rndUpper) { rndUpper_ = rndUpper; }
-    protected:
+        static void setRndUpper(int rndUpper);
     private:
         void setSleepDuration();
         static int  rndUpper_;

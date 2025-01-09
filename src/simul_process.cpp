@@ -7,8 +7,17 @@
 #include "process_base.h"
 #include "simul_process.h"
 
+
+
 int SimulProcess::rndUpper_ = 10;
 constexpr int baseSleepDuration = 20;
+
+void SimulProcess::setRndUpper(int rndUpper)
+{
+    rndUpper_ = rndUpper;
+    std::cout << "Children process will simulate work for a random duration between " << baseSleepDuration
+              << " and " << baseSleepDuration + rndUpper_ << " seconds." << std::endl;
+}
 void SimulProcess::setSleepDuration()
 {
     std::srand(std::time(nullptr) ^ getpid()); // Seed using time and PID to ensure different seeds

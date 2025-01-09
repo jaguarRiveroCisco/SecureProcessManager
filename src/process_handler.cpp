@@ -151,3 +151,12 @@ void ProcessHandler::terminateProcessByPid(pid_t pid)
         std::cerr << "Process with PID: " << pid << " not found." << std::endl;
     }
 }
+void ProcessHandler::displayAllPids()
+{
+    std::cout << "Current PIDs:" << std::endl;
+    for (const auto &handler: handlers_)
+    {
+        std::cout << handler->getPid() << std::endl;
+    }
+    std::cout << "Total number of processes: " << handlers_.size() << std::endl;
+}
