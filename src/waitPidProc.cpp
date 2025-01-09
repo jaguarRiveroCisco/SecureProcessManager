@@ -23,20 +23,25 @@ auto main(int argc, char *argv[]) -> int
         {
             switch (opt)
             {
-                case 'n':
-                    numProcesses = std::atoi(optarg);
-                    break;
-                case 't':
-                    processType = optarg;
-                    break;
-                case 'r':
-                    rndUpper = std::atoi(optarg);
-                    break;
-                case 'd':
-                    g_display = std::atoi(optarg) != 0;
-                    break;
-                case 'h':
-                default:
+            case 'n':
+                // Set the number of processes from the argument
+                numProcesses = std::atoi(optarg);
+                break;
+            case 't':
+                // Set the process type from the argument
+                processType = optarg;
+                break;
+            case 'r':
+                // Set the random upper limit from the argument
+                rndUpper = std::atoi(optarg);
+                break;
+            case 'd':
+                // Set the display flag from the argument (0 or 1)
+                g_display = std::atoi(optarg) != 0;
+                break;
+            case 'h':
+            default:
+                // Display usage information and exit
                     std::cerr << "Usage: " << argv[0]
                               << " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 "
                                  "or 1)> -h -> help\n";
@@ -67,7 +72,7 @@ auto main(int argc, char *argv[]) -> int
 
     process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
 
-    std::thread readerThread(process::processControl);
+    std::thread readerThread(process::controller);
 
     process::Controller::run(processType, numProcesses);
 

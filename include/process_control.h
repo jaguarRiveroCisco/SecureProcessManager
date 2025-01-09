@@ -3,7 +3,7 @@
 
 namespace process
 {
-    void processControl();
+    void controller();
 }
 
 #endif // PROCESS_CONTROL_H

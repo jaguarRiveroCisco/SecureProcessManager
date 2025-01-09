@@ -9,7 +9,7 @@ extern std::atomic<bool> g_running;
 
 namespace process
 {
-    void processControl()
+    void controller()
     {
         std::string input;
         while (g_running)
