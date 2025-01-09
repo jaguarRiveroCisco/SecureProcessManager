@@ -1,7 +1,10 @@
 #include "messenger.h"
+#include <iostream>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include <iostream>
+#include <unistd.h>
+
+static int counter;
 
 Messenger::Messenger()
 {
@@ -14,7 +17,8 @@ Messenger::Messenger()
         perror("msgget");
         throw std::runtime_error("Failed to create message queue");
     }
-    std::cout << "CTOR Message queue created with id " << msgid_ << std::endl;
+    std::cout << "Process ID: " << getpid() << " - CTOR Message queue created with id " << msgid_
+              << " number of instances " << ++counter << std::endl;
 }
 
 Messenger::~Messenger()
@@ -24,7 +28,8 @@ Messenger::~Messenger()
     {
         perror("msgctl");
     }
-    std::cout << "DTOR ~Message queue with id " << msgid_ << " destroyed" << std::endl;
+    std::cout << "Process ID: " << getpid() << " - DTOR ~Message queue with id " << msgid_ << " number of instances "
+              << --counter << std::endl;
 }
 
 void Messenger::sendMessage(const std::string &text, int msgType)
