@@ -153,13 +153,12 @@ auto main(int argc, char *argv[]) -> int
         }
 
     };
+    parseArguments(argc, argv);
 
     SimulProcess::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
     ProcessHandler::setProcessType(processType); // Call to setProcessType with the parsed value
 
     std::thread readerThread(processControl);
-
-    parseArguments(argc, argv);
 
     // Create process handlers
     ProcessHandler::createHandlers(numProcesses);
