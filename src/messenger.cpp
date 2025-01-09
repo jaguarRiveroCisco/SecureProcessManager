@@ -1,9 +1,6 @@
 #include "messenger.h"
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include <cstdio>
-#include <stdexcept>
-#include <string>
 #include <iostream>
 
 Messenger::Messenger()

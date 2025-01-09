@@ -1,9 +1,7 @@
 #ifndef PROCESS_HANDLER_H
 #define PROCESS_HANDLER_H
+#include "process_interface.h"
 #include "process_base.h"
-#include "process_helper.h"
-#include "simul_process.h"
-#include "process.h"
 class ProcessHandler final : protected ProcessBase
 {
 public:

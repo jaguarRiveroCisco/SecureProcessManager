@@ -1,6 +1,8 @@
 
 #include <unistd.h>
-#include "synchro.h"
+#include "process.h"
+
+#include "simul_process.h"
 #include "process_handler.h"
 
 std::vector<std::unique_ptr<ProcessHandler>> ProcessHandler::handlers_;

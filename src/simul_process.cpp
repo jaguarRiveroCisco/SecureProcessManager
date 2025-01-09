@@ -1,12 +1,10 @@
 
-#include <ctime>
-#include <thread>
-#include <chrono>
-#include <unistd.h>
-#include "synchro.h"
-#include "process_base.h"
 #include "simul_process.h"
-
+#include <chrono>
+#include <ctime>
+#include <iostream>
+#include <thread>
+#include <unistd.h>
 
 
 int SimulProcess::rndUpper_ = 10;

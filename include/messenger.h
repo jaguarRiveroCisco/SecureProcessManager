@@ -1,10 +1,6 @@
 #ifndef MESSENGER_H
 #define MESSENGER_H
 
-#include <sys/ipc.h>
-#include <sys/msg.h>
-#include <cstdio>
-#include <stdexcept>
 #include <string>
 #include "message.h"
 
