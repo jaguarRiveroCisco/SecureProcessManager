@@ -9,9 +9,6 @@
 #include "process_control.h"
 
 std::atomic<bool> g_display = true;
-std::atomic<bool> g_running = true;
-
-
 
 auto main(int argc, char *argv[]) -> int
 {

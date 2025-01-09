@@ -11,7 +11,7 @@ while true; do
     
     # Print the total number of lines
     line_count=$(echo "$current_output" | wc -l)
-    echo "Total number of child processes: $(( $(echo "$current_output" | wc -l) - 1 ))"
+    echo "Total number of ProcessController processes: $(( $(echo "$current_output" | wc -l) - 1 ))"
 
     previous_output="$current_output"
   fi

@@ -9,10 +9,13 @@ namespace process
     {
     public:
         virtual ~Communicator() = default;
+        Communicator(const Communicator &) = delete;
+        Communicator &operator=(const Communicator &) = delete;
+        Communicator(Communicator &&)                 = delete;
+        Communicator() = default;
         virtual std::string receiveCreationMessage();
 
     protected:
-        Communicator() = default;
         void             sendCreationMessage(int sleepDuration = 0, pid_t pid = getpid());
         static Messenger messenger_;
     };

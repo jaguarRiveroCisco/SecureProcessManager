@@ -6,7 +6,6 @@
 #include "process_handler.h"
 
 extern std::atomic<bool> g_display;
-extern std::atomic<bool> g_running;
 
 namespace process::controller
 {
@@ -69,7 +68,7 @@ namespace process::controller
     void main()
     {
         std::string input;
-        while (g_running)
+        while (process::Controller::running())
         {
             std::getline(std::cin, input);
             doCommand(input);
@@ -93,12 +92,12 @@ namespace process::controller
             }
             else if (input == "exit")
             {
-                g_running = false; // Set running to false to signal the main thread
+                process::Controller::running() = false; // Set running to false to signal the main thread
                 std::cout << "Program signalled to exiting once the next process is done" << std::endl;
             }
             else if (input == "terminate all")
             {
-                g_running = false; // Set running to false to signal the main thread
+                process::Controller::running() = false; // Set running to false to signal the main thread
                 std::cout << "Terminating all processes and exiting the program." << std::endl;
                 process::Controller::terminateAll();
             }
@@ -109,7 +108,7 @@ namespace process::controller
             }
             else if (input == "kill all")
             {
-                g_running = false; // Set running to false to signal the main thread
+                process::Controller::running() = false; // Set running to false to signal the main thread
                 std::cout << "Killing all processes and exiting the program." << std::endl;
                 process::Controller::killAll();
             }

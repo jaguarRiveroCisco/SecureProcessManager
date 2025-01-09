@@ -6,13 +6,12 @@
 #include "process_handler.h"
 
 extern std::atomic<bool> g_display;
-extern std::atomic<bool> g_running;
 namespace process
 {
     std::vector<std::unique_ptr<Controller>> Controller::handlers_;
     int                                      Controller::numProcesses_ = 4; // Default number of processes
     std::string                              Controller::processType_  = "simul"; // Default process type
-
+    bool                                     Controller::running_      = true;
 
     Synchro *Controller::synchro()
     {
@@ -26,7 +25,7 @@ namespace process
 
     pid_t Controller::getPid() const { return pid_; }
 
-    std::string Controller::receiveCreationMessage() { return process_->receiveCreationMessage(); }
+    std::string Controller::receiveCreationMessage() { return communicator_->receiveCreationMessage(); }
 
     void Controller::init(Synchro *synchro, std::unique_ptr<IProcess> process)
     {
@@ -36,6 +35,7 @@ namespace process
         }
         synchro_ = synchro;
         process_ = std::move(process);
+        communicator_ = std::make_unique<Communicator>();
         createChild();
     }
 
@@ -120,7 +120,7 @@ namespace process
 
     void Controller::waitForEvents()
     {
-        while (g_running)
+        while (process::Controller::running())
         {
             std::unique_lock<std::mutex> lock(synchro()->mtx);
             synchro()->cv.wait(lock, [&] { return !synchro()->eventQueue.empty(); });
@@ -136,7 +136,7 @@ namespace process
                             handlers_.begin(), handlers_.end(),
                             [pid](const std::unique_ptr<Controller> &handler) { return handler->getPid() == pid; });
                     handlers_.erase(it, handlers_.end());
-                    if (g_running)
+                    if (process::Controller::running())
                     {
                         if(g_display)
                             std::cout << "\trespawn!  ";
@@ -204,4 +204,7 @@ namespace process
             std::cerr << "Process with PID: " << pid << " not found." << std::endl;
         }
     }
+
+    bool &Controller::running() { return running_; }
+
 } // namespace process
