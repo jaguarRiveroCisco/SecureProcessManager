@@ -10,8 +10,8 @@ extern std::atomic<bool> g_running;
 namespace process
 {
     std::vector<std::unique_ptr<Controller>> Controller::handlers_;
-    int                                          Controller::numProcesses_ = 4; // Default number of processes
-    std::string                                  Controller::processType_  = "simul"; // Default process type
+    int                                      Controller::numProcesses_ = 4; // Default number of processes
+    std::string                              Controller::processType_  = "simul"; // Default process type
 
 
     Synchro *Controller::synchro()
@@ -19,6 +19,14 @@ namespace process
         static Synchro instance;
         return &instance;
     }
+
+    void Controller::numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
+
+    int Controller::numProcesses() { return numProcesses_; }
+
+    pid_t Controller::getPid() const { return pid_; }
+
+    std::string Controller::receiveCreationMessage() { return process_->receiveCreationMessage(); }
 
     void Controller::init(Synchro *synchro, std::unique_ptr<IProcess> process)
     {
@@ -31,13 +39,7 @@ namespace process
         createChild();
     }
 
-    std::string Controller::receiveCreationMessage() { return process_->receiveCreationMessage(); }
-
     void Controller::start() { createCheckProcessThread(); }
-
-    void Controller::numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
-
-    int Controller::numProcesses() { return numProcesses_; }
 
     void Controller::createChild()
     {
@@ -68,8 +70,6 @@ namespace process
         }
     }
 
-    pid_t Controller::getPid() const { return pid_; }
-
     void Controller::setProcessType(const std::string &processType) { processType_ = processType; }
 
     void Controller::createHandlers(int numProcesses)
@@ -97,7 +97,7 @@ namespace process
         createHandlers(numProcesses);
         waitForEvents();
     }
-    
+
     void Controller::createHandler()
     {
         auto handler = std::make_unique<Controller>();
@@ -150,6 +150,7 @@ namespace process
             handler->terminateProcess();
         }
     }
+    
     void Controller::terminateProcessByPid(pid_t pid)
     {
         auto it =
@@ -165,6 +166,7 @@ namespace process
             std::cerr << "Process with PID: " << pid << " not found." << std::endl;
         }
     }
+    
     void Controller::displayAllPids()
     {
         std::cout << "Current PIDs:" << std::endl;
@@ -174,6 +176,7 @@ namespace process
         }
         std::cout << "Total number of processes: " << handlers_.size() << std::endl;
     }
+    
     void Controller::killAll()
     {
         for (auto &handler: handlers_)
@@ -181,6 +184,7 @@ namespace process
             handler->killProcess();
         }
     }
+    
     void Controller::killProcessByPid(pid_t pid)
     {
         auto it =

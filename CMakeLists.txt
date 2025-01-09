@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(MyCMakeProject)
+project(DynamicControlOfChildProcesses)
 
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
 
-add_executable(waitPidProc 
+add_executable(ProcessController 
 src/waitPidProc.cpp 
 src/messenger.cpp 
 src/process_base.cpp

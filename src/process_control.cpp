@@ -8,13 +8,12 @@
 extern std::atomic<bool> g_display;
 extern std::atomic<bool> g_running;
 
-namespace process
+namespace process::controller
 {
     void killPid(const std::string &input);
     void terminatePid(const std::string &input);
-    void printHelp();
 
-    void controller()
+    void main()
     {
         std::string input;
         while (g_running)
@@ -40,19 +39,28 @@ namespace process
                 else if (input == "terminate all")
                 {
                     g_running = false; // Set running to false to signal the main thread
+                    std::cout << "Terminating all processes and exiting the program." << std::endl;
                     process::Controller::terminateAll();
                 }
                 else if (input.rfind("terminate ", 0) == 0) // Check if input starts with "terminate "
+                {
+                    std::cout << "Terminating process with PID: " << input.substr(10) << std::endl;
                     terminatePid(input);
+                }
                 else if (input == "kill all")
                 {
                     g_running = false; // Set running to false to signal the main thread
+                    std::cout << "Killing all processes and exiting the program." << std::endl;
                     process::Controller::killAll();
                 }
                 else if (input.rfind("kill ", 0) == 0) // Check if input starts with "kill "
+                {
+                    std::cout << "Killing process with PID: " << input.substr(5) << std::endl;
                     killPid(input);
+                }
                 else if (input == "display pids")
                 {
+                    std::cout << "Displaying all current PIDs:" << std::endl;
                     process::Controller::displayAllPids();
                 }
                 else if (input == "help")
@@ -70,16 +78,18 @@ namespace process
 
     void printHelp()
     {
-        std::cout << "Available commands:\n"
-                  << "  print on       - Turn on display progress\n"
-                  << "  print off      - Turn off display progress\n"
-                  << "  exit           - Exit the program once all processes are done\n"
-                  << "  terminate all  - Terminate all processes and exit the program\n"
+        std::cout << "Process Control Help Menu\n"
+                  << "==========================\n"
+                  << "Available commands:\n"
+                  << "  print on        - Turn on display progress\n"
+                  << "  print off       - Turn off display progress\n"
+                  << "  exit            - Gracefully exits the program once the first process is done\n"
+                  << "  terminate all   - Terminate all processes and exit the program\n"
                   << "  terminate <pid> - Terminate a specific process by PID\n"
-                  << "  kill all       - Kill all processes and exit the program\n"
-                  << "  kill <pid>     - Kill a specific process by PID\n"
-                  << "  display pids   - Display all current PIDs\n"
-                  << "  help           - Display this help message\n";
+                  << "  kill all        - Kill all processes and exit the program\n"
+                  << "  kill <pid>      - Kill a specific process by PID\n"
+                  << "  display pids    - Display all current PIDs\n"
+                  << "  help            - Display this help message\n";
     }
 
     void killPid(const std::string &input)
