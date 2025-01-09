@@ -1,11 +1,13 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-struct Message 
+namespace process
 {
-    long      msgType = CREATION_MSG;
-    char msgText[100] {0};
-    static const int CREATION_MSG = 1;
-};
-
+    struct Message
+    {
+        static const int CREATION_MSG = 1;
+        long             msgType      = CREATION_MSG;
+        char             msgText[100] {0};
+    };
+} // namespace process
 #endif // MESSAGE_H
