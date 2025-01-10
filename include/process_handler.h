@@ -21,16 +21,14 @@ namespace process
         static void     killProcessByPid(pid_t pid);
         static void     displayAllPids();
         static void     run(const std::string &processType, int numProcesses);
-        static bool    &running();
+
 
     private:
         static void                       waitForEvents();
         static void                       createHandlers(int numProcesses);
         static void                       setProcessType(const std::string &processType);
         static void                       createHandler();
-        static int                        numProcesses_;
-        static std::string                processType_;
-        static bool                       running_;
+
         void                              createChild();
         std::unique_ptr<IProcess> process_;
         static std::vector<std::unique_ptr<Controller>> handlers_;

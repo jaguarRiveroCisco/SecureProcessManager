@@ -10,10 +10,7 @@ extern std::atomic<bool> g_display;
 namespace process
 {
     std::vector<std::unique_ptr<Controller>> Controller::handlers_;
-    int                                      Controller::numProcesses_ = 4; // Default number of processes
-    std::string                              Controller::processType_  = "simul"; // Default process type
-    bool                                     Controller::running_      = true;
-
+   
     Synchro *Controller::synchro()
     {
         static Synchro instance;
@@ -203,6 +200,6 @@ namespace process
         }
     }
 
-    bool &Controller::running() { return running_; }
+
 
 } // namespace process

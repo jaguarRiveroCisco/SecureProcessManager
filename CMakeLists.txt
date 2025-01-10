@@ -15,4 +15,5 @@ src/simul_process.cpp
 src/process_handler.cpp
 src/process.cpp
 src/process_control.cpp
+src/controller_base.cpp
 )
