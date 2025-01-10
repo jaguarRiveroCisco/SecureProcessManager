@@ -9,63 +9,10 @@
 extern std::atomic<bool> g_display;
 namespace process
 {
-    std::vector<std::unique_ptr<Controller>> Controller::handlers_;
-   
-    Synchro *Controller::synchro()
-    {
-        static Synchro instance;
-        return &instance;
-    }
 
-    void Controller::numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
 
-    int Controller::numProcesses() { return numProcesses_; }
 
-    std::string Controller::receiveCreationMessage() { return Communicator::getInstance().receiveCreationMessage(); }
 
-    void Controller::init(Synchro *synchro, std::unique_ptr<IProcess> process)
-    {
-        if (synchro == nullptr)
-        {
-            throw std::runtime_error("Synchro object is null");
-        }
-        synchro_ = synchro;
-        process_ = std::move(process);
-        createChild();
-    }
-
-    void Controller::start() { createCheckProcessThread(); }
-
-    void Controller::createChild()
-    {
-        pid_ = fork();
-        if (pid_ == 0)
-        {
-            try
-            {
-                process_->work();
-            }
-            catch (const std::exception &e)
-            {
-                // Handle exceptions in child process
-                std::cerr << "Exception in child process: " << e.what() << std::endl;
-                _exit(EXIT_FAILURE); // Ensure child process exits
-            }
-        }
-        else if (pid_ < 0)
-        {
-            // Fork failed
-            perror("fork");
-            throw std::runtime_error("Failed to fork process");
-        }
-        else
-        {
-            // Parent process
-            // std::cout << "Parent process created child process with PID: " << pid_ << std::endl;
-        }
-    }
-
-    void Controller::setProcessType(const std::string &processType) { processType_ = processType; }
 
     void Controller::createHandlers(int numProcesses)
     {
@@ -95,7 +42,7 @@ namespace process
 
     void Controller::createHandler()
     {
-        auto handler = std::make_unique<Controller>();
+        auto handler = std::make_unique<ControllerBase>();
         if (processType_ == "real")
         {
             handler->init(synchro(), std::make_unique<Process>());
@@ -129,7 +76,7 @@ namespace process
                     // Find and remove the handler with the matching PID
                     auto it = std::remove_if(
                             handlers_.begin(), handlers_.end(),
-                            [pid](const std::unique_ptr<Controller> &handler) { return handler->getPid() == pid; });
+                            [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
                     handlers_.erase(it, handlers_.end());
                     if (process::Controller::running())
                     {
@@ -142,63 +89,8 @@ namespace process
         }
     }
 
-    void Controller::terminateAll()
-    {
-        for (auto &handler: handlers_)
-        {
-            handler->terminateProcess();
-        }
-    }
+
     
-    void Controller::terminateProcessByPid(pid_t pid)
-    {
-        auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<Controller> &handler) {
-                    return handler->getPid() == pid;
-                });
-        if (it != handlers_.end())
-        {
-            (*it)->terminateProcess();
-        }
-        else
-        {
-            std::cerr << "Process with PID: " << pid << " not found." << std::endl;
-        }
-    }
-    
-    void Controller::displayAllPids()
-    {
-        std::cout << "Current PIDs:" << std::endl;
-        for (const auto &handler: handlers_)
-        {
-            std::cout << handler->getPid() << std::endl;
-        }
-        std::cout << "Total number of processes: " << handlers_.size() << std::endl;
-    }
-    
-    void Controller::killAll()
-    {
-        for (auto &handler: handlers_)
-        {
-            handler->killProcess();
-        }
-    }
-    
-    void Controller::killProcessByPid(pid_t pid)
-    {
-        auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<Controller> &handler) {
-                    return handler->getPid() == pid;
-                });
-        if (it != handlers_.end())
-        {
-            (*it)->killProcess();
-        }
-        else
-        {
-            std::cerr << "Process with PID: " << pid << " not found." << std::endl;
-        }
-    }
 
 
 
