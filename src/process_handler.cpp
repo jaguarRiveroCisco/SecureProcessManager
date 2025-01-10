@@ -11,12 +11,13 @@ namespace process
 {
     void Controller::createHandlers()
     {
-        std::cout << "Creating " << numProcesses_ << " child processes of type " << processType_ << ".\n";
         createHandlers_(numProcesses_);
     }
 
     void Controller::createHandlers_(int numHandlers)
     {
+        std::cout << "Creating " << numHandlers << " child processes of type " << processType_ << ".\n";
+
         for (int i = 0; i < numHandlers; ++i)
         {
             try
@@ -85,6 +86,19 @@ namespace process
                             createHandler();
                         }
                     }
+                }
+                // Check if the number of handlers is less than numProcesses_
+                if (handlers_.size() < numProcesses_)
+                {
+                    if (process::Controller::respawn())
+                    {
+                        int numHandlersToCreate = numProcesses_ - handlers_.size();
+                        createHandlers_(numHandlersToCreate);
+                    }
+                }
+                if(handlers_.empty())
+                {
+                    process::Controller::running() = false;
                 }
             }
         }
