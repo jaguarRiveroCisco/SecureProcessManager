@@ -22,6 +22,9 @@ namespace process
 
         protected:
             static int                                          numProcesses_;
+            static void setNumProcesses(int numProcesses) {
+                numProcesses_ = numProcesses;
+            }
             static std::string processType_;
             static std::vector<std::unique_ptr<ControllerBase>> handlers_;
         private:

@@ -9,18 +9,15 @@
 extern std::atomic<bool> g_display;
 namespace process
 {
-
-
-
-
-
-    void Controller::createHandlers(int numProcesses)
+    void Controller::createHandlers()
     {
-        numProcesses_ = numProcesses;
-
         std::cout << "Creating " << numProcesses_ << " child processes of type " << processType_ << ".\n";
+        createHandlers_(numProcesses_);
+    }
 
-        for (int i = 0; i < numProcesses_; ++i)
+    void Controller::createHandlers_(int numHandlers)
+    {
+        for (int i = 0; i < numHandlers; ++i)
         {
             try
             {
@@ -36,7 +33,8 @@ namespace process
     void Controller::run(const std::string &processType, int numProcesses)
     {
         setProcessType(processType);
-        createHandlers(numProcesses);
+        setNumProcesses(numProcesses);
+        createHandlers();
         waitForEvents();
     }
 

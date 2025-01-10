@@ -4,15 +4,15 @@
 
 namespace process
 {
-    class Controller final : public ControllerBase 
-    {
+    class Controller final : public ControllerBase {
     public:
-        static void     run(const std::string &processType, int numProcesses);
-    private:
-        static void                       waitForEvents();
-        static void                       createHandlers(int numProcesses);
-        static void                       createHandler();
+        static void run(const std::string &processType, int numProcesses);
 
+    private:
+        static void waitForEvents();
+        static void createHandlers();
+        static void createHandlers_(int numHandlers);
+        static void createHandler();
     };
 } // namespace process
 
