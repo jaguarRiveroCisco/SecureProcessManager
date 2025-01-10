@@ -134,6 +134,16 @@ namespace process::controller
             {
                 printHelp();
             }
+            else if (input == "respawn on")
+            {
+                process::ControllerBase::respawn() = true;
+                std::cout << "Respawn turned on." << std::endl;
+            }
+            else if (input == "respawn off")
+            {
+                process::ControllerBase::respawn() = false;
+                std::cout << "Respawn turned off." << std::endl;
+            }
             else
             {
                 std::cout << "You entered: " << input << std::endl;
@@ -153,6 +163,8 @@ namespace process::controller
                   << "  kill all        - Kill all processes and exit the program\n"
                   << "  kill <pid>      - Kill a specific process by PID\n"
                   << "  display pids    - Display all current PIDs\n"
+                  << "  respawn on      - Turn on respawn\n"
+                  << "  respawn off     - Turn off respawn\n"
                   << "  help            - Display this help message\n";
     }
 
