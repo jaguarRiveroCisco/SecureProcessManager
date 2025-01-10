@@ -59,10 +59,6 @@ namespace process
     
     bool &ControllerBase::running() { return running_; }
 
-    void  ControllerBase::numProcesses(int numProcesses) { numProcesses_ = numProcesses; }
-    
-    int   ControllerBase::numProcesses() { return numProcesses_; }
-
     void ControllerBase::setProcessType(const std::string &processType) { processType_ = processType; }
 
     void  ControllerBase::displayAllPids()
