@@ -80,9 +80,12 @@ namespace process
                     handlers_.erase(it, handlers_.end());
                     if (process::Controller::running())
                     {
-                        if(g_display)
-                            std::cout << "\trespawn!  ";
-                        createHandler();
+                        if(process::Controller::respawn())
+                        {
+                            if(g_display)
+                                std::cout << "\trespawn!  ";
+                            createHandler();
+                        }
                     }
                 }
             }

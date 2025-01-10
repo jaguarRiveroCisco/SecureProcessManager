@@ -5,6 +5,7 @@ namespace process
     int         ControllerBase::numProcesses_ = 4; // Default number of processes
     std::string ControllerBase::processType_  = "simul"; // Default process type
     bool        ControllerBase::running_      = true;
+    bool        ControllerBase::respawn_      = true;
     std::vector<std::unique_ptr<ControllerBase>> ControllerBase::handlers_;
 
     Synchro *ControllerBase::synchro()
@@ -31,6 +32,7 @@ namespace process
         pid_ = fork();
         if (pid_ == 0)
         {
+            //setupSignalHandling();
             try
             {
                 process_->work();
@@ -58,6 +60,8 @@ namespace process
     void  ControllerBase::start() { createCheckProcessThread(); }
     
     bool &ControllerBase::running() { return running_; }
+
+    bool &ControllerBase::respawn() { return respawn_; }
 
     void ControllerBase::setProcessType(const std::string &processType) { processType_ = processType; }
 

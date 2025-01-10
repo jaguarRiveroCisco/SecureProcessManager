@@ -7,7 +7,8 @@ namespace process
     class ControllerBase : public BaseHandler 
     {
         public:
-            static bool &running();
+            static bool    &running();
+            static bool    &respawn();
             static void  terminateAll();
             static void  terminateProcessByPid(pid_t pid);
             static void  killAll();
@@ -27,5 +28,17 @@ namespace process
             void                      createChild();
             std::unique_ptr<IProcess> process_;
             static bool               running_;
+            static bool               respawn_;
+            static void               signalHandler(int signum)
+            {
+                std::cout << "Process " << getpid() << " received signal " << signum << std::endl;
+                exit(signum);
+            }
+
+            void setupSignalHandling()
+            {
+                signal(SIGTERM, ControllerBase::signalHandler);
+                signal(SIGINT, ControllerBase::signalHandler);
+            }
     };
 }
