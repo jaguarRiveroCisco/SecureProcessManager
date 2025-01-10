@@ -5,7 +5,7 @@
 #include <iostream>
 #include <thread>
 #include <unistd.h>
-
+#include "process_helper.h"
 namespace process
 {
     int           ProcessSimulator::rndUpper_ = 10;
@@ -26,7 +26,7 @@ namespace process
     void ProcessSimulator::work()
     {
         setSleepDuration();
-        sendCreationMessage(sleepDuration_);
+        Communicator::getInstance().sendCreationMessage(sleepDuration_);
         // Child process
         std::this_thread::sleep_for(std::chrono::seconds(sleepDuration_)); // Simulate some work
         _exit(0); // Ensure the child process exits immediately

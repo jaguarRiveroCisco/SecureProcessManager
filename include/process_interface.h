@@ -4,7 +4,7 @@
 
 namespace process
 {
-    class IProcess : public Communicator 
+    class IProcess
     {
     public:
         virtual ~IProcess() = default;

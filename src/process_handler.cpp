@@ -4,6 +4,7 @@
 
 #include "simul_process.h"
 #include "process_handler.h"
+#include "process_helper.h"
 
 extern std::atomic<bool> g_display;
 namespace process
@@ -23,9 +24,7 @@ namespace process
 
     int Controller::numProcesses() { return numProcesses_; }
 
-    pid_t Controller::getPid() const { return pid_; }
-
-    std::string Controller::receiveCreationMessage() { return communicator_->receiveCreationMessage(); }
+    std::string Controller::receiveCreationMessage() { return Communicator::getInstance().receiveCreationMessage(); }
 
     void Controller::init(Synchro *synchro, std::unique_ptr<IProcess> process)
     {
@@ -35,7 +34,6 @@ namespace process
         }
         synchro_ = synchro;
         process_ = std::move(process);
-        communicator_ = std::make_unique<Communicator>();
         createChild();
     }
 

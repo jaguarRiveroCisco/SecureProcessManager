@@ -38,6 +38,8 @@ namespace process
         }
     }
 
+    pid_t BaseHandler::getPid() const { return pid_; }
+
     bool BaseHandler::isProcessRunning() const
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)

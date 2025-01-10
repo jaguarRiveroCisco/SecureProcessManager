@@ -4,8 +4,10 @@
 
 namespace process
 {
-    class BaseHandler 
-    {
+    class BaseHandler {
+    public:
+        pid_t getPid() const;
+
     protected:
         BaseHandler();
         virtual ~BaseHandler();

@@ -1,13 +1,12 @@
 #ifndef PROCESS_HANDLER_H
 #define PROCESS_HANDLER_H
 #include "process_interface.h"
-#include "process_base.h"
+#include "controller_base.h"
 
 namespace process
 {
-
-    class ControllerBase : public BaseHandler {};
-    class Controller final : protected ControllerBase {
+    class Controller final : protected ControllerBase 
+    {
     public:
         void        init(Synchro *synchro, std::unique_ptr<IProcess> process);
         void        start();
@@ -15,7 +14,7 @@ namespace process
         static int  numProcesses();
         static Synchro *synchro();
         std::string     receiveCreationMessage();
-        pid_t           getPid() const;
+        
         static void     terminateAll();
         static void     terminateProcessByPid(pid_t pid);
         static void     killAll();
@@ -34,7 +33,6 @@ namespace process
         static bool                       running_;
         void                              createChild();
         std::unique_ptr<IProcess> process_;
-        std::unique_ptr<Communicator> communicator_;
         static std::vector<std::unique_ptr<Controller>> handlers_;
     };
 } // namespace process
