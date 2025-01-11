@@ -54,6 +54,22 @@ namespace process
         handlers_.push_back(std::move(handler));
     }
 
+    void Controller::removeHandler()
+    {
+        if (!handlers_.empty())
+        {
+            pid_t pid = synchro()->getAndPopFront();
+            if (pid != -1)
+            {
+                // Find and remove the handler with the matching PID
+                auto it = std::remove_if(
+                        handlers_.begin(), handlers_.end(),
+                        [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
+                handlers_.erase(it, handlers_.end());
+            }
+        }
+    }
+
     void Controller::waitForEvents()
     {
         while (process::Controller::running())
@@ -64,22 +80,8 @@ namespace process
             // Process all events
             while (!synchro()->eventQueue.empty())
             {
-                pid_t pid = synchro()->getAndPopFront();
-                if (pid != -1)
-                {
-                    // Find and remove the handler with the matching PID
-                    auto it = std::remove_if(
-                            handlers_.begin(), handlers_.end(),
-                            [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
-                    handlers_.erase(it, handlers_.end());
-
-                }
-                // Check if the number of handlers is less than numProcesses_
-                if (process::Controller::respawn() && (handlers_.size() < numProcesses_))
-                {
-                    int numHandlersToCreate = numProcesses_ - handlers_.size();
-                    createHandlers_(numHandlersToCreate);
-                }
+                removeHandler();
+                restoreHandlerCount();
                 if(handlers_.empty())
                 {
                     process::Controller::running() = false;
@@ -88,9 +90,15 @@ namespace process
         }
     }
 
-
-    
-
+    void Controller::restoreHandlerCount()
+    {
+        // Check if the number of handlers is less than numProcesses_
+        if (process::Controller::respawn() && (handlers_.size() < numProcesses_))
+        {
+            int numHandlersToCreate = numProcesses_ - handlers_.size();
+            createHandlers_(numHandlersToCreate);
+        }
+    }
 
 
 } // namespace process
