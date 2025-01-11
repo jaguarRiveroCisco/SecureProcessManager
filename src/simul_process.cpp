@@ -39,27 +39,24 @@ namespace process
         // Maximum allowed lifetime to prevent indefinite execution
         auto maxLifetime = std::chrono::milliseconds(msSleepDuration + 5000); // Add a buffer to the sleep duration
         auto currentTime = std::chrono::high_resolution_clock::now();
-
+        std::string reason = "Sleep duration reached";
         while (continue_)
         {
             if (currentTime >= endTime)
             {
-                std::cout << getpid() << " Ending simulation: Reached end time "
-                          << "Sleep duration: " << msSleepDuration << " ms\n";
                 break;
             }
 
             if (currentTime - startTime_ >= maxLifetime)
             {
-                std::cout << getpid() << " Ending simulation: Reached maximum allowed lifetime " << maxLifetime.count()
-                          << " ms\n";
+                reason = "Maximum lifetime reached";
                 break;
             }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate some work
             currentTime = std::chrono::high_resolution_clock::now();
         }
-        logLifetime();
+        logLifetime(reason);
         _exit(0); // Ensure the child process exits immediately
     }
 } // namespace process

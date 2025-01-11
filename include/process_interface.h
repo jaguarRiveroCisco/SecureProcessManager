@@ -36,11 +36,11 @@ namespace process
 
         BaseProcess() = default;
 
-        void logLifetime() const
+        void logLifetime(const std::string& reason = "End of life") const
         {
             auto endTime  = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-            std::cout << "Process " << getpid() << " lifetime: " << duration << " milliseconds." << std::endl;
+            std::cout << "Process " << getpid() << " lifetime: " << duration << " milliseconds reason: " << reason << std::endl;
         }
     };
 } // namespace process
