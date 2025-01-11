@@ -51,10 +51,7 @@ namespace process
             handler->init(synchro(), std::make_unique<ProcessSimulator>());
         }
 
-        std::string messageText =
-                handler->receiveCreationMessage() + " Number of processes: " + std::to_string(numProcesses_);
-        if (g_display)
-            std::cout << messageText << std::endl;
+        Communicator::getInstance().receiveCreationMessage();
         handler->start();
         handlers_.push_back(std::move(handler));
     }
