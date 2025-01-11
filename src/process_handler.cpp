@@ -16,8 +16,6 @@ namespace process
 
     void Controller::createHandlers_(int numHandlers)
     {
-        std::cout << "Creating " << numHandlers << " child processes of type " << processType_ << ".\n";
-
         for (int i = 0; i < numHandlers; ++i)
         {
             try
@@ -74,22 +72,13 @@ namespace process
                             handlers_.begin(), handlers_.end(),
                             [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
                     handlers_.erase(it, handlers_.end());
-                    if (process::Controller::running())
-                    {
-                        if(process::Controller::respawn())
-                        {
-                            createHandler();
-                        }
-                    }
+
                 }
                 // Check if the number of handlers is less than numProcesses_
-                if (handlers_.size() < numProcesses_)
+                if (process::Controller::respawn() && (handlers_.size() < numProcesses_))
                 {
-                    if (process::Controller::respawn())
-                    {
-                        int numHandlersToCreate = numProcesses_ - handlers_.size();
-                        createHandlers_(numHandlersToCreate);
-                    }
+                    int numHandlersToCreate = numProcesses_ - handlers_.size();
+                    createHandlers_(numHandlersToCreate);
                 }
                 if(handlers_.empty())
                 {
