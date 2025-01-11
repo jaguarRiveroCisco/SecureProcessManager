@@ -114,75 +114,81 @@ namespace process::controller
         }
     }
 
-    void doCommand(const std::string& input)
+    void doCommand(const std::string &input)
     {
-        if (!input.empty())
+        if (input.empty())
         {
-            if (input == "print on")
-            {
-                g_display = true;
-                std::cout << "Display progress turned on." << std::endl;
-            }
-            else if (input == "print off")
-            {
-                g_display = false;
-                std::cout << "Display progress turned off." << std::endl;
-            }
-            else if (input == "context")
-            {
-                printContext();
-            }
-            else if (input == "exit")
-            {
-                process::ControllerBase::running() = false; // Set running to false to signal the main thread
-                std::cout << "Program signalled to exiting once the next process is done" << std::endl;
-            }
-            else if (input == "terminate all")
-            {
-                process::ControllerBase::running() = false; // Set running to false to signal the main thread
-                std::cout << "Terminating all processes and exiting the program." << std::endl;
-                process::Controller::terminateAll();
-            }
-            else if (input.rfind("terminate ", 0) == 0) // Check if input starts with "terminate "
-            {
-                std::cout << "Terminating process with PID: " << input.substr(10) << std::endl;
-                terminatePid(input);
-            }
-            else if (input == "kill all")
-            {
-                process::ControllerBase::running() = false; // Set running to false to signal the main thread
-                std::cout << "Killing all processes and exiting the program." << std::endl;
-                process::Controller::killAll();
-            }
-            else if (input.rfind("kill ", 0) == 0) // Check if input starts with "kill "
-            {
-                std::cout << "Killing process with PID: " << input.substr(5) << std::endl;
-                killPid(input);
-            }
-            else if (input == "display pids")
-            {
-                std::cout << "Displaying all current PIDs:" << std::endl;
-                process::Controller::displayAllPids();
-            }
-            else if (input == "help")
-            {
-                printHelp();
-            }
-            else if (input == "respawn on")
-            {
-                process::ControllerBase::respawn() = true;
-                std::cout << "Respawn turned on." << std::endl;
-            }
-            else if (input == "respawn off")
-            {
-                process::ControllerBase::respawn() = false;
-                std::cout << "Respawn turned off." << std::endl;
-            }
-            else
-            {
-                std::cout << "You entered: " << input << std::endl;
-            }
+            return;
         }
+
+        std::cout << ">> Command: " << input << std::endl; // Highlight the command being processed
+
+        if (input == "print on")
+        {
+            g_display = true;
+            std::cout << "[INFO] Display progress is now ON." << std::endl;
+        }
+        else if (input == "print off")
+        {
+            g_display = false;
+            std::cout << "[INFO] Display progress is now OFF." << std::endl;
+        }
+        else if (input == "context")
+        {
+            printContext();
+        }
+        else if (input == "exit")
+        {
+            process::ControllerBase::running() = false;
+            std::cout << "[ACTION] Exiting program after current process completes." << std::endl;
+        }
+        else if (input == "terminate all")
+        {
+            process::ControllerBase::running() = false;
+            std::cout << "[ACTION] Terminating all processes and exiting." << std::endl;
+            process::Controller::terminateAll();
+        }
+        else if (input.rfind("terminate ", 0) == 0)
+        {
+            std::cout << "[ACTION] Terminating process with PID: " << input.substr(10) << std::endl;
+            terminatePid(input);
+        }
+        else if (input == "kill all")
+        {
+            process::ControllerBase::running() = false;
+            std::cout << "[ACTION] Killing all processes and exiting." << std::endl;
+            process::Controller::killAll();
+        }
+        else if (input.rfind("kill ", 0) == 0)
+        {
+            std::cout << "[ACTION] Killing process with PID: " << input.substr(5) << std::endl;
+            killPid(input);
+        }
+        else if (input == "display pids")
+        {
+            std::cout << "[INFO] Current Process IDs:" << std::endl;
+            process::Controller::displayAllPids();
+        }
+        else if (input == "help")
+        {
+            printHelp();
+        }
+        else if (input == "respawn on")
+        {
+            process::ControllerBase::respawn() = true;
+            std::cout << "[INFO] Respawn feature is now ON." << std::endl;
+        }
+        else if (input == "respawn off")
+        {
+            process::ControllerBase::respawn() = false;
+            std::cout << "[INFO] Respawn feature is now OFF." << std::endl;
+        }
+        else
+        {
+            std::cout << "[ERROR] Unknown command. Type 'help' for a list of available commands." << std::endl;
+        }
+
+        std::cout << std::string(40, '-') << std::endl; // Separator for readability
     }
     void printHelp()
     {
