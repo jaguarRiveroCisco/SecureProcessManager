@@ -78,8 +78,6 @@ namespace process
                     {
                         if(process::Controller::respawn())
                         {
-                            if(g_display)
-                                std::cout << "\trespawn!  ";
                             createHandler();
                         }
                     }

@@ -12,6 +12,7 @@ namespace process::controller
     void killPid(const std::string &input);
     void terminatePid(const std::string &input);
     void doCommand(const std::string &input);
+    void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
 
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
@@ -72,7 +73,36 @@ namespace process::controller
             std::cerr << "Random upper limit must be greater than 10. Defaulting to 10.\n";
             rndUpper = 10;
         }
+
+        printContext(numProcesses, processType, rndUpper);
     }
+
+    void printContext(int numProcesses, const std::string &processType, int rndUpper)
+    {
+        // Static variables to store the latest values
+        static int         lastNumProcesses = 0;
+        static std::string lastProcessType  = "unknown";
+        static int         lastRndUpper     = 0;
+
+        // Update static variables only if new values are provided
+        if (numProcesses != -1)
+            lastNumProcesses = numProcesses;
+        if (!processType.empty())
+            lastProcessType = processType;
+        if (rndUpper != -1)
+            lastRndUpper = rndUpper;
+
+        // Print the stored context
+        std::cout << "\n========================= Context =========================\n"
+                  << " Number of Processes : " << lastNumProcesses << "\n"
+                  << " Process Type        : " << lastProcessType << "\n"
+                  << " Random Upper Limit  : " << lastRndUpper << "\n"
+                  << " Display Flag        : " << (g_display ? "Enabled" : "Disabled") << "\n"
+                  << " Respawn             : " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << "\n"
+                  << "==========================================================\n\n"
+                  << std::flush;
+    }
+
     void main()
     {
         std::string input;
@@ -97,6 +127,10 @@ namespace process::controller
             {
                 g_display = false;
                 std::cout << "Display progress turned off." << std::endl;
+            }
+            else if (input == "context")
+            {
+                printContext();
             }
             else if (input == "exit")
             {
@@ -152,12 +186,15 @@ namespace process::controller
     }
     void printHelp()
     {
-        std::cout << "Process Control Help Menu\n"
-                  << "==========================\n"
+        std::cout << "\n==========================================================\n"
+                  << "Process Control Help Menu\n"
+                  << "==========================================================\n"
                   << "Available commands:\n"
+                  << "  context         - Display the current context\n"
                   << "  print on        - Turn on display progress\n"
                   << "  print off       - Turn off display progress\n"
-                  << "  exit            - Sets exist signal to gracefully exits the program once the next process is done\n"
+                  << "  exit            - Sets exist signal to gracefully exits the program once the next process is "
+                     "done\n"
                   << "  terminate all   - Terminate all processes and exit the program\n"
                   << "  terminate <pid> - Terminate a specific process by PID\n"
                   << "  kill all        - Kill all processes and exit the program\n"
@@ -165,7 +202,9 @@ namespace process::controller
                   << "  display pids    - Display all current PIDs\n"
                   << "  respawn on      - Turn on respawn\n"
                   << "  respawn off     - Turn off respawn\n"
-                  << "  help            - Display this help message\n";
+                  << "  help            - Display this help message\n\n"
+                  << "==========================================================\n\n"
+                  << std::flush;
     }
 
     void killPid(const std::string &input)
