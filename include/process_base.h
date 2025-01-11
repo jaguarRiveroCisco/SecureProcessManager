@@ -9,8 +9,8 @@ namespace process
         pid_t getPid() const;
 
     protected:
-        BaseHandler();
-        virtual ~BaseHandler();
+        BaseHandler() = default;
+        virtual ~BaseHandler() = default;
         void          displayProcessStatus(int &status);
         bool          isProcessRunning() const;
         void          terminateProcess();
@@ -20,10 +20,7 @@ namespace process
         void          checkProcessState();
         pid_t         pid_{0};
         Synchro      *synchro_{nullptr};
-        static size_t processCounter_;
 
-    private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> startTime_;
     };
 } // namespace process
 
