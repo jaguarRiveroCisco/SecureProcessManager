@@ -11,18 +11,6 @@ namespace process
     int           ProcessSimulator::rndUpper_ = 20;
     constexpr int baseSleepDuration           = 10;
 
-    void signalHandler(int signum)
-    {
-        std::cout << "[INFO] Process " << getpid() << " received signal: " << signum << std::endl;
-        BaseProcess::continue_ = false;
-    }
-
-    void setupSignalHandling()
-    {
-        signal(SIGTERM, signalHandler);
-        signal(SIGINT, signalHandler);
-    }
-
     void ProcessSimulator::setRndUpper(int rndUpper)
     {
         rndUpper_ = rndUpper;
@@ -38,7 +26,6 @@ namespace process
 
     void ProcessSimulator::work()
     {
-        setupSignalHandling();
         setSleepDuration();
         Communicator::getInstance().sendCreationMessage(sleepDuration_);
 

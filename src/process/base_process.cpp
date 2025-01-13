@@ -10,4 +10,16 @@ namespace process
         std::cout << "[END]   Process ID: " << getpid() << " | Lifetime: " << duration << " ms"
                   << " | Reason: " << reason << std::endl;
     }
+
+    void signalHandler(int signum)
+    {
+        std::cout << "[INFO] Process " << getpid() << " received signal: " << signum << std::endl;
+        BaseProcess::continue_ = false;
+    }
+
+    void setupSignalHandling()
+    {
+        signal(SIGTERM, signalHandler);
+        signal(SIGINT, signalHandler);
+    }
 }

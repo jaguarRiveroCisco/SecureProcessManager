@@ -5,6 +5,9 @@
 namespace process
 {
 
+    void signalHandler(int signum);
+    void setupSignalHandling();
+
     class BaseProcess : public IProcess 
     {
     public:
@@ -15,10 +18,11 @@ namespace process
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
                 std::chrono::high_resolution_clock::now();
 
-        BaseProcess() = default;
+        BaseProcess() { setupSignalHandling(); }
 
         void logLifetime(const std::string &reason = "End of life") const;
     };
-}
+
+} // namespace process
 
 #endif // BASE_PROCESS_H
