@@ -68,9 +68,9 @@ namespace process
     LoggingType &ControllerBase::loggingType() { return loggingType_; }
 
     // Implementation of the new method
-    std::string ControllerBase::loggingTypeToString(LoggingType type)
+    std::string ControllerBase::loggingTypeToString()
     {
-        switch (type)
+        switch (loggingType_)
         {
             case LoggingType::Console:
                 return "Console";

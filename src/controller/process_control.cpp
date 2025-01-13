@@ -15,6 +15,12 @@ namespace process::controller
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
 
+    template <typename T>
+    void printpid(const std::string& str, const T& x = nullptr)
+    {
+        std::cout << "(" << getpid() << ") " << str << " " << x << std::endl;
+    }
+
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
         int opt;
@@ -25,39 +31,37 @@ namespace process::controller
             case 'n':
                 // Set the number of processes from the argument
                 numProcesses = std::atoi(optarg);
-                std::cout << "[INFO] Number of processes: " << numProcesses << std::endl;
+                printpid("[INFO] Number of processes: ", numProcesses);
                 break;
             case 't':
                 // Set the process type from the argument
                 processType = optarg;
-                std::cout << "[INFO] Process type: " << processType << std::endl;
+                printpid("[INFO] Process type: ", processType);
                 break;
             case 'r':
                 // Set the random upper limit from the argument
                 rndUpper = std::atoi(optarg);
-                std::cout << "[INFO] Random upper limit: " << rndUpper << std::endl;
+                printpid("[INFO] Random upper limit: ", rndUpper);
                 break;
             case 'd':
                 // Set the display flag from the argument (0 or 1)
                 g_display = std::atoi(optarg) != 0;
-                std::cout << "[INFO] Display flag: " << (g_display ? "Enabled" : "Disabled") << std::endl;
+                printpid("[INFO] Display flag: ", (g_display ? "Enabled" : "Disabled"));
                 break;
             case 's':
                 // Set the respawn flag from the argument (0 or 1)
                 process::ControllerBase::respawn() = std::atoi(optarg) != 0;
-                std::cout << "[INFO] Respawn flag: " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << std::endl;
+                printpid("[INFO] Respawn flag: ", (process::ControllerBase::respawn() ? "Enabled" : "Disabled"));
                 break;
             case 'l':
                 // Set the logging type from the argument
                 process::ControllerBase::loggingType() = static_cast<LoggingType>(std::atoi(optarg));
-                std::cout << "[INFO] Logging type: " << static_cast<int>(process::ControllerBase::loggingType()) << std::endl;
+                printpid("[INFO] Logging type: ", process::ControllerBase::loggingTypeToString());
                 break;
             case 'h':
             default:
                 // Display usage information and exit
-                std::cout << "[INFO] Usage: " << argv[0]
-                      << " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -l <logging type> -h -> help"
-                      << std::endl;
+                printpid(argv[0], "[INFO] Usage: -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -l <logging type> -h -> help");
                 std::exit(EXIT_SUCCESS);
             }
         }
@@ -105,8 +109,7 @@ namespace process::controller
                   << " Random Upper Limit  : " << lastRndUpper << "\n"
                   << " Display Flag        : " << (g_display ? "Enabled" : "Disabled") << "\n"
                   << " Respawn             : " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << "\n"
-                  << " Logging Type        : "
-                  << process::ControllerBase::loggingTypeToString(process::ControllerBase::loggingType()) << "\n"
+                  << " Logging Type        : " << process::ControllerBase::loggingTypeToString() << "\n"
                   << "==========================================================\n\n"
                   << std::flush;
     }
@@ -155,12 +158,12 @@ namespace process::controller
         if (input == "print on")
         {
             g_display = true;
-            std::cout << "[INFO] Display progress is now ON." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Display progress is now ON." << std::endl;
         }
         else if (input == "print off")
         {
             g_display = false;
-            std::cout << "[INFO] Display progress is now OFF." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Display progress is now OFF." << std::endl;
         }
         else if (input == "context")
         {
@@ -169,33 +172,33 @@ namespace process::controller
         else if (input == "exit")
         {
             process::ControllerBase::running() = false;
-            std::cout << "[INFO] Exiting program after current process completes." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Exiting program after current process completes." << std::endl;
         }
         else if (input == "terminate all")
         {
             process::ControllerBase::running() = false;
-            std::cout << "[INFO] Terminating all processes and exiting." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Terminating all processes and exiting." << std::endl;
             process::Controller::terminateAll();
         }
         else if (input.rfind("terminate ", 0) == 0)
         {
-            std::cout << "[INFO] Terminating process with PID: " << input.substr(10) << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Terminating process with PID: " << input.substr(10) << std::endl;
             terminatePid(input);
         }
         else if (input == "kill all")
         {
             process::ControllerBase::running() = false;
-            std::cout << "[INFO] Killing all processes and exiting." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Killing all processes and exiting." << std::endl;
             process::Controller::killAll();
         }
         else if (input.rfind("kill ", 0) == 0)
         {
-            std::cout << "[INFO] Killing process with PID: " << input.substr(5) << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Killing process with PID: " << input.substr(5) << std::endl;
             killPid(input);
         }
         else if (input == "display pids")
         {
-            std::cout << "[INFO] Current Process IDs:" << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Current Process IDs:" << std::endl;
             process::Controller::displayAllPids();
         }
         else if (input == "help")
@@ -205,16 +208,16 @@ namespace process::controller
         else if (input == "respawn on")
         {
             process::ControllerBase::respawn() = true;
-            std::cout << "[INFO] Respawn feature is now ON." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Respawn feature is now ON." << std::endl;
         }
         else if (input == "respawn off")
         {
             process::ControllerBase::respawn() = false;
-            std::cout << "[INFO] Respawn feature is now OFF." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[INFO] Respawn feature is now OFF." << std::endl;
         }
         else
         {
-            std::cout << "[ERROR] Unknown command. Type 'help' for a list of available commands." << std::endl;
+            std::cout << "(" << getpid() << ")" << "[ERROR] Unknown command. Type 'help' for a list of available commands." << std::endl;
         }
 
         std::cout << std::string(40, '-') << std::endl; // Separator for readability

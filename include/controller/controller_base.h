@@ -25,7 +25,7 @@ namespace process
             static void     setProcessType(const std::string &processType);
             static void     setLoggingType(LoggingType type);
             static LoggingType getLoggingType();
-            static std::string loggingTypeToString(LoggingType type); // New method
+            static std::string loggingTypeToString(); // New method
 
         protected:
             static int                                          numProcesses_;
