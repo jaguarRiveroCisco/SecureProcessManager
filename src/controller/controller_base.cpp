@@ -67,6 +67,20 @@ namespace process
 
     LoggingType &ControllerBase::loggingType() { return loggingType_; }
 
+    // Implementation of the new method
+    std::string ControllerBase::loggingTypeToString(LoggingType type)
+    {
+        switch (type)
+        {
+            case LoggingType::Console:
+                return "Console";
+            case LoggingType::File:
+                return "File";
+            default:
+                return "Unknown";
+        }
+    }
+
     void ControllerBase::setProcessType(const std::string &processType) { processType_ = processType; }
 
     void  ControllerBase::displayAllPids()

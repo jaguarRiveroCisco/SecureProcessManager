@@ -18,7 +18,7 @@ namespace process::controller
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
         int opt;
-        while ((opt = getopt(argc, argv, "n:t:r:d:s:h")) != -1)
+        while ((opt = getopt(argc, argv, "n:t:r:d:s:l:h")) != -1)
         {
             switch (opt)
             {
@@ -47,11 +47,16 @@ namespace process::controller
                 process::ControllerBase::respawn() = std::atoi(optarg) != 0;
                 std::cout << "[INFO] Respawn flag: " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << std::endl;
                 break;
+            case 'l':
+                // Set the logging type from the argument
+                process::ControllerBase::loggingType() = static_cast<LoggingType>(std::atoi(optarg));
+                std::cout << "[INFO] Logging type: " << static_cast<int>(process::ControllerBase::loggingType()) << std::endl;
+                break;
             case 'h':
             default:
                 // Display usage information and exit
                 std::cout << "[INFO] Usage: " << argv[0]
-                      << " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -h -> help"
+                      << " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -l <logging type> -h -> help"
                       << std::endl;
                 std::exit(EXIT_SUCCESS);
             }
@@ -100,6 +105,8 @@ namespace process::controller
                   << " Random Upper Limit  : " << lastRndUpper << "\n"
                   << " Display Flag        : " << (g_display ? "Enabled" : "Disabled") << "\n"
                   << " Respawn             : " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << "\n"
+                  << " Logging Type        : "
+                  << process::ControllerBase::loggingTypeToString(process::ControllerBase::loggingType()) << "\n"
                   << "==========================================================\n\n"
                   << std::flush;
     }
