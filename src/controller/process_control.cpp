@@ -191,6 +191,7 @@ namespace process::controller
 
         std::cout << std::string(40, '-') << std::endl; // Separator for readability
     }
+    
     void printHelp()
     {
         std::cout << "\n==========================================================\n"

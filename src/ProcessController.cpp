@@ -10,8 +10,28 @@
 
 std::atomic<bool> g_display = true;
 
+
+void displayCompilationInfo(const char *appName)
+{
+    std::cout << "*******************************************" << std::endl;
+    std::cout << "*                                         *" << std::endl;
+    std::cout << "*  Application Name: " << appName << std::endl;
+    std::cout << "*  Compiled on: " << __DATE__ << " at " << __TIME__ << std::endl;
+    std::cout << "*                                         *" << std::endl;
+    std::cout << "*******************************************" << std::endl;
+}
+
+
+// Declare a static instance to trigger the display
+
+
 auto main(int argc, char *argv[]) -> int
 {
+    displayCompilationInfo(argv[0]);
+
+    // Print the project name and the time the code was compiled
+    std::cout << argv[0] << " Compiled on: " << __DATE__ << " at " << __TIME__ << std::endl;
+
     int         numProcesses = 4;
     std::string processType  = "simul";
     int         rndUpper     = 10; // Default value for rndUpper
@@ -29,5 +49,6 @@ auto main(int argc, char *argv[]) -> int
     readerThread.join(); // Ensure the reader thread is joined before exiting
 
     std::cout << "Exiting main" << std::endl;
+
     return 0;
 }
