@@ -4,7 +4,8 @@
 
 namespace process
 {
-    class Controller final : public ControllerBase {
+    class Controller final : public ControllerBase 
+    {
     public:
         static void run(const std::string &processType, int numProcesses);
 

@@ -29,9 +29,6 @@ auto main(int argc, char *argv[]) -> int
 {
     displayCompilationInfo(argv[0]);
 
-    // Print the project name and the time the code was compiled
-    std::cout << argv[0] << " Compiled on: " << __DATE__ << " at " << __TIME__ << std::endl;
-
     int         numProcesses = 4;
     std::string processType  = "simul";
     int         rndUpper     = 10; // Default value for rndUpper

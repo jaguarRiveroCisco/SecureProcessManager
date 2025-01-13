@@ -1,7 +1,6 @@
 
 #include <unistd.h>
 #include "process.h"
-
 #include "simul_process.h"
 #include "process_handler.h"
 #include "communicator.h"
