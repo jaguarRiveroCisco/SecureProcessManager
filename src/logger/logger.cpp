@@ -9,8 +9,9 @@ namespace tools
 {
 
     Logger::Logger() : done(false) 
-    { 
-        logThread = std::thread(&Logger::processLogs, this); 
+    {
+        std::cout << "[Logger] Initialized at " << TimeStamp::get() << std::endl;
+        logThread = std::thread(&Logger::processLogs, this);
     }
 
     Logger::~Logger()
@@ -21,6 +22,7 @@ namespace tools
             condVar.notify_all();
         }
         logThread.join();
+        std::cout << "[Logger] Destroyed at " << TimeStamp::get() << std::endl;
     }
 
     void Logger::log(LogLevel level, const std::string &message)

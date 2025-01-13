@@ -5,6 +5,7 @@
 #include <thread>
 #include <unistd.h>
 #include "communicator.h"
+#include "logger.h"
 
 namespace process
 {

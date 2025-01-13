@@ -2,6 +2,7 @@
 #include <iostream>
 #include <thread>
 #include "communicator.h"
+#include "logger.h"
 namespace process
 {
     void Process::work()

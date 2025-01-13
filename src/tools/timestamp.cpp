@@ -6,19 +6,22 @@
 #include <sstream>
 #include <unistd.h> // For getpid()
 
-std::string tools::TimeStamp::get() 
+std::string tools::TimeStamp::get()
 {
-    // Get current time
+    // Get current time with high precision
     auto now = std::chrono::system_clock::now();
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    auto ms  = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 
-    // Format the time
-    std::tm* now_tm = std::localtime(&now_time);
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::tm    *now_tm   = std::localtime(&now_time);
+
+    // Format the time with milliseconds
     std::ostringstream oss;
-    oss << std::put_time(now_tm, "%Y%m%d_%H%M%S"); // Format: YYYYMMDD_HHMMSS
+    oss << std::put_time(now_tm, "%Y-%m-%d %H:%M:%S"); // Format: YYYY-MM-DD HH:MM:SS
+    oss << '.' << std::setfill('0') << std::setw(3) << ms.count(); // Append milliseconds
 
     // Append process ID
-    oss << "_PID" << getpid();
+    oss << " [PID: " << getpid() << "]";
 
     return oss.str();
 }
