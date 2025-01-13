@@ -1,5 +1,3 @@
-
-
 #include "simul_process.h"
 #include <chrono>
 #include <ctime>
@@ -7,38 +5,53 @@
 #include <thread>
 #include <unistd.h>
 #include "communicator.h"
+
 namespace process
 {
     int           ProcessSimulator::rndUpper_ = 20;
     constexpr int baseSleepDuration           = 10;
 
+    void signalHandler(int signum)
+    {
+        std::cout << "[INFO] Process " << getpid() << " received signal: " << signum << std::endl;
+        BaseProcess::continue_ = false;
+    }
+
+    void setupSignalHandling()
+    {
+        signal(SIGTERM, signalHandler);
+        signal(SIGINT, signalHandler);
+    }
+
     void ProcessSimulator::setRndUpper(int rndUpper)
     {
         rndUpper_ = rndUpper;
-        std::cout << "Children process will simulate work for a random duration between " << baseSleepDuration
-                  << " and " << baseSleepDuration + rndUpper_ << " seconds." << std::endl;
+        std::cout << "[CONFIG] Random work duration set between " << baseSleepDuration << " and "
+                  << baseSleepDuration + rndUpper_ << " seconds for child processes." << std::endl;
     }
+
     void ProcessSimulator::setSleepDuration()
     {
-        std::srand(std::time(nullptr) ^ getpid()); // Seed using time and PID to ensure different seeds
+        std::srand(std::time(nullptr) ^ getpid()); // Seed using time and PID for unique seeds
         sleepDuration_ = std::rand() % rndUpper_ + baseSleepDuration; // Random sleep duration between 1 and x seconds
     }
 
     void ProcessSimulator::work()
     {
+        setupSignalHandling();
         setSleepDuration();
         Communicator::getInstance().sendCreationMessage(sleepDuration_);
 
         auto msSleepDuration = sleepDuration_ * 1000;
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
-        std::cout << "[START] Process ID: " << getpid() << " | Sleep Duration: " << msSleepDuration << " ms"
-                  << std::endl;
+        std::cout << "[START] Process ID: " << getpid() << " | Simulated Work Duration: " << sleepDuration_
+                  << " seconds (" << msSleepDuration << " ms)" << std::endl;
 
         // Maximum allowed lifetime to prevent indefinite execution
         auto maxLifetime   = std::chrono::milliseconds(msSleepDuration + 5000); // Add a buffer to the sleep duration
         auto currentTime   = std::chrono::high_resolution_clock::now();
-        std::string reason = "Sleep duration reached";
+        std::string reason = "Sleep duration completed";
 
         while (continue_)
         {
@@ -49,7 +62,7 @@ namespace process
 
             if (currentTime - startTime_ >= maxLifetime)
             {
-                reason = "Maximum lifetime reached";
+                reason = "Maximum allowed lifetime exceeded";
                 break;
             }
 
@@ -58,6 +71,7 @@ namespace process
         }
 
         logLifetime(reason);
+        std::cout << "[END] Process ID: " << getpid() << " | Termination Reason: " << reason << std::endl;
         _exit(0); // Ensure the child process exits immediately
     }
 } // namespace process
