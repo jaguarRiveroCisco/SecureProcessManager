@@ -10,6 +10,7 @@ include_directories(
     include/process
     include/synchro
     include/tools
+    include/logger
 )
 
 
@@ -32,4 +33,7 @@ src/controller/controller_base.cpp
 
 # Tools
 src/tools/timestamp.cpp
+
+# Logger
+src/logger/logger.cpp
 )
