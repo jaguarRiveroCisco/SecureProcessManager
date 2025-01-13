@@ -3,12 +3,17 @@
 
 namespace process
 {
+    enum class LoggingType {
+        Console,
+        File
+    };
 
     class ControllerBase : public BaseHandler 
     {
         public:
             static bool    &running();
             static bool    &respawn();
+            static LoggingType &loggingType();
             static void  terminateAll();
             static void  terminateProcessByPid(pid_t pid);
             static void  killAll();
@@ -18,6 +23,8 @@ namespace process
             void            init(Synchro *synchro, std::unique_ptr<IProcess> process);
             void            start();
             static void     setProcessType(const std::string &processType);
+            static void     setLoggingType(LoggingType type);
+            static LoggingType getLoggingType();
 
         protected:
             static int                                          numProcesses_;
@@ -26,6 +33,7 @@ namespace process
             }
             static std::string processType_;
             static std::vector<std::unique_ptr<ControllerBase>> handlers_;
+            static LoggingType loggingType_;
         private:
             void                      createChild();
             std::unique_ptr<IProcess> process_;

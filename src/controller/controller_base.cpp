@@ -8,6 +8,9 @@ namespace process
     bool        ControllerBase::running_      = true;
     bool        ControllerBase::respawn_      = true;
     std::vector<std::unique_ptr<ControllerBase>> ControllerBase::handlers_;
+    // Initialize static members
+    LoggingType ControllerBase::loggingType_ = LoggingType::Console;
+
 
     Synchro *ControllerBase::synchro()
     {
@@ -61,6 +64,8 @@ namespace process
     bool &ControllerBase::running() { return running_; }
 
     bool &ControllerBase::respawn() { return respawn_; }
+
+    LoggingType &ControllerBase::loggingType() { return loggingType_; }
 
     void ControllerBase::setProcessType(const std::string &processType) { processType_ = processType; }
 
