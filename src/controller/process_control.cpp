@@ -5,7 +5,7 @@
 #include <string>
 #include <thread>
 #include "process_handler.h"
-#include "logger.h"
+#include "console_logger.h"
 
 extern std::atomic<bool> g_display;
 
@@ -15,7 +15,7 @@ namespace process::controller
     void terminatePid(const std::string &input);
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
-    tools::Logger logger;
+    tools::ConsoleLogger logger;
 
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {

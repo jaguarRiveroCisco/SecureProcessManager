@@ -15,7 +15,7 @@ namespace tools
     {
     public:
         Logger();
-        ~Logger();
+        virtual ~Logger();
 
         void log(LogLevel level, const std::string &message);
 
@@ -32,6 +32,9 @@ namespace tools
         void logWarning(const std::string &message);
         void logError(const std::string &message);
 
+    protected:
+        virtual void outputLog(const std::string &message) = 0; // Pure virtual function
+
     private:
         std::queue<std::string> logQueue;
         std::mutex              mutex_;
@@ -43,6 +46,9 @@ namespace tools
         void processLogs();
         std::string logLevelToString(LogLevel level) const;
     };
+
+
+
 
     int example();
 

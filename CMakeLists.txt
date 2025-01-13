@@ -36,4 +36,6 @@ src/tools/timestamp.cpp
 
 # Logger
 src/logger/logger.cpp
+src/logger/console_logger.cpp
+src/logger/file_logger.cpp
 )
