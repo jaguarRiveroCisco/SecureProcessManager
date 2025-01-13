@@ -4,7 +4,7 @@
 
 #include "simul_process.h"
 #include "process_handler.h"
-#include "process_helper.h"
+#include "communicator.h"
 
 extern std::atomic<bool> g_display;
 namespace process

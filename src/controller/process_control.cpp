@@ -1,5 +1,6 @@
 #include "process_control.h"
 #include <atomic>
+#include <unistd.h>
 #include <iostream>
 #include <string>
 #include <thread>

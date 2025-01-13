@@ -1,4 +1,5 @@
 #include "base_process.h"
+#include <unistd.h>
 namespace process
 {
     void BaseProcess::logLifetime(const std::string &reason) const

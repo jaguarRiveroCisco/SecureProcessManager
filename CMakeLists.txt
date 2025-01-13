@@ -19,7 +19,7 @@ src/ProcessController.cpp
 # Process sources
 src/process/messenger.cpp 
 src/process/base_handler.cpp
-src/process/process_helper.cpp
+src/process/communicator.cpp
 src/process/simul_process.cpp
 src/process/process.cpp
 src/process/base_process.cpp

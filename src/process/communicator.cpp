@@ -1,5 +1,5 @@
 #include <iostream>
-#include "process_helper.h"
+#include "communicator.h"
 
 namespace process
 {

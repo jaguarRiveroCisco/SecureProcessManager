@@ -1,7 +1,6 @@
 #ifndef PROCESS_INTERFACE_H
 #define PROCESS_INTERFACE_H
 #include <iostream>
-#include "process_helper.h"
 namespace process
 {
     class IProcess 

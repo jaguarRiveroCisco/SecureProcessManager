@@ -6,7 +6,7 @@
 #include <iostream>
 #include <thread>
 #include <unistd.h>
-#include "process_helper.h"
+#include "communicator.h"
 namespace process
 {
     int           ProcessSimulator::rndUpper_ = 20;

@@ -1,7 +1,7 @@
 #include "process.h"
 #include <iostream>
 #include <thread>
-#include "process_helper.h"
+#include "communicator.h"
 namespace process
 {
     void Process::work()
