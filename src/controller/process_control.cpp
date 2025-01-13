@@ -104,6 +104,29 @@ namespace process::controller
                   << std::flush;
     }
 
+    void printHelp()
+    {
+        std::cout << "\n==========================================================\n"
+                  << "Process Control Help Menu\n"
+                  << "==========================================================\n"
+                  << "Available commands:\n"
+                  << "  context         - Display the current context\n"
+                  << "  print on        - Turn on display progress\n"
+                  << "  print off       - Turn off display progress\n"
+                  << "  exit            - Sets exist signal to gracefully exits the program once the next process is "
+                     "done\n"
+                  << "  terminate all   - Terminate all processes and exit the program\n"
+                  << "  terminate <pid> - Terminate a specific process by PID\n"
+                  << "  kill all        - Kill all processes and exit the program\n"
+                  << "  kill <pid>      - Kill a specific process by PID\n"
+                  << "  display pids    - Display all current PIDs\n"
+                  << "  respawn on      - Turn on respawn\n"
+                  << "  respawn off     - Turn off respawn\n"
+                  << "  help            - Display this help message\n\n"
+                  << "==========================================================\n\n"
+                  << std::flush;
+    }
+
     void main()
     {
         std::string input;
@@ -121,8 +144,6 @@ namespace process::controller
         {
             return;
         }
-
-        std::cout << ">> Command: " << input << std::endl; // Highlight the command being processed
 
         if (input == "print on")
         {
@@ -192,29 +213,6 @@ namespace process::controller
         std::cout << std::string(40, '-') << std::endl; // Separator for readability
     }
     
-    void printHelp()
-    {
-        std::cout << "\n==========================================================\n"
-                  << "Process Control Help Menu\n"
-                  << "==========================================================\n"
-                  << "Available commands:\n"
-                  << "  context         - Display the current context\n"
-                  << "  print on        - Turn on display progress\n"
-                  << "  print off       - Turn off display progress\n"
-                  << "  exit            - Sets exist signal to gracefully exits the program once the next process is "
-                     "done\n"
-                  << "  terminate all   - Terminate all processes and exit the program\n"
-                  << "  terminate <pid> - Terminate a specific process by PID\n"
-                  << "  kill all        - Kill all processes and exit the program\n"
-                  << "  kill <pid>      - Kill a specific process by PID\n"
-                  << "  display pids    - Display all current PIDs\n"
-                  << "  respawn on      - Turn on respawn\n"
-                  << "  respawn off     - Turn off respawn\n"
-                  << "  help            - Display this help message\n\n"
-                  << "==========================================================\n\n"
-                  << std::flush;
-    }
-
     void killPid(const std::string &input)
     {
         try
