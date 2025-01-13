@@ -18,6 +18,12 @@ namespace process
         BaseProcess() = default;
 
         void logLifetime(const std::string &reason = "End of life") const;
+
+    protected:
+        void setupSignalHandling();
+
+    private:
+        static void signalHandler(int signum);
     };
 }
 

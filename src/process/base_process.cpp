@@ -8,4 +8,15 @@ namespace process
         std::cout << "[END]   Process ID: " << getpid() << " | Lifetime: " << duration << " ms"
                   << " | Reason: " << reason << std::endl;
     }
+    void BaseProcess::setupSignalHandling()
+    {
+        signal(SIGTERM, BaseProcess::signalHandler);
+        signal(SIGINT, BaseProcess::signalHandler);
+    }
+
+    void BaseProcess::signalHandler(int signum)
+    {
+        std::cout << "Process " << getpid() << " received signal " << signum << std::endl;
+        exit(signum);
+    }
 }

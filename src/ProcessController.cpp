@@ -27,5 +27,7 @@ auto main(int argc, char *argv[]) -> int
     process::Controller::run(processType, numProcesses);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
+
+    std::cout << "Exiting main" << std::endl;
     return 0;
 }
