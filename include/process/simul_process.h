@@ -1,6 +1,6 @@
 #ifndef SIMUL_PROCESS_H
 #define SIMUL_PROCESS_H
-#include "process_interface.h"
+#include "base_process.h"
 
 namespace process
 {

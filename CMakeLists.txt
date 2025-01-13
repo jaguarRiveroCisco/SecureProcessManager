@@ -22,6 +22,7 @@ src/process/process_base.cpp
 src/process/process_helper.cpp
 src/process/simul_process.cpp
 src/process/process.cpp
+src/process/base_process.cpp
 
 # Controller sources
 src/controller/process_handler.cpp

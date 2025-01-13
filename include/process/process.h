@@ -1,7 +1,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#include "process_interface.h"
+#include "base_process.h"
 
 namespace process
 {
