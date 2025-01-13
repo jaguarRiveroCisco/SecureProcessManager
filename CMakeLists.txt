@@ -13,12 +13,17 @@ include_directories(
 
 
 add_executable(ProcessController 
+# Main source file
 src/ProcessController.cpp 
+
+# Process sources
 src/process/messenger.cpp 
 src/process/process_base.cpp
 src/process/process_helper.cpp
 src/process/simul_process.cpp
 src/process/process.cpp
+
+# Controller sources
 src/controller/process_handler.cpp
 src/controller/process_control.cpp
 src/controller/controller_base.cpp

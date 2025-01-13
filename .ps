@@ -22,13 +22,9 @@ while true; do
     echo  # Print an empty line to indicate a change
     echo "$current_output"
     
-    # Print the total number of lines excluding the header
+    # Calculate and print the total number of lines excluding the header
     line_count=$(echo "$current_output" | wc -l)
-    if [ "$line_count" -gt 0 ]; then
-      echo "Total number of $process_name processes: $line_count"
-    else
-      echo "Total number of $process_name processes: 0"
-    fi
+    echo "Total number of $process_name processes: $((line_count - 1))"
 
     previous_output="$current_output"
   fi
