@@ -5,7 +5,6 @@
 #include <string>
 #include <thread>
 #include "process_handler.h"
-#include "console_logger.h"
 
 extern std::atomic<bool> g_display;
 
@@ -15,7 +14,6 @@ namespace process::controller
     void terminatePid(const std::string &input);
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
-    tools::ConsoleLogger logger;
 
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
@@ -24,56 +22,56 @@ namespace process::controller
         {
             switch (opt)
             {
-                case 'n':
-                    // Set the number of processes from the argument
-                    numProcesses = std::atoi(optarg);
-                    logger.logInfo("Number of processes: " + std::to_string(numProcesses));
-                    break;
-                case 't':
-                    // Set the process type from the argument
-                    processType = optarg;
-                    logger.logInfo("Process type: " + processType);
-                    break;
-                case 'r':
-                    // Set the random upper limit from the argument
-                    rndUpper = std::atoi(optarg);
-                    logger.logInfo("Random upper limit: " + std::to_string(rndUpper));
-                    break;
-                case 'd':
-                    // Set the display flag from the argument (0 or 1)
-                    g_display = std::atoi(optarg) != 0;
-                    logger.logInfo("Display flag: " + std::string(g_display ? "Enabled" : "Disabled"));
-                    break;
-                case 's':
-                    // Set the respawn flag from the argument (0 or 1)
-                    process::ControllerBase::respawn() = std::atoi(optarg) != 0;
-                    logger.logInfo("Respawn flag: " + std::string(process::ControllerBase::respawn() ? "Enabled" : "Disabled"));
-                    break;
-                case 'h':
-                default:
-                    // Display usage information and exit
-                    logger.logInfo("Usage: " + std::string(argv[0]) +
-                                    " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random "
-                                    "upper limit> -d <display (0 or 1)> -r <respawn (0 or 1)> -h -> help");
-                    std::exit(EXIT_SUCCESS);
+            case 'n':
+                // Set the number of processes from the argument
+                numProcesses = std::atoi(optarg);
+                std::cout << "[INFO] Number of processes: " << numProcesses << std::endl;
+                break;
+            case 't':
+                // Set the process type from the argument
+                processType = optarg;
+                std::cout << "[INFO] Process type: " << processType << std::endl;
+                break;
+            case 'r':
+                // Set the random upper limit from the argument
+                rndUpper = std::atoi(optarg);
+                std::cout << "[INFO] Random upper limit: " << rndUpper << std::endl;
+                break;
+            case 'd':
+                // Set the display flag from the argument (0 or 1)
+                g_display = std::atoi(optarg) != 0;
+                std::cout << "[INFO] Display flag: " << (g_display ? "Enabled" : "Disabled") << std::endl;
+                break;
+            case 's':
+                // Set the respawn flag from the argument (0 or 1)
+                process::ControllerBase::respawn() = std::atoi(optarg) != 0;
+                std::cout << "[INFO] Respawn flag: " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << std::endl;
+                break;
+            case 'h':
+            default:
+                // Display usage information and exit
+                std::cout << "[INFO] Usage: " << argv[0]
+                      << " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -h -> help"
+                      << std::endl;
+                std::exit(EXIT_SUCCESS);
             }
         }
 
         if (numProcesses <= 0)
         {
-            logger.logWarning("Number of processes must be greater than 0. Defaulting to 4.");
+            std::cout << "[WARN] Number of processes must be greater than 0. Defaulting to 4." << std::endl;
             numProcesses = 4;
         }
 
         if (processType != "real" && processType != "simul")
         {
-            logger.logWarning("Invalid process type: " + processType + ". Defaulting to 'simul'.");
+            std::cout << "[WARN] Invalid process type: " << processType << ". Defaulting to 'simul'." << std::endl;
             processType = "simul";
         }
 
         if (rndUpper < 10)
         {
-            logger.logWarning("Random upper limit must be greater than 10. Defaulting to 10.");
+            std::cout << "[WARN] Random upper limit must be greater than 10. Defaulting to 10." << std::endl;
             rndUpper = 10;
         }
 
@@ -124,17 +122,17 @@ namespace process::controller
             return;
         }
 
-        logger.logInfo(">> Command: " + input); // Highlight the command being processed
+        std::cout << ">> Command: " << input << std::endl; // Highlight the command being processed
 
         if (input == "print on")
         {
             g_display = true;
-            logger.logInfo("Display progress is now ON.");
+            std::cout << "[INFO] Display progress is now ON." << std::endl;
         }
         else if (input == "print off")
         {
             g_display = false;
-            logger.logInfo("Display progress is now OFF.");
+            std::cout << "[INFO] Display progress is now OFF." << std::endl;
         }
         else if (input == "context")
         {
@@ -143,33 +141,33 @@ namespace process::controller
         else if (input == "exit")
         {
             process::ControllerBase::running() = false;
-            logger.logInfo("Exiting program after current process completes.");
+            std::cout << "[INFO] Exiting program after current process completes." << std::endl;
         }
         else if (input == "terminate all")
         {
             process::ControllerBase::running() = false;
-            logger.logInfo("Terminating all processes and exiting.");
+            std::cout << "[INFO] Terminating all processes and exiting." << std::endl;
             process::Controller::terminateAll();
         }
         else if (input.rfind("terminate ", 0) == 0)
         {
-            logger.logInfo("Terminating process with PID: " + input.substr(10));
+            std::cout << "[INFO] Terminating process with PID: " << input.substr(10) << std::endl;
             terminatePid(input);
         }
         else if (input == "kill all")
         {
             process::ControllerBase::running() = false;
-            logger.logInfo("Killing all processes and exiting.");
+            std::cout << "[INFO] Killing all processes and exiting." << std::endl;
             process::Controller::killAll();
         }
         else if (input.rfind("kill ", 0) == 0)
         {
-            logger.logInfo("Killing process with PID: " + input.substr(5));
+            std::cout << "[INFO] Killing process with PID: " << input.substr(5) << std::endl;
             killPid(input);
         }
         else if (input == "display pids")
         {
-            logger.logInfo("Current Process IDs:");
+            std::cout << "[INFO] Current Process IDs:" << std::endl;
             process::Controller::displayAllPids();
         }
         else if (input == "help")
@@ -179,19 +177,19 @@ namespace process::controller
         else if (input == "respawn on")
         {
             process::ControllerBase::respawn() = true;
-            logger.logInfo("Respawn feature is now ON.");
+            std::cout << "[INFO] Respawn feature is now ON." << std::endl;
         }
         else if (input == "respawn off")
         {
             process::ControllerBase::respawn() = false;
-            logger.logInfo("Respawn feature is now OFF.");
+            std::cout << "[INFO] Respawn feature is now OFF." << std::endl;
         }
         else
         {
-            logger.logError("Unknown command. Type 'help' for a list of available commands.");
+            std::cout << "[ERROR] Unknown command. Type 'help' for a list of available commands." << std::endl;
         }
 
-        logger.logInfo(std::string(40, '-')); // Separator for readability
+        std::cout << std::string(40, '-') << std::endl; // Separator for readability
     }
     
     void printHelp()
@@ -226,11 +224,11 @@ namespace process::controller
         }
         catch (const std::invalid_argument &)
         {
-            logger.logError("Invalid PID format.");
+            std::cerr << "[ERROR] Invalid PID format." << std::endl;
         }
         catch (const std::out_of_range &)
         {
-            logger.logError("PID out of range.");
+            std::cerr << "[ERROR] PID out of range." << std::endl;
         }
     }
 
@@ -243,11 +241,11 @@ namespace process::controller
         }
         catch (const std::invalid_argument &)
         {
-            logger.logError("Invalid PID format.");
+            std::cerr << "[ERROR] Invalid PID format." << std::endl;
         }
         catch (const std::out_of_range &)
         {
-            logger.logError("PID out of range.");
+            std::cerr << "[ERROR] PID out of range." << std::endl;
         }
     }
 } // namespace process
