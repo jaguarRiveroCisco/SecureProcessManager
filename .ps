@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Process States: In addition to S (sleeping) and R (running), there are other process states such as D (uninterruptible sleep), 
-# Z (zombie), T (stopped), and I (idle).
-# Foreground Process Group (+): A process marked with a + is associated with a terminal and is likely the one that receives 
-# input from the user.
 
 # Default process name
 process_name="ProcessController"
@@ -16,15 +12,21 @@ previous_output=""
 current_pid=$$
 
 while true; do
-  current_output=$(ps -ax -o pid,stat,comm,args | egrep "$process_name" | grep -v grep | grep -v "$current_pid" | grep -v "$0")
+  # Capture the output excluding the script and its process
+  current_output=$(ps -ax -o pid,stat,comm,args | grep "$process_name" | grep -v grep | grep -v "$current_pid" | grep -v "$0")
+  
+  # Count the number of non-empty lines in current_output
+  line_count=$(echo "$current_output" | grep -c '[^[:space:]]')
 
   if [[ "$current_output" != "$previous_output" ]]; then
     echo  # Print an empty line to indicate a change
-    echo "$current_output"
     
-    # Calculate and print the total number of lines excluding the header
-    line_count=$(echo "$current_output" | wc -l)
-    echo "Total number of $process_name processes: $((line_count - 1))"
+    if [[ "$line_count" -eq 0 ]]; then
+      echo "Total number of $process_name processes: 0"
+    else
+      echo "$current_output"
+      echo "Total number of $process_name processes: $line_count"
+    fi
 
     previous_output="$current_output"
   fi
