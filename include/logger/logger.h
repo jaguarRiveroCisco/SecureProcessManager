@@ -28,11 +28,9 @@ namespace tools
 
         void flush(LogLevel level);
 
-        void logInfo(const std::string &message) { log(LogLevel::INFO, message); }
-
-        void logWarning(const std::string &message) { log(LogLevel::WARNING, message); }
-
-        void logError(const std::string &message) { log(LogLevel::ERROR, message); }
+        void logInfo(const std::string &message);
+        void logWarning(const std::string &message);
+        void logError(const std::string &message);
 
     private:
         std::queue<std::string> logQueue;
@@ -45,6 +43,8 @@ namespace tools
         void processLogs();
         std::string logLevelToString(LogLevel level) const;
     };
+
+    int example();
 
 } // namespace tools
 

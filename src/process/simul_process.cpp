@@ -59,7 +59,6 @@ namespace process
         }
 
         logLifetime(reason);
-        std::cout << "[END] Process ID: " << getpid() << " | Termination Reason: " << reason << std::endl;
         _exit(0); // Ensure the child process exits immediately
     }
 } // namespace process

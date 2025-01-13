@@ -67,6 +67,18 @@ namespace tools
         }
     }
 
+    void Logger::logInfo(const std::string &message)
+    {
+        log(LogLevel::INFO, message);
+    }
+    void Logger::logWarning(const std::string &message)
+    {
+        log(LogLevel::WARNING, message);
+    }
+    void Logger::logError(const std::string &message)
+    {
+        log(LogLevel::ERROR, message);
+    }
     std::string Logger::logLevelToString(LogLevel level) const
     {
         switch (level)
