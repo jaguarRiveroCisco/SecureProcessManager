@@ -1,6 +1,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include "logger_interface.h"
 #include <condition_variable>
 #include <mutex>
 #include <queue>
@@ -8,10 +9,7 @@
 
 namespace tools
 {
-
-    enum class LogLevel { INFO, WARNING, ERROR };
-
-    class Logger 
+    class Logger : protected ILogger
     {
     public:
         Logger();

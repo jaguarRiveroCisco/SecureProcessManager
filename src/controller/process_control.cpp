@@ -52,7 +52,7 @@ namespace process::controller
                 case 'h':
                 default:
                     // Display usage information and exit
-                    logger.logError("Usage: " + std::string(argv[0]) +
+                    logger.logInfo("Usage: " + std::string(argv[0]) +
                                     " -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random "
                                     "upper limit> -d <display (0 or 1)> -r <respawn (0 or 1)> -h -> help");
                     std::exit(EXIT_SUCCESS);
