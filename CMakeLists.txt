@@ -9,6 +9,7 @@ include_directories(
     include/controller
     include/process
     include/synchro
+    include/tools
 )
 
 
@@ -28,4 +29,7 @@ src/process/base_process.cpp
 src/controller/process_handler.cpp
 src/controller/process_control.cpp
 src/controller/controller_base.cpp
+
+# Tools
+src/tools/timestamp.cpp
 )
