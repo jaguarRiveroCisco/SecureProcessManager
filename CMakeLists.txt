@@ -13,7 +13,7 @@ include_directories(
 
 
 add_executable(ProcessController 
-src/waitPidProc.cpp 
+src/ProcessController.cpp 
 src/process/messenger.cpp 
 src/process/process_base.cpp
 src/process/process_helper.cpp

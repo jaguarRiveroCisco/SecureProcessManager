@@ -1,1 +1,24 @@
-cmake --build build --parallel 3
+#!/usr/bin/env bash
+
+clean() {
+  rm -rf build > /dev/null 2>&1
+}
+
+conf() {
+  cmake -B build -S . > /dev/null 2>&1
+}
+
+build() {
+  cmake --build build --parallel 3
+}
+
+if [ "$1" == "clean" ]; then
+  clean
+elif [ "$1" == "conf" ]; then
+  conf
+else
+  if [ ! -d "build" ]; then
+    conf
+  fi
+  build
+fi

@@ -4,18 +4,31 @@
 # Foreground Process Group (+): A process marked with a + is associated with a terminal and is likely the one that receives 
 # input from the user.
 
+# Default process name
+process_name="ProcessController"
+
+# Check if a parameter is provided
+if [ $# -gt 0 ]; then
+  process_name="$1"
+fi
+
 previous_output=""
+current_pid=$$
 
 while true; do
-  current_output=$(ps -ax -o pid,stat,comm,args | egrep "ProcessController" | grep -v grep)
+  current_output=$(ps -ax -o pid,stat,comm,args | egrep "$process_name" | grep -v grep | grep -v "$current_pid" | grep -v "$0")
 
   if [[ "$current_output" != "$previous_output" ]]; then
     echo  # Print an empty line to indicate a change
     echo "$current_output"
     
-    # Print the total number of lines
+    # Print the total number of lines excluding the header
     line_count=$(echo "$current_output" | wc -l)
-    echo "Total number of ProcessController processes: $(( $(echo "$current_output" | wc -l) - 1 ))"
+    if [ "$line_count" -gt 0 ]; then
+      echo "Total number of $process_name processes: $line_count"
+    else
+      echo "Total number of $process_name processes: 0"
+    fi
 
     previous_output="$current_output"
   fi
