@@ -20,7 +20,7 @@ namespace process
             throw std::runtime_error("Failed to create message queue");
         }
         std::cout << "Process ID: " << getpid() << " - CTOR Message queue created with id " << msgid_
-                  << " number of instances " << ++counter << std::endl;
+                  << " | Number of instances " << ++counter << std::endl;
     }
 
     Messenger::~Messenger()
@@ -31,7 +31,7 @@ namespace process
             perror("msgctl");
         }
         std::cout << "Process ID: " << getpid() << " - DTOR ~Message queue with id " << msgid_
-                  << " number of instances " << --counter << std::endl;
+                  << " | Number of instances " << --counter << std::endl;
     }
 
     void Messenger::sendMessage(const std::string &text, int msgType)
