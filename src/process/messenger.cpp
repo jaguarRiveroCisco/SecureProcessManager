@@ -2,7 +2,7 @@
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <unistd.h>
-#include "console_logger.h"
+#include "logger_instance.h"
 
 namespace process
 {
@@ -19,9 +19,9 @@ namespace process
             perror("msgget");
             throw std::runtime_error("Failed to create message queue");
         }
-        tools::ConsoleLogger::getInstance() << "[START] Message queue created with id " << msgid_
+        tools::LogOpt::getInstance() << "[START] Message queue created with id " << msgid_
                   << " | Number of instances " << ++counter;
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
     Messenger::~Messenger()
@@ -31,9 +31,9 @@ namespace process
         {
             perror("msgctl");
         }
-        tools::ConsoleLogger::getInstance() << "[END] Message queue with id " << msgid_
-                  << " | Number of instances " << --counter;
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance() << "[END] Message queue with id " << msgid_ << " | Number of instances "
+                                     << --counter;
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
     void Messenger::sendMessage(const std::string &text, int msgType)

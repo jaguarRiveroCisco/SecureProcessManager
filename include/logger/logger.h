@@ -6,8 +6,10 @@
 
 namespace tools
 {
-    class Logger : public ILogger
+    struct LogOpt;
+    class Logger : public ILogger 
     {
+        friend struct LogOpt;
     public:
         void flush(LogLevel level);
         void log(LogLevel level, const std::string &message);
@@ -21,11 +23,11 @@ namespace tools
             currentMessageStream << message;
             return *this;
         }
+        virtual ~Logger();
 
     protected:
         virtual void outputLog(const std::string &message) = 0; // Pure virtual function
         Logger();
-        virtual ~Logger();
     private:
 
         Logger(const Logger &)                            = delete;

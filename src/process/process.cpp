@@ -2,15 +2,16 @@
 #include <iostream>
 #include <thread>
 #include "communicator.h"
-#include "console_logger.h"
+#include "logger_instance.h"
+
 namespace process
 {
     void Process::work()
     {
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
-        tools::ConsoleLogger::getInstance() << "[START] Process ID: " << getpid();
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance() << "[START] Process ID: " << getpid();
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
         // Add real process work code here
         while (continue_)
         {

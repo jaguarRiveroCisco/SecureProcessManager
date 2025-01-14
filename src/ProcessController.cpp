@@ -7,6 +7,7 @@
 #include "process_handler.h"
 #include "simul_process.h"
 #include "process_control.h"
+#include "logger_instance.h"
 
 std::atomic<bool> g_display = true;
 
@@ -27,6 +28,8 @@ void displayCompilationInfo(const char *appName)
 
 auto main(int argc, char *argv[]) -> int
 {
+    tools::LogOpt::initializeLogger("console");
+
     displayCompilationInfo(argv[0]);
 
     int         numProcesses = 4;
@@ -47,7 +50,7 @@ auto main(int argc, char *argv[]) -> int
 
     process::controller::printpid("[INFO] Main process exiting", "");
 
-    process::controller::LoggerExample(); // Call to example
+    // process::controller::LoggerExample(); // Call to example
 
     return 0;
 }

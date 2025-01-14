@@ -6,15 +6,13 @@
 
 namespace tools
 {
-    class FileLogger final : protected Logger 
+    class FileLogger final : public Logger 
     {
+        friend struct LogOpt;
+
     public:
         ~FileLogger() override;
-        static FileLogger &getInstance()
-        {
-            static FileLogger instance;
-            return instance;
-        }
+   
 
     protected:
         void outputLog(const std::string &message) override;
@@ -23,6 +21,11 @@ namespace tools
         std::ofstream outputFile;
         static void ensureLogsDirectoryExists();
         FileLogger();
+        static FileLogger &getInstance()
+        {
+            static FileLogger instance;
+            return instance;
+        }
     };
 }
 #endif // FILE_LOGGER_H

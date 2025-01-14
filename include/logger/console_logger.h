@@ -7,16 +7,15 @@ namespace tools
 {
     class ConsoleLogger final : public Logger 
     {
-    public:
+        friend struct LogOpt;
+    protected:
+        void outputLog(const std::string &message) override;
+    private:
         static ConsoleLogger &getInstance()
         {
             static ConsoleLogger instance;
             return instance;
         }
-
-    protected:
-        void outputLog(const std::string &message) override;
-    private:
         ConsoleLogger() = default;
     };
 }

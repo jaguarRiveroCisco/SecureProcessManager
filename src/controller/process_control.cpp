@@ -5,8 +5,7 @@
 #include <string>
 #include <thread>
 #include "process_handler.h"
-#include "console_logger.h"
-#include "timestamp.h"
+#include "logger_instance.h"
 
 extern std::atomic<bool> g_display;
 
@@ -21,23 +20,23 @@ namespace process::controller
     template <typename T>
     void printpid(const std::string& str, const T& x)
     {
-        tools::ConsoleLogger::getInstance() << str << " " << x;
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance() << str << " " << x;
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
     template<typename T> 
     void printpidE(const std::string &str, const T &x)
     {
 
-        tools::ConsoleLogger::getInstance() << str << " " << x;
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
+        tools::LogOpt::getInstance() << str << " " << x;
+        tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
     }
 
    template<typename T> 
     void printpidW(const std::string &str, const T &x)
     {
-        tools::ConsoleLogger::getInstance() << str << " " << x;
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::WARNING);
+        tools::LogOpt::getInstance() << str << " " << x;
+        tools::LogOpt::getInstance().flush(tools::LogLevel::WARNING);
     }
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
@@ -91,13 +90,20 @@ namespace process::controller
                 break;
             case 'l':
                 // Set the logging type from the argument
-                process::ControllerBase::loggingType() = static_cast<LoggingType>(std::atoi(optarg));
+                if (std::string(optarg) == "file")
+                {
+                    tools::LogOpt::initializeLogger("file");
+                }
+                else
+                {
+                    printpidW("Invalid logging type defaulting to ", "console");
+                }
                 printpid("Logging type: ", process::ControllerBase::loggingTypeToString());
                 break;
             case 'h':
             default:
                 // Display usage information and exit
-                printpid(argv[0], "Usage: -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -l <logging type> -h -> help");
+                printpid(argv[0], "Usage: -n <number of processes> -t <process type 'real' or 'simul' (default)> -r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -l <logging type 'console' or 'file'> -h -> help");
                 std::exit(EXIT_SUCCESS);
             }
         }
@@ -276,17 +282,15 @@ namespace process::controller
     int LoggerExample()
     {
         //
-        tools::ConsoleLogger::getInstance().log(tools::LogLevel::INFO, "This is an info message.");
-        tools::ConsoleLogger::getInstance().log(tools::LogLevel::WARNING, "This is a warning message.");
-        tools::ConsoleLogger::getInstance().log(tools::LogLevel::ERROR, "This is an error message.");
-        //
-        tools::ConsoleLogger::getInstance().logInfo("This is an info message.");
-        tools::ConsoleLogger::getInstance().logWarning("This is a warning message.");
-        tools::ConsoleLogger::getInstance().logError("This is an error message.");
-        //
-        tools::ConsoleLogger::getInstance() << "Starting a new log entry with operator<< ";
-        tools::ConsoleLogger::getInstance() << "and adding more details.";
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance().log(tools::LogLevel::INFO, "This is an info message.");
+        tools::LogOpt::getInstance().log(tools::LogLevel::WARNING, "This is a warning message.");
+        tools::LogOpt::getInstance().log(tools::LogLevel::ERROR, "This is an error message.");
+        tools::LogOpt::getInstance().logInfo("This is an info message.");
+        tools::LogOpt::getInstance().logWarning("This is a warning message.");
+        tools::LogOpt::getInstance().logError("This is an error message.");
+        tools::LogOpt::getInstance() << "Starting a new log entry with operator<< ";
+        tools::LogOpt::getInstance() << "and adding more details.";
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
         //
         return 0;
     }

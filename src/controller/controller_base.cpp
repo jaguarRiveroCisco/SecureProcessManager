@@ -1,6 +1,6 @@
 #include "controller_base.h"
 #include <unistd.h> // Include this header for fork
-#include "console_logger.h"
+#include "logger_instance.h"
 namespace process
 {
     int         ControllerBase::numProcesses_ = 4; // Default number of processes
@@ -42,8 +42,8 @@ namespace process
             catch (const std::exception &e)
             {
                 // Handle exceptions in child process
-                tools::ConsoleLogger::getInstance() << "Exception in child process: " << e.what();
-                tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
+                tools::LogOpt::getInstance() << "Exception in child process: " << e.what();
+                tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
                 _exit(EXIT_FAILURE); // Ensure child process exits
             }
         }
@@ -86,13 +86,13 @@ namespace process
 
     void  ControllerBase::displayAllPids()
     {
-        tools::ConsoleLogger::getInstance() << "Current PIDs:";
+        tools::LogOpt::getInstance() << "Current PIDs:";
         for (const auto &handler: handlers_)
         {
-            tools::ConsoleLogger::getInstance() << handler->getPid() ;
+            tools::LogOpt::getInstance() << handler->getPid() ;
         }
-        tools::ConsoleLogger::getInstance() << "Total number of processes: " << handlers_.size();
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance() << "Total number of processes: " << handlers_.size();
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
     void ControllerBase::killAll()
@@ -113,8 +113,8 @@ namespace process
         }
         else
         {
-            tools::ConsoleLogger::getInstance() << "Process with PID: " << pid << " not found.";
-            tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LogOpt::getInstance() << "Process with PID: " << pid << " not found.";
+            tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
     
@@ -136,8 +136,8 @@ namespace process
         }
         else
         {
-            tools::ConsoleLogger::getInstance() << "Process with PID: " << pid << " not found.";
-            tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LogOpt::getInstance() << "Process with PID: " << pid << " not found.";
+            tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
 }

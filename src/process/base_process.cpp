@@ -1,6 +1,7 @@
 #include "base_process.h"
 #include <unistd.h>
-#include "console_logger.h"
+#include "logger_instance.h"
+
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
@@ -8,12 +9,12 @@ namespace process
     {
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        tools::ConsoleLogger::getInstance().logInfo("[END]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason);
+        tools::LogOpt::getInstance().logInfo("[END]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason);
     }
 
     void signalHandler(int signum)
     {
-        tools::ConsoleLogger::getInstance().logInfo("Received signal: " + std::to_string(signum));
+        tools::LogOpt::getInstance().logInfo("Received signal: " + std::to_string(signum));
         BaseProcess::continueFlag() = false;
     }
 

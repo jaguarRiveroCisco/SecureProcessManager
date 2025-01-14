@@ -3,7 +3,7 @@
 #include <csignal>
 #include <thread>
 #include <unistd.h> // Include this header for _exit
-#include "console_logger.h"
+#include "logger_interface.h"
 extern std::atomic<bool> g_display;
 
 namespace process
@@ -16,13 +16,13 @@ namespace process
         {
             if (WIFSIGNALED(status))
             {
-                tools::ConsoleLogger::getInstance() << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
-                tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+                tools::LogOpt::getInstance() << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
+                tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
             }
             else
             {
-                tools::ConsoleLogger::getInstance() << "Child process " << pid_ << " exited with status " << status << ".";
-                tools::ConsoleLogger::getInstance().flush(tools::LogLevel::WARNING);
+                tools::LogOpt::getInstance() << "Child process " << pid_ << " exited with status " << status << ".";
+                tools::LogOpt::getInstance().flush(tools::LogLevel::WARNING);
             }
         }
     }
@@ -33,8 +33,8 @@ namespace process
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
-            tools::ConsoleLogger::getInstance() << "Process " << pid_ << " is not running.";
-            tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LogOpt::getInstance() << "Process " << pid_ << " is not running.";
+            tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
             return false;
         }
         return true;
@@ -63,8 +63,8 @@ namespace process
         }
         catch (const std::system_error &e)
         {
-            tools::ConsoleLogger::getInstance() << "Thread creation failed: " << e.what();
-            tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LogOpt::getInstance() << "Thread creation failed: " << e.what();
+            tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
             _exit(EXIT_FAILURE); // Ensure the child process exits
         }
     }

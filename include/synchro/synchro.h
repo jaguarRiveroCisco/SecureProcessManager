@@ -2,7 +2,7 @@
 #define SYNCHRO_H
 #include <condition_variable>
 #include <queue>
-#include <console_logger.h>
+#include "logger_instance.h"
 
 struct Synchro final
 {
@@ -12,14 +12,14 @@ struct Synchro final
 
     Synchro()
     {
-        tools::ConsoleLogger::getInstance() << "[START] Synchro object created: " << this;
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance() << "[START] Synchro object created: " << this;
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
     ~Synchro()
     {
-        tools::ConsoleLogger::getInstance() << "[END] ~Synchro object destroyed: " << this;
-        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
+        tools::LogOpt::getInstance() << "[END] ~Synchro object destroyed: " << this;
+        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
     // Delete the new and delete operators to prevent dynamic allocation

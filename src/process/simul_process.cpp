@@ -4,7 +4,7 @@
 #include <thread>
 #include <unistd.h>
 #include "communicator.h"
-#include "console_logger.h"
+#include "logger_instance.h"
 
 namespace process
 {
@@ -14,7 +14,7 @@ namespace process
     void ProcessSimulator::setRndUpper(int rndUpper)
     {
         rndUpper_ = rndUpper;
-        tools::ConsoleLogger::getInstance().logInfo("Random work duration set between " + std::to_string(baseSleepDuration) +
+        tools::LogOpt::getInstance().logInfo("Random work duration set between " + std::to_string(baseSleepDuration) +
                                          " and " + std::to_string(baseSleepDuration + rndUpper_) + " seconds for child processes.");
     }
 
@@ -32,7 +32,7 @@ namespace process
         auto msSleepDuration = sleepDuration_ * 1000;
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
-        tools::ConsoleLogger::getInstance().logInfo(
+        tools::LogOpt::getInstance().logInfo(
                 "[START] | Simulated Work Duration: " + std::to_string(sleepDuration_) + " seconds (" +
                 std::to_string(msSleepDuration) + " ms)");
 
