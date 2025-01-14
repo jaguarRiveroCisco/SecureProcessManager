@@ -16,13 +16,13 @@ namespace process::controller
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
 
     template <typename T>
-    void printpid(const std::string& str, const T& x = T())
+    void printpid(const std::string& str, const T& x)
     {
         std::cout << "(" << getpid() << ") " << str << " " << x << std::endl;
     }
 
     template<typename T> 
-    void printpidE(const std::string &str, const T &x = T())
+    void printpidE(const std::string &str, const T &x)
     {
         std::cerr << "(" << getpid() << ") " << str << " " << x << std::endl;
     }

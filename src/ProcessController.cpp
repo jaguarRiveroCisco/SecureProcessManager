@@ -45,7 +45,7 @@ auto main(int argc, char *argv[]) -> int
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
 
-    std::cout << "Exiting main" << std::endl;
+    process::controller::printpid("[INFO] Main process exiting", "");
 
     return 0;
 }
