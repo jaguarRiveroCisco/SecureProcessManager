@@ -2,10 +2,7 @@
 #define LOGGER_H
 
 #include "logger_interface.h"
-#include <condition_variable>
-#include <mutex>
-#include <queue>
-#include <thread>
+#include <sstream>
 
 namespace tools
 {
@@ -19,7 +16,6 @@ namespace tools
 
         template<typename T> Logger &operator<<(const T &message)
         {
-            std::lock_guard<std::mutex> lock(mutex_);
             currentMessageStream << message;
             return *this;
         }
@@ -34,14 +30,7 @@ namespace tools
         virtual void outputLog(const std::string &message) = 0; // Pure virtual function
 
     private:
-        std::queue<std::string> logQueue;
-        std::mutex              mutex_;
-        std::condition_variable condVar;
-        std::thread             logThread;
-        std::atomic<bool>       done;
         std::ostringstream      currentMessageStream;
-
-        void processLogs();
         std::string logLevelToString(LogLevel level) const;
     };
 

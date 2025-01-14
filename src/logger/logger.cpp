@@ -8,36 +8,24 @@
 namespace tools
 {
 
-    Logger::Logger() : done(false) 
+    Logger::Logger()
     {
         std::cout << "[Logger] Initialized at " << TimeStamp::get() << std::endl;
-        logThread = std::thread(&Logger::processLogs, this);
     }
 
     Logger::~Logger()
     {
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            done = true;
-            condVar.notify_all();
-        }
-        logThread.join();
         std::cout << "[Logger] Destroyed at " << TimeStamp::get() << std::endl;
     }
 
     void Logger::log(LogLevel level, const std::string &message)
     {
         std::string logEntry = "[" + TimeStamp::get() + "] " + logLevelToString(level) + ": " + message;
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            logQueue.push(logEntry);
-        }
-        condVar.notify_one();
+        outputLog(logEntry);
     }
 
     void Logger::flush(LogLevel level)
     {
-        std::lock_guard<std::mutex> lock(mutex_);
         std::string                 message = currentMessageStream.str();
         if (!message.empty())
         {
@@ -45,28 +33,6 @@ namespace tools
             currentMessageStream.str(""); // Clear the stream
         }
     }
-
-    void Logger::processLogs()
-    {
-        while (!done)
-        {
-            std::unique_lock<std::mutex> lock(mutex_);
-            condVar.wait(lock, [this] { return !logQueue.empty() || done; });
-
-            while (!logQueue.empty())
-            {
-                std::string message = logQueue.front();
-                logQueue.pop();
-                lock.unlock();
-
-                // Output log message to the console or a file
-                std::cout << message << std::endl;
-
-                lock.lock();
-            }
-        }
-    }
-
     void Logger::logInfo(const std::string &message)
     {
         log(LogLevel::INFO, message);
