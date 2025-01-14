@@ -17,7 +17,7 @@ std::string tools::TimeStamp::get()
 
     // Format the time with milliseconds
     std::ostringstream oss;
-    oss << "(" << getpid() << ") "; // Append process ID at the beginning
+    oss << "PID: " << getpid() << "|"; // Append process ID at the beginning
     oss << std::put_time(now_tm, "%Y-%m-%d %H:%M:%S"); // Format: YYYY-MM-DD HH:MM:SS
     oss << '.' << std::setfill('0') << std::setw(3) << ms.count(); // Append milliseconds
 

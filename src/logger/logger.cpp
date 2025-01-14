@@ -20,7 +20,7 @@ namespace tools
 
     void Logger::log(LogLevel level, const std::string &message)
     {
-        std::string logEntry = "[" + TimeStamp::get() + "] " + logLevelToString(level) + ": " + message;
+        std::string logEntry = "" + TimeStamp::get() + "|" + logLevelToString(level) + ": " + message;
         outputLog(logEntry);
     }
 
@@ -59,24 +59,4 @@ namespace tools
                 return "UNKNOWN";
         }
     }
-
-    //int example()
-    //{
-    //    tools::ConsoleLogger logger;
-//
-    //    logger.log(tools::LogLevel::INFO, "This is an info message.");
-    //    logger.log(tools::LogLevel::WARNING, "This is a warning message.");
-    //    logger.log(tools::LogLevel::ERROR, "This is an error message.");
-//
-    //    logger.logInfo("This is an info message.");
-    //    logger.logWarning("This is a warning message.");
-    //    logger.logError("This is an error message.");
-//
-    //    logger << "Starting a new log entry with operator<< ";
-    //    logger << "and adding more details.";
-    //    logger.flush(tools::LogLevel::INFO);
-//
-    //    return 0;
-    //}
-
 } // namespace tools

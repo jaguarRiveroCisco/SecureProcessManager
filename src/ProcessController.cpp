@@ -37,6 +37,8 @@ auto main(int argc, char *argv[]) -> int
 
     process::controller::printHelp(); // Call to printHelp
 
+    process::controller::example(); // Call to example
+
     process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
 
     std::thread readerThread(process::controller::main);

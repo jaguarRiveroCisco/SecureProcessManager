@@ -33,12 +33,6 @@ namespace tools
         std::ostringstream      currentMessageStream;
         std::string logLevelToString(LogLevel level) const;
     };
-
-
-
-
-    int example();
-
 } // namespace tools
 
 #endif // LOGGER_H
