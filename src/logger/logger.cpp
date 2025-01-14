@@ -10,12 +10,12 @@ namespace tools
 
     Logger::Logger()
     {
-        std::cout << "[Logger] Initialized at " << TimeStamp::get() << std::endl;
+        std::cout << TimeStamp::get() + "|INFO: [START] Logger Initialized at " << TimeStamp::get() << std::endl;
     }
 
     Logger::~Logger()
     {
-        std::cout << "[Logger] Destroyed at " << TimeStamp::get() << std::endl;
+        std::cout << TimeStamp::get() + "|INFO: [END] Logger Finnished at " << TimeStamp::get() << std::endl;
     }
 
     void Logger::log(LogLevel level, const std::string &message)
