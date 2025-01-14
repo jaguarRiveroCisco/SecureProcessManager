@@ -5,7 +5,7 @@
 
 namespace tools
 {
-    class ConsoleLogger : public Logger 
+    class ConsoleLogger final : public Logger 
     {
     public:
         static ConsoleLogger &getInstance()
@@ -16,6 +16,8 @@ namespace tools
 
     protected:
         void outputLog(const std::string &message) override;
+    private:
+        ConsoleLogger() = default;
     };
 }
 

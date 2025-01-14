@@ -47,7 +47,7 @@ auto main(int argc, char *argv[]) -> int
 
     process::controller::printpid("[INFO] Main process exiting", "");
 
-    process::controller::example(); // Call to example
+    process::controller::LoggerExample(); // Call to example
 
     return 0;
 }

@@ -273,7 +273,7 @@ namespace process::controller
             printpidE("PID out of range.","");
         }
     }
-    int example()
+    int LoggerExample()
     {
         //
         tools::ConsoleLogger::getInstance().log(tools::LogLevel::INFO, "This is an info message.");

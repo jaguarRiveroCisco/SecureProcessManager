@@ -4,13 +4,13 @@
 
 namespace tools
 {
-    FileLogger::FileLogger(const std::string &filename) : Logger()
+    FileLogger::FileLogger() : Logger()
     {
         // Ensure the 'logs' directory exists
         ensureLogsDirectoryExists();
 
         // Create the log file path
-        auto name = "logs/" + std::to_string(getpid()) + "_" + filename + ".log";
+        auto name = "logs/" + std::to_string(getpid()) + "_.log";
 
         // Open the log file
         outputFile.open(name, std::ios::app);

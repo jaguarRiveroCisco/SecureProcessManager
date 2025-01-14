@@ -9,7 +9,7 @@ namespace process::controller
     template<typename T> void printpid(const std::string &str, const T &x = T());
 
     template<typename T> void printpidE(const std::string &str, const T &x = T());
-    int example();
+    int LoggerExample();
 
 } // namespace process::controller
 

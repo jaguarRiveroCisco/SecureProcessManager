@@ -6,10 +6,9 @@
 
 namespace tools
 {
-    class FileLogger : protected Logger 
+    class FileLogger final : protected Logger 
     {
     public:
-        explicit FileLogger(const std::string &filename = "");
         ~FileLogger() override;
         static FileLogger &getInstance()
         {
@@ -23,6 +22,7 @@ namespace tools
     private:
         std::ofstream outputFile;
         static void ensureLogsDirectoryExists();
+        FileLogger();
     };
 }
 #endif // FILE_LOGGER_H
