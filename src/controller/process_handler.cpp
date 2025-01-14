@@ -3,6 +3,7 @@
 #include "process.h"
 #include "simul_process.h"
 #include "process_handler.h"
+#include "console_logger.h"
 #include "communicator.h"
 
 extern std::atomic<bool> g_display;
@@ -23,7 +24,9 @@ namespace process
             }
             catch (const std::exception &e)
             {
-                std::cerr << "Error creating process handler: " << e.what() << std::endl;
+
+               tools::ConsoleLogger::getInstance() << "Error creating process handler: " << e.what();
+               tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
             }
         }
     }

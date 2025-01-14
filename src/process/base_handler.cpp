@@ -1,9 +1,9 @@
-#include <csignal>
-#include <iostream>
-#include <thread>
 #include "base_handler.h"
 #include <chrono>
-
+#include <csignal>
+#include <thread>
+#include <unistd.h> // Include this header for _exit
+#include "console_logger.h"
 extern std::atomic<bool> g_display;
 
 namespace process
@@ -16,22 +16,25 @@ namespace process
         {
             if (WIFSIGNALED(status))
             {
-                std::cout << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".\n";
+                tools::ConsoleLogger::getInstance() << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
+                tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
             }
             else
             {
-                std::cerr << "Child process " << pid_ << " exited with status " << status << ".\n";
+                tools::ConsoleLogger::getInstance() << "Child process " << pid_ << " exited with status " << status << ".";
+                tools::ConsoleLogger::getInstance().flush(tools::LogLevel::WARNING);
             }
         }
     }
 
     pid_t BaseHandler::getPid() const { return pid_; }
 
-    bool BaseHandler::isProcessRunning() const
+    bool BaseHandler::isProcessRunning()
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
-            std::cerr << "Process " << pid_ << " is not running.\n";
+            tools::ConsoleLogger::getInstance() << "Process " << pid_ << " is not running.";
+            tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
             return false;
         }
         return true;
@@ -60,7 +63,9 @@ namespace process
         }
         catch (const std::system_error &e)
         {
-            std::cerr << "Thread creation failed: " << e.what() << std::endl;
+            tools::ConsoleLogger::getInstance() << "Thread creation failed: " << e.what();
+            tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
+            _exit(EXIT_FAILURE); // Ensure the child process exits
         }
     }
 

@@ -11,6 +11,12 @@ namespace tools
     public:
         explicit FileLogger(const std::string &filename = "");
         ~FileLogger() override;
+        static FileLogger &getInstance()
+        {
+            static FileLogger instance;
+            return instance;
+        }
+
     protected:
         void outputLog(const std::string &message) override;
 

@@ -2,8 +2,8 @@
 #define BASE_PROCESS_H
 
 #include "process_interface.h"
-#include "console_logger.h"
 #include <memory>
+#include <string>
 namespace process
 {
 
@@ -14,7 +14,11 @@ namespace process
     {
     public:
         virtual ~BaseProcess() = default;
-        static std::atomic<bool> continue_;
+    
+        static std::atomic<bool>& continueFlag() 
+        {
+            return continue_;
+        }
 
     protected:
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
@@ -24,9 +28,7 @@ namespace process
 
         void logLifetime(const std::string &reason = "End of life") const;
 
-        static std::unique_ptr<tools::ILogger> logger_;
-
-
+        static std::atomic<bool>               continue_;
     };
 
 } // namespace process

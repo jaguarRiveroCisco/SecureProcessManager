@@ -2,14 +2,15 @@
 #include <iostream>
 #include <thread>
 #include "communicator.h"
-#include "logger.h"
+#include "console_logger.h"
 namespace process
 {
     void Process::work()
     {
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
-        std::cout << "[START] Process ID: " << getpid() << std::endl;
+        tools::ConsoleLogger::getInstance() << "[START] Process ID: " << getpid();
+        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
         // Add real process work code here
         while (continue_)
         {

@@ -21,25 +21,23 @@ namespace process::controller
     template <typename T>
     void printpid(const std::string& str, const T& x)
     {
-        static tools::ConsoleLogger logger;
-        logger << str << " " << x;  
-        logger.flush(tools::LogLevel::INFO);
+        tools::ConsoleLogger::getInstance() << str << " " << x;
+        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
     }
 
     template<typename T> 
     void printpidE(const std::string &str, const T &x)
     {
-        static tools::ConsoleLogger logger;
-        logger << str << " " << x;
-        logger.flush(tools::LogLevel::ERROR);
+
+        tools::ConsoleLogger::getInstance() << str << " " << x;
+        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
     }
 
    template<typename T> 
     void printpidW(const std::string &str, const T &x)
     {
-        static tools::ConsoleLogger logger;
-        logger << str << " " << x;
-        logger.flush(tools::LogLevel::WARNING);
+        tools::ConsoleLogger::getInstance() << str << " " << x;
+        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::WARNING);
     }
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
@@ -278,19 +276,17 @@ namespace process::controller
     int example()
     {
         //
-        static tools::ConsoleLogger logger;
-
-        logger.log(tools::LogLevel::INFO, "This is an info message.");
-        logger.log(tools::LogLevel::WARNING, "This is a warning message.");
-        logger.log(tools::LogLevel::ERROR, "This is an error message.");
+        tools::ConsoleLogger::getInstance().log(tools::LogLevel::INFO, "This is an info message.");
+        tools::ConsoleLogger::getInstance().log(tools::LogLevel::WARNING, "This is a warning message.");
+        tools::ConsoleLogger::getInstance().log(tools::LogLevel::ERROR, "This is an error message.");
         //
-        logger.logInfo("This is an info message.");
-        logger.logWarning("This is a warning message.");
-        logger.logError("This is an error message.");
+        tools::ConsoleLogger::getInstance().logInfo("This is an info message.");
+        tools::ConsoleLogger::getInstance().logWarning("This is a warning message.");
+        tools::ConsoleLogger::getInstance().logError("This is an error message.");
         //
-        logger << "Starting a new log entry with operator<< ";
-        logger << "and adding more details.";
-        logger.flush(tools::LogLevel::INFO);
+        tools::ConsoleLogger::getInstance() << "Starting a new log entry with operator<< ";
+        tools::ConsoleLogger::getInstance() << "and adding more details.";
+        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
         //
         return 0;
     }

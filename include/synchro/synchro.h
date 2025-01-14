@@ -1,9 +1,8 @@
 #ifndef SYNCHRO_H
 #define SYNCHRO_H
-
-#include <iostream>
 #include <condition_variable>
 #include <queue>
+#include <console_logger.h>
 
 struct Synchro final
 {
@@ -13,12 +12,14 @@ struct Synchro final
 
     Synchro()
     {
-        std::cout << "CTOR Synchro object created" << std::endl;
+        tools::ConsoleLogger::getInstance() << "[START] Synchro object created: " << this;
+        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
     }
 
     ~Synchro()
     {
-        std::cout << "DTOR ~Synchro object destroyed" << std::endl;
+        tools::ConsoleLogger::getInstance() << "[END] ~Synchro object destroyed: " << this;
+        tools::ConsoleLogger::getInstance().flush(tools::LogLevel::INFO);
     }
 
     // Delete the new and delete operators to prevent dynamic allocation

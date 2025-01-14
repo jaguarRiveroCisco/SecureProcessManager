@@ -28,12 +28,10 @@ namespace process
             static std::string loggingTypeToString(); // New method
 
         protected:
-            static int                                          numProcesses_;
-            static void setNumProcesses(int numProcesses) {
-                numProcesses_ = numProcesses;
-            }
-            static std::string processType_;
             static std::vector<std::unique_ptr<ControllerBase>> handlers_;
+            static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
+            static int                                          numProcesses_;
+            static std::string                                  processType_;
             static LoggingType loggingType_;
         private:
             void                      createChild();

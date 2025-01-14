@@ -1,6 +1,6 @@
 #include <iostream>
 #include "communicator.h"
-
+#include "console_logger.h"
 namespace process
 {
     Messenger Communicator::messenger_;
@@ -15,7 +15,8 @@ namespace process
         }
         catch (const std::runtime_error &e)
         {
-            std::cerr << "Failed to send message: " << e.what() << std::endl;
+            tools::ConsoleLogger::getInstance() << "Failed to send message: " << e.what();
+            tools::ConsoleLogger::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
 
