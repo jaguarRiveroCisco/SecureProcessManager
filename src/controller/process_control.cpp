@@ -16,9 +16,15 @@ namespace process::controller
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
 
     template <typename T>
-    void printpid(const std::string& str, const T& x = nullptr)
+    void printpid(const std::string& str, const T& x = T())
     {
         std::cout << "(" << getpid() << ") " << str << " " << x << std::endl;
+    }
+
+    template<typename T> 
+    void printpidE(const std::string &str, const T &x = T())
+    {
+        std::cerr << "(" << getpid() << ") " << str << " " << x << std::endl;
     }
 
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
@@ -31,17 +37,35 @@ namespace process::controller
             case 'n':
                 // Set the number of processes from the argument
                 numProcesses = std::atoi(optarg);
-                printpid("[INFO] Number of processes: ", numProcesses);
+                if (numProcesses <= 0)
+                {
+                    printpid("[WARN] Number of processes must be greater than 0. Defaulting to  ", 4);
+                    numProcesses = 4;
+                }
+                else
+                    printpid("[INFO] Number of processes: ", numProcesses);
                 break;
             case 't':
                 // Set the process type from the argument
                 processType = optarg;
-                printpid("[INFO] Process type: ", processType);
+                if (processType != "real" && processType != "simul")
+                {
+                    printpid("[WARN] Invalid process type defaulting to ", "simul");
+                    processType = "simul";
+                }
+                else
+                    printpid("[INFO] Process type: ", processType);
                 break;
             case 'r':
                 // Set the random upper limit from the argument
                 rndUpper = std::atoi(optarg);
-                printpid("[INFO] Random upper limit: ", rndUpper);
+                if (rndUpper < 10)
+                {
+                    printpid("[WARN] Random upper limit must be >= than 10. Defaulting to ", 10);
+                    rndUpper = 10;
+                }
+                else
+                    printpid("[INFO] Random upper limit: ", rndUpper);
                 break;
             case 'd':
                 // Set the display flag from the argument (0 or 1)
@@ -66,23 +90,11 @@ namespace process::controller
             }
         }
 
-        if (numProcesses <= 0)
-        {
-            std::cout << "[WARN] Number of processes must be greater than 0. Defaulting to 4." << std::endl;
-            numProcesses = 4;
-        }
+ 
 
-        if (processType != "real" && processType != "simul")
-        {
-            std::cout << "[WARN] Invalid process type: " << processType << ". Defaulting to 'simul'." << std::endl;
-            processType = "simul";
-        }
 
-        if (rndUpper < 10)
-        {
-            std::cout << "[WARN] Random upper limit must be greater than 10. Defaulting to 10." << std::endl;
-            rndUpper = 10;
-        }
+
+
 
         printContext(numProcesses, processType, rndUpper);
     }
@@ -158,12 +170,12 @@ namespace process::controller
         if (input == "print on")
         {
             g_display = true;
-            std::cout << "(" << getpid() << ")" << "[INFO] Display progress is now ON." << std::endl;
+            printpid("[INFO] Display progress is now", "ON");
         }
         else if (input == "print off")
         {
             g_display = false;
-            std::cout << "(" << getpid() << ")" << "[INFO] Display progress is now OFF." << std::endl;
+            printpid("[INFO] Display progress is now", "OFF");
         }
         else if (input == "context")
         {
@@ -172,33 +184,33 @@ namespace process::controller
         else if (input == "exit")
         {
             process::ControllerBase::running() = false;
-            std::cout << "(" << getpid() << ")" << "[INFO] Exiting program after current process completes." << std::endl;
+            printpid("[INFO] Exiting program after current process completes.", "");
         }
         else if (input == "terminate all")
         {
             process::ControllerBase::running() = false;
-            std::cout << "(" << getpid() << ")" << "[INFO] Terminating all processes and exiting." << std::endl;
+            printpid("[INFO] Terminating all processes and exiting.", "");
             process::Controller::terminateAll();
         }
         else if (input.rfind("terminate ", 0) == 0)
         {
-            std::cout << "(" << getpid() << ")" << "[INFO] Terminating process with PID: " << input.substr(10) << std::endl;
+            printpid("[INFO] Terminating process with PID:", input.substr(10));
             terminatePid(input);
         }
         else if (input == "kill all")
         {
             process::ControllerBase::running() = false;
-            std::cout << "(" << getpid() << ")" << "[INFO] Killing all processes and exiting." << std::endl;
+            printpid("[INFO] Killing all processes and exiting.", "");
             process::Controller::killAll();
         }
         else if (input.rfind("kill ", 0) == 0)
         {
-            std::cout << "(" << getpid() << ")" << "[INFO] Killing process with PID: " << input.substr(5) << std::endl;
+            printpid("[INFO] Killing process with PID:", input.substr(5));
             killPid(input);
         }
         else if (input == "display pids")
         {
-            std::cout << "(" << getpid() << ")" << "[INFO] Current Process IDs:" << std::endl;
+            printpid("[INFO] Current Process IDs:","");
             process::Controller::displayAllPids();
         }
         else if (input == "help")
@@ -208,16 +220,16 @@ namespace process::controller
         else if (input == "respawn on")
         {
             process::ControllerBase::respawn() = true;
-            std::cout << "(" << getpid() << ")" << "[INFO] Respawn feature is now ON." << std::endl;
+            printpid("[INFO] Respawn feature is now", "ON");
         }
         else if (input == "respawn off")
         {
             process::ControllerBase::respawn() = false;
-            std::cout << "(" << getpid() << ")" << "[INFO] Respawn feature is now OFF." << std::endl;
+            printpid("[INFO] Respawn feature is now", "OFF");
         }
         else
         {
-            std::cout << "(" << getpid() << ")" << "[ERROR] Unknown command. Type 'help' for a list of available commands." << std::endl;
+            printpidE("[ERROR] Unknown command. Type 'help' for a list of available commands.","");
         }
 
         std::cout << std::string(40, '-') << std::endl; // Separator for readability
@@ -232,11 +244,11 @@ namespace process::controller
         }
         catch (const std::invalid_argument &)
         {
-            std::cerr << "[ERROR] Invalid PID format." << std::endl;
+            printpidE("[ERROR] Invalid PID format.","");
         }
         catch (const std::out_of_range &)
         {
-            std::cerr << "[ERROR] PID out of range." << std::endl;
+            printpidE("[ERROR] PID out of range.","");
         }
     }
 
@@ -249,11 +261,11 @@ namespace process::controller
         }
         catch (const std::invalid_argument &)
         {
-            std::cerr << "[ERROR] Invalid PID format." << std::endl;
+            printpidE("[ERROR] Invalid PID format.","");
         }
         catch (const std::out_of_range &)
         {
-            std::cerr << "[ERROR] PID out of range." << std::endl;
+            printpidE("[ERROR] PID out of range.","");
         }
     }
 } // namespace process
