@@ -10,17 +10,17 @@ namespace tools
 
     Logger::Logger()
     {
-        std::cout << TimeStamp::get() + "|INFO: [START] Logger Initialized at " << TimeStamp::get() << std::endl;
+        std::cout << TimeStamp::get() + "INFO: [START] Logger Initialized: " << this << std::endl;
     }
 
     Logger::~Logger()
     {
-        std::cout << TimeStamp::get() + "|INFO: [END] Logger Finnished at " << TimeStamp::get() << std::endl;
+        std::cout << TimeStamp::get() + "INFO: [END] Logger Finnished: " << this << std::endl;
     }
 
     void Logger::log(LogLevel level, const std::string &message)
     {
-        std::string logEntry = "" + TimeStamp::get() + "|" + logLevelToString(level) + ": " + message;
+        std::string logEntry = TimeStamp::get() + logLevelToString(level) + ": " + message;
         outputLog(logEntry);
     }
 

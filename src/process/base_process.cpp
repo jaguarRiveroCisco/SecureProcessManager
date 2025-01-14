@@ -8,7 +8,7 @@ namespace process
     {
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        logger_->logInfo("[END]  | Lifetime: " + std::to_string(duration) + " ms" +
+        logger_->logInfo("[END]   | Lifetime: " + std::to_string(duration) + " ms" +
                          " | Reason: " + reason);
     }
 
