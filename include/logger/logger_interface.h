@@ -8,11 +8,9 @@ namespace tools
 
     enum class LogLevel { INFO, WARNING, ERROR };
 
-    class ILogger 
+    struct ILogger 
     {
-    protected:
         virtual ~ILogger() = default;
-
         virtual void log(LogLevel level, const std::string &message) = 0;
         virtual void logInfo(const std::string &message)             = 0;
         virtual void logWarning(const std::string &message)          = 0;

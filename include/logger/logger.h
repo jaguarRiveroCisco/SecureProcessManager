@@ -9,7 +9,7 @@
 
 namespace tools
 {
-    class Logger : protected ILogger
+    class Logger : public ILogger
     {
     public:
         Logger();

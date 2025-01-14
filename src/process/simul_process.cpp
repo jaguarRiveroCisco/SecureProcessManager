@@ -15,8 +15,8 @@ namespace process
     void ProcessSimulator::setRndUpper(int rndUpper)
     {
         rndUpper_ = rndUpper;
-        std::cout << "[CONFIG] Random work duration set between " << baseSleepDuration << " and "
-                  << baseSleepDuration + rndUpper_ << " seconds for child processes." << std::endl;
+        logger_->logInfo("Random work duration set between " + std::to_string(baseSleepDuration) +
+                                         " and " + std::to_string(baseSleepDuration + rndUpper_) + " seconds for child processes.");
     }
 
     void ProcessSimulator::setSleepDuration()
@@ -33,8 +33,8 @@ namespace process
         auto msSleepDuration = sleepDuration_ * 1000;
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
-        std::cout << "[START] Process ID: " << getpid() << " | Simulated Work Duration: " << sleepDuration_
-                  << " seconds (" << msSleepDuration << " ms)" << std::endl;
+        logger_->logInfo("[START] Process ID: " + std::to_string(getpid()) + " | Simulated Work Duration: " +
+                        std::to_string(sleepDuration_) + " seconds (" + std::to_string(msSleepDuration) + " ms)");
 
         // Maximum allowed lifetime to prevent indefinite execution
         auto maxLifetime   = std::chrono::milliseconds(msSleepDuration + 5000); // Add a buffer to the sleep duration

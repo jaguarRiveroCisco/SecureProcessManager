@@ -2,6 +2,8 @@
 #define BASE_PROCESS_H
 
 #include "process_interface.h"
+#include "console_logger.h"
+#include <memory>
 namespace process
 {
 
@@ -21,6 +23,10 @@ namespace process
         BaseProcess() { setupSignalHandling(); }
 
         void logLifetime(const std::string &reason = "End of life") const;
+
+        static std::unique_ptr<tools::ILogger> logger_;
+
+
     };
 
 } // namespace process

@@ -3,12 +3,13 @@
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
+    std::unique_ptr<tools::ILogger> BaseProcess::logger_ = std::make_unique<tools::ConsoleLogger>();
     void BaseProcess::logLifetime(const std::string &reason) const
     {
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        std::cout << "[END]   Process ID: " << getpid() << " | Lifetime: " << duration << " ms"
-                  << " | Reason: " << reason << std::endl;
+        logger_->logInfo("[END]   Process ID: " + std::to_string(getpid()) + " | Lifetime: " + std::to_string(duration) + " ms" +
+                         " | Reason: " + reason);
     }
 
     void signalHandler(int signum)
