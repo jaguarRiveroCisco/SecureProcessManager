@@ -15,7 +15,7 @@ namespace tools
 
     Logger::~Logger()
     {
-        std::cout << TimeStamp::get() + "INFO: [END] Logger Finnished: " << this << std::endl;
+        std::cout << TimeStamp::get() + "INFO: [END] Logger Finished: " << this << std::endl;
     }
 
     void Logger::log(LogLevel level, const std::string &message)
