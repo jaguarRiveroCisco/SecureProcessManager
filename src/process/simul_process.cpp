@@ -26,7 +26,7 @@ namespace process
 
     void ProcessSimulator::work()
     {
-        tools::LoggerManager::createLoggerType(tools::LoggerManager::loggerType());
+        tools::LoggerManager::createLoggerType();
 
         setSleepDuration();
         Communicator::getInstance().sendCreationMessage(sleepDuration_);
@@ -35,7 +35,7 @@ namespace process
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
         tools::LoggerManager::getInstance().logInfo(
-                "[EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
+                "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
                 std::to_string(msSleepDuration) + " ms)");
 
         // Maximum allowed lifetime to prevent indefinite execution

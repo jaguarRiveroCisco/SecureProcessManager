@@ -9,7 +9,7 @@ namespace tools
 {
     struct LoggerManager {
     public:
-        static void         createLoggerType(const std::string &);
+        static void         createLoggerType();
         static std::string &loggerType();
         static Logger      &getInstance();
         static Logger      &consoleLogger();

@@ -9,7 +9,7 @@ namespace process
     {
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        tools::LoggerManager::getInstance().logInfo("[DONE]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason_);
+        tools::LoggerManager::getInstance().logInfo("[PROCESS FINISHED]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason_);
     }
 
     void signalHandler(int signum)

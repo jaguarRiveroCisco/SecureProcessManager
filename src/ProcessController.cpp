@@ -28,7 +28,6 @@ void displayCompilationInfo(const char *appName)
 
 auto main(int argc, char *argv[]) -> int
 {
-    tools::LoggerManager::createLoggerType("console");
 
     displayCompilationInfo(argv[0]);
 
@@ -38,6 +37,8 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::parseArguments(argc, argv, numProcesses, processType, rndUpper);
 
+    tools::LoggerManager::createLoggerType();
+    
     cli::driver::printHelp(); // Call to printHelp
 
     process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value

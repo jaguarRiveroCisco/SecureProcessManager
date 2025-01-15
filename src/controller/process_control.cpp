@@ -20,23 +20,23 @@ namespace cli::driver
     template <typename T>
     void printpid(const std::string& str, const T& x)
     {
-        tools::LoggerManager::getInstance() << str << " " << x;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::consoleLogger() << str << " " << x;
+        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
     }
 
     template<typename T> 
     void printpidE(const std::string &str, const T &x)
     {
 
-        tools::LoggerManager::getInstance() << str << " " << x;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
+        tools::LoggerManager::consoleLogger() << str << " " << x;
+        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::ERROR);
     }
 
    template<typename T> 
     void printpidW(const std::string &str, const T &x)
     {
-        tools::LoggerManager::getInstance() << str << " " << x;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
+        tools::LoggerManager::consoleLogger() << str << " " << x;
+        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::WARNING);
     }
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
@@ -283,15 +283,15 @@ namespace cli::driver
     int LoggerExample()
     {
         //
-        tools::LoggerManager::getInstance().log(tools::LogLevel::INFO, "This is an info message.");
-        tools::LoggerManager::getInstance().log(tools::LogLevel::WARNING, "This is a warning message.");
-        tools::LoggerManager::getInstance().log(tools::LogLevel::ERROR, "This is an error message.");
-        tools::LoggerManager::getInstance().logInfo("This is an info message.");
-        tools::LoggerManager::getInstance().logWarning("This is a warning message.");
-        tools::LoggerManager::getInstance().logError("This is an error message.");
-        tools::LoggerManager::getInstance() << "Starting a new log entry with operator<< ";
-        tools::LoggerManager::getInstance() << "and adding more details.";
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::consoleLogger().log(tools::LogLevel::INFO, "This is an info message.");
+        tools::LoggerManager::consoleLogger().log(tools::LogLevel::WARNING, "This is a warning message.");
+        tools::LoggerManager::consoleLogger().log(tools::LogLevel::ERROR, "This is an error message.");
+        tools::LoggerManager::consoleLogger().logInfo("This is an info message.");
+        tools::LoggerManager::consoleLogger().logWarning("This is a warning message.");
+        tools::LoggerManager::consoleLogger().logError("This is an error message.");
+        tools::LoggerManager::consoleLogger() << "Starting a new log entry with operator<< ";
+        tools::LoggerManager::consoleLogger() << "and adding more details.";
+        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
         //
         return 0;
     }

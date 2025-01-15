@@ -8,10 +8,10 @@ namespace process
 {
     void Process::work()
     {
-        tools::LoggerManager::createLoggerType(tools::LoggerManager::loggerType());
+        tools::LoggerManager::createLoggerType();
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
-        tools::LoggerManager::getInstance() << "[EXECUTING] Process work started";
+        tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] Process work started";
         tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         // Add real process work code here
         while (continue_)

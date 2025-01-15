@@ -17,9 +17,12 @@ namespace tools
         return *loggerInstance;
     }
 
-    void LoggerManager::createLoggerType(const std::string &loggerType)
+    void LoggerManager::createLoggerType()
     {
-        loggerType_ = loggerType;
+        if(loggerType_.empty())
+        {
+            throw std::invalid_argument("Logger type cannot be empty");
+        }
         std::cout << TimeStamp::get() + "INFO: [CREATING] LoggerManager creating Logger type: " << loggerType_
                   << std::endl;
         resetLogger();
