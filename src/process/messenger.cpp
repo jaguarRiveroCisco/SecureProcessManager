@@ -30,13 +30,11 @@ namespace process
 
         if (buf.msg_qnum == 0)
         {
-            tools::LogOpt::getInstance() << "[CREATE] New message queue created with ID " << msgid_
-                                         << ". This queue will be used for inter-process communication.";
+            tools::LogOpt::getInstance() << "[CREATE] New IPC message queue created with ID " << msgid_;    
         }
         else
         {
-            tools::LogOpt::getInstance() << "[OPEN] Opened existing message queue with ID " << msgid_
-                                         << ". Messages already in queue: " << buf.msg_qnum;
+            tools::LogOpt::getInstance() << "[OPEN] Opened existing IPC message queue with ID " << msgid_;
         }
 
         counter++;
