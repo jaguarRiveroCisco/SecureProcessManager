@@ -29,7 +29,7 @@ void displayCompilationInfo(const char *appName)
 auto main(int argc, char *argv[]) -> int
 {
 
-    process::BaseProcess::consoleFlag() = true;
+    tools::LoggerManager::consoleFlag() = true;
 
     displayCompilationInfo(argv[0]);
 
@@ -47,7 +47,7 @@ auto main(int argc, char *argv[]) -> int
 
     std::thread readerThread(cli::driver::main);
 
-    process::Controller::run(processType, numProcesses, true);
+    process::Controller::run(processType, numProcesses);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
 

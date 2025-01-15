@@ -7,7 +7,7 @@ namespace process
     class Controller final : public ControllerBase 
     {
     public:
-        static void run(const std::string &processType, int numProcesses, bool consoleFlag);
+        static void run(const std::string &processType, int numProcesses);
 
     private:
         static void waitForEvents();

@@ -14,11 +14,14 @@ namespace tools
         static Logger      &getInstance();
         static Logger      &consoleLogger();
 
+        static std::atomic<bool> &consoleFlag() { return console_; }
+
     private:
         static Logger     *loggerInstance;
         static std::string loggerType_;
         static void        createLogger();
         static void        resetLogger();
+        static std::atomic<bool> console_;
     };
 
 

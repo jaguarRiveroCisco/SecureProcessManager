@@ -45,9 +45,8 @@ namespace process
 
     void Controller::createHandlers() { createHandlers_(numProcesses_); }
 
-    void Controller::run(const std::string &processType, int numProcesses, bool consoleFlag)
+    void Controller::run(const std::string &processType, int numProcesses)
     {
-        process::BaseProcess::consoleFlag() = consoleFlag;
         setProcessType(processType);
         setNumProcesses(numProcesses);
         createHandlers();

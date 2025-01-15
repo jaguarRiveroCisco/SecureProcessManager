@@ -19,10 +19,6 @@ namespace process
         {
             return continue_;
         }
-        static std::atomic<bool>& consoleFlag() 
-        {
-            return console_;
-        }
 
     protected:
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
@@ -33,7 +29,6 @@ namespace process
         void logLifetime() const;
 
         static std::atomic<bool> continue_;
-        static std::atomic<bool> console_;
         std::string reason_ = "End of life";
     };
 
