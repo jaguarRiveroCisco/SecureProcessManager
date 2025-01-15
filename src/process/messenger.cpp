@@ -30,7 +30,7 @@ namespace process
 
         if (buf.msg_qnum == 0)
         {
-            tools::LogOpt::getInstance() << "[CREATE] New IPC message queue created with ID " << msgid_;    
+            tools::LogOpt::getInstance() << "[CREATED] New IPC message queue created with ID " << msgid_;    
         }
         else
         {
@@ -51,7 +51,7 @@ namespace process
         }
         else
         {
-            tools::LogOpt::getInstance() << "[INFO] Successfully removed message queue with ID " << msgid_;
+            tools::LogOpt::getInstance() << "[DESTROYED] Successfully removed message queue with ID " << msgid_;
         }
 
         counter--;

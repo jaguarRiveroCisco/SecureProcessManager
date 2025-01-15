@@ -9,36 +9,6 @@
 extern std::atomic<bool> g_display;
 namespace process
 {
-    void Controller::createHandlers()
-    {
-        createHandlers_(numProcesses_);
-    }
-
-    void Controller::createHandlers_(int numHandlers)
-    {
-        for (int i = 0; i < numHandlers; ++i)
-        {
-            try
-            {
-                createHandler();
-            }
-            catch (const std::exception &e)
-            {
-
-               tools::LogOpt::getInstance() << "Error creating process handler: " << e.what();
-               tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
-            }
-        }
-    }
-
-    void Controller::run(const std::string &processType, int numProcesses)
-    {
-        setProcessType(processType);
-        setNumProcesses(numProcesses);
-        createHandlers();
-        waitForEvents();
-    }
-
     void Controller::createHandler()
     {
         auto handler = std::make_unique<ControllerBase>();
@@ -54,6 +24,33 @@ namespace process
         Communicator::getInstance().receiveCreationMessage();
         handler->start();
         handlers_.push_back(std::move(handler));
+    }
+
+    void Controller::createHandlers_(int numHandlers)
+    {
+        for (int i = 0; i < numHandlers; ++i)
+        {
+            try
+            {
+                createHandler();
+            }
+            catch (const std::exception &e)
+            {
+
+                tools::LogOpt::getInstance() << "Error creating process handler: " << e.what();
+                tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
+            }
+        }
+    }
+
+    void Controller::createHandlers() { createHandlers_(numProcesses_); }
+
+    void Controller::run(const std::string &processType, int numProcesses)
+    {
+        setProcessType(processType);
+        setNumProcesses(numProcesses);
+        createHandlers();
+        waitForEvents();
     }
 
     void Controller::removeHandler()

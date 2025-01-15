@@ -26,6 +26,8 @@ namespace process
 
     void ProcessSimulator::work()
     {
+        tools::LogOpt::createLoggerType(tools::LogOpt::loggerType());
+
         setSleepDuration();
         Communicator::getInstance().sendCreationMessage(sleepDuration_);
 

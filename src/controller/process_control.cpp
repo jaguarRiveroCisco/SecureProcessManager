@@ -92,11 +92,12 @@ namespace cli::driver
                 // Set the logging type from the argument
                 if (std::string(optarg) == "file")
                 {
-                    tools::LogOpt::initializeLogger("file");
+                    tools::LogOpt::loggerType() = "file";
                 }
                 else
                 {
                     printpidW("Invalid logging type defaulting to ", "console");
+                    tools::LogOpt::loggerType() = "console";
                 }
                 printpid("Logging type: ", process::ControllerBase::loggingTypeToString());
                 break;

@@ -8,6 +8,7 @@ namespace process
 {
     void Process::work()
     {
+        tools::LogOpt::createLoggerType(tools::LogOpt::loggerType());
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
         tools::LogOpt::getInstance() << "[EXECUTING] Process work started";

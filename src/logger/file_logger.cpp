@@ -4,6 +4,9 @@
 
 namespace tools
 {
+    // Initialize the static member
+    std::unique_ptr<FileLogger> FileLogger::instance = nullptr;
+
     FileLogger::FileLogger() : Logger()
     {
         // Ensure the 'logs' directory exists
@@ -37,7 +40,7 @@ namespace tools
     }
     void FileLogger::ensureLogsDirectoryExists()
     {
-        std::filesystem::path logDir("logs");
+        static std::filesystem::path logDir("logs");
 
         // Check if the directory exists
         if (!std::filesystem::exists(logDir))

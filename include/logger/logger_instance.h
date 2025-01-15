@@ -10,12 +10,15 @@ namespace tools
     struct LogOpt 
     {
     public:
-        static void initializeLogger(const std::string &choice);
-
-        static Logger &getInstance();
+        static void        createLoggerType(const std::string &);
+        static std::string &loggerType();
+        static Logger      &getInstance();
 
     private:
         static Logger* loggerInstance;
+        static std::string loggerType_;
+        static void        createLogger();
+        static void        resetLogger();
     };
 
 

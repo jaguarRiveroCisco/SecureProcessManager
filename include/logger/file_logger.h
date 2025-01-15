@@ -2,29 +2,39 @@
 #define FILE_LOGGER_H
 
 #include <fstream>
+#include <memory>
 #include "logger.h"
 
 namespace tools
 {
     class FileLogger final : public Logger 
     {
-        friend struct LogOpt;
+        friend LogOpt;
 
     public:
         ~FileLogger() override;
-   
+        FileLogger();
 
     protected:
         void outputLog(const std::string &message) override;
 
     private:
         std::ofstream outputFile;
+        static std::unique_ptr<FileLogger> instance;
         static void ensureLogsDirectoryExists();
-        FileLogger();
         static FileLogger &getInstance()
         {
-            static FileLogger instance;
-            return instance;
+            if (!instance)
+            {
+                instance = std::make_unique<FileLogger>();
+            }
+            return *instance;
+        }
+
+        // Reset the singleton instance
+        static void resetInstance()
+        {
+            instance.reset(); // Automatically deletes the instance and sets to nullptr
         }
     };
 }

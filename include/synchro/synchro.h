@@ -12,13 +12,13 @@ struct Synchro final
 
     Synchro()
     {
-        tools::LogOpt::getInstance() << "[START] Synchro object created: " << this;
+        tools::LogOpt::getInstance() << "[CREATED] Synchro object created: " << this;
         tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
     ~Synchro()
     {
-        tools::LogOpt::getInstance() << "[END] ~Synchro object destroyed: " << this;
+        tools::LogOpt::getInstance() << "[DESTROYED] ~Synchro object destroyed: " << this;
         tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
     }
 
