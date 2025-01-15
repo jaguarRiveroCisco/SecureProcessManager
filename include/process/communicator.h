@@ -23,7 +23,7 @@ namespace process
         Communicator(const Communicator &)            = delete;
         Communicator &operator=(const Communicator &) = delete;
         Communicator(Communicator &&)                 = delete;
-        static Messenger messenger_;
+        Messenger messenger_;
     };
 } // namespace process
 

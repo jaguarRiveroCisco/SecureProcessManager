@@ -29,7 +29,8 @@ namespace tools
     {
         if (!loggerInstance)
         {
-            initializeLogger("console");
+            //initializeLogger("console");
+            throw std::runtime_error("Logger not initialized");
         }
         return *loggerInstance;
     }

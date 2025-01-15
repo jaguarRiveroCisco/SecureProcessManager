@@ -33,7 +33,7 @@ namespace process
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
         tools::LogOpt::getInstance().logInfo(
-                "[START] | Simulated Work Duration: " + std::to_string(sleepDuration_) + " seconds (" +
+                "[EXECUTING] | Simulated Work Duration: " + std::to_string(sleepDuration_) + " seconds (" +
                 std::to_string(msSleepDuration) + " ms)");
 
         // Maximum allowed lifetime to prevent indefinite execution

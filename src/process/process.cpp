@@ -10,7 +10,7 @@ namespace process
     {
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
-        tools::LogOpt::getInstance() << "[START] Process ID: " << getpid();
+        tools::LogOpt::getInstance() << "[EXECUTING] Process ID: " << getpid();
         tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
         // Add real process work code here
         while (continue_)
