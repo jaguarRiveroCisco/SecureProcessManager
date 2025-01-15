@@ -29,8 +29,6 @@ void displayCompilationInfo(const char *appName)
 auto main(int argc, char *argv[]) -> int
 {
 
-    tools::LoggerManager::consoleFlag() = true;
-
     displayCompilationInfo(argv[0]);
 
     int         numProcesses = 4;

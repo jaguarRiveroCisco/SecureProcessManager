@@ -7,7 +7,6 @@ namespace tools
 {
     Logger* LoggerManager::loggerInstance = nullptr;
     std::string LoggerManager::loggerType_ = "console";
-    std::atomic<bool> LoggerManager::console_{false};
 
     Logger &LoggerManager::getInstance()
     {
