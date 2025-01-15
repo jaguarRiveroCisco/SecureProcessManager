@@ -9,7 +9,7 @@
 
 extern std::atomic<bool> g_display;
 
-namespace process::controller
+namespace cli::driver
 {
     void killPid(const std::string &input);
     void terminatePid(const std::string &input);

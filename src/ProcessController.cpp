@@ -36,21 +36,21 @@ auto main(int argc, char *argv[]) -> int
     std::string processType  = "simul";
     int         rndUpper     = 10; // Default value for rndUpper
 
-    process::controller::parseArguments(argc, argv, numProcesses, processType, rndUpper);
+    cli::driver::parseArguments(argc, argv, numProcesses, processType, rndUpper);
 
-    process::controller::printHelp(); // Call to printHelp
+    cli::driver::printHelp(); // Call to printHelp
 
     process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
 
-    std::thread readerThread(process::controller::main);
+    std::thread readerThread(cli::driver::main);
 
     process::Controller::run(processType, numProcesses);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
 
-    process::controller::printpid("[INFO] Main process exiting", "");
+    cli::driver::printpid("[INFO] Main process exiting", "");
 
-    // process::controller::LoggerExample(); // Call to example
+    // cli::driver::LoggerExample(); // Call to example
 
     return 0;
 }

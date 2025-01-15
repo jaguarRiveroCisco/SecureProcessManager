@@ -1,7 +1,7 @@
 #ifndef PROCESS_CONTROL_H
 #define PROCESS_CONTROL_H
 #include <string>
-namespace process::controller
+namespace cli::driver
 {
     void main();
     void printHelp();
@@ -11,6 +11,6 @@ namespace process::controller
     template<typename T> void printpidE(const std::string &str, const T &x = T());
     int LoggerExample();
 
-} // namespace process::controller
+} // namespace cli::driver
 
 #endif // PROCESS_CONTROL_H
