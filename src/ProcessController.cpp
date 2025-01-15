@@ -29,6 +29,8 @@ void displayCompilationInfo(const char *appName)
 auto main(int argc, char *argv[]) -> int
 {
 
+    process::BaseProcess::consoleFlag() = true;
+
     displayCompilationInfo(argv[0]);
 
     int         numProcesses = 4;
@@ -36,8 +38,6 @@ auto main(int argc, char *argv[]) -> int
     int         rndUpper     = 10; // Default value for rndUpper
 
     cli::driver::parseArguments(argc, argv, numProcesses, processType, rndUpper);
-
-    process::BaseProcess::consoleFlag() = true;
 
     tools::LoggerManager::createLoggerType();
 

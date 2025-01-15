@@ -53,8 +53,7 @@ namespace cli::driver
                     printpidW("Number of processes must be greater than 0. Defaulting to  ", 4);
                     numProcesses = 4;
                 }
-                else
-                    printpid("Number of processes: ", numProcesses);
+ 
                 break;
             case 't':
                 // Set the process type from the argument
@@ -75,8 +74,7 @@ namespace cli::driver
                     printpidW("Random upper limit must be >= than 10. Defaulting to ", 10);
                     rndUpper = 10;
                 }
-                else
-                    printpid("Random upper limit: ", rndUpper);
+
                 break;
             case 'd':
                 // Set the display flag from the argument (0 or 1)
@@ -99,7 +97,6 @@ namespace cli::driver
                     printpidW("Invalid logging type defaulting to ", "console");
                     tools::LoggerManager::loggerType() = "console";
                 }
-                printpid("Logging type: ", process::ControllerBase::loggingTypeToString());
                 break;
             case 'h':
             default:
