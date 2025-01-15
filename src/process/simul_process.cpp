@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include "communicator.h"
 #include "logger_instance.h"
-#include <iostream>
 namespace process
 {
     int           ProcessSimulator::rndUpper_ = 20;

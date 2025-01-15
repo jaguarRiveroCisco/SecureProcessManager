@@ -3,8 +3,6 @@
 #include "logger_instance.h"
 namespace process
 {
-   // Messenger Communicator::messenger_;
-
     void Communicator::sendCreationMessage(int sleepDuration, pid_t pid)
     {
         std::string messageText = ":) Child " + std::to_string(pid) +

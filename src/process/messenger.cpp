@@ -1,9 +1,6 @@
 #include "messenger.h"
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include <unistd.h>
-#include "logger_instance.h"
-#include "base_process.h"
 namespace process
 {
     Messenger::Messenger()
