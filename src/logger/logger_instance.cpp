@@ -9,7 +9,7 @@ namespace tools
     Logger* LogOpt::loggerInstance = nullptr;
     void LogOpt::initializeLogger(const std::string &choice)
     {
-        std::cout << TimeStamp::get() + "INFO: [START] LogOpt Initialized" << std::endl;
+        std::cout << TimeStamp::get() + "INFO: [START] LogOpt Initialized as: " << choice << std::endl;
 
         if (choice == "console")
         {

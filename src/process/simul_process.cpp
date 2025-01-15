@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "communicator.h"
 #include "logger_instance.h"
-
+#include <iostream>
 namespace process
 {
     int           ProcessSimulator::rndUpper_ = 20;
@@ -33,7 +33,7 @@ namespace process
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
         tools::LogOpt::getInstance().logInfo(
-                "[EXECUTING] | Simulated Work Duration: " + std::to_string(sleepDuration_) + " seconds (" +
+                "[EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
                 std::to_string(msSleepDuration) + " ms)");
 
         // Maximum allowed lifetime to prevent indefinite execution
@@ -53,6 +53,13 @@ namespace process
                 reason = "Maximum allowed lifetime exceeded";
                 break;
             }
+
+            if (getppid() == 1)
+            {
+                std::cout << "Parent process has terminated. Exiting child process." << std::endl;
+                break;
+            }
+
 
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate some work
             currentTime = std::chrono::high_resolution_clock::now();
