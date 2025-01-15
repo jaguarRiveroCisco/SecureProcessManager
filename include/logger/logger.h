@@ -23,11 +23,11 @@ namespace tools
             currentMessageStream << message;
             return *this;
         }
-        virtual ~Logger();
+        virtual ~Logger() = default;
 
     protected:
         virtual void outputLog(const std::string &message) = 0; // Pure virtual function
-        Logger();
+        Logger() = default;
     private:
 
         Logger(const Logger &)                            = delete;

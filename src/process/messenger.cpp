@@ -6,8 +6,6 @@
 #include "base_process.h"
 namespace process
 {
-    static int counter = 0; // Initialize the counter
-
     Messenger::Messenger()
     {
         // Generate a unique key for the message queue
@@ -27,39 +25,14 @@ namespace process
             perror("msgctl");
             throw std::runtime_error("Failed to retrieve message queue status");
         }
-
-        if (buf.msg_qnum == 0)
-        {
-            counter++;
-
-            if(process::BaseProcess::consoleFlag())
-            {
-                tools::LoggerManager::consoleLogger() << "[IPC MESSAGE QUEUE CREATED] ID " << msgid_
-                << " | Total active queues: " << counter;
-                tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
-            }
-            else
-            {
-                tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE CREATED] ID " << msgid_
-                << " | Total active queues: " << counter;    
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-            }
-        }
-        else
-        {
-            if(process::BaseProcess::consoleFlag())
-            {
-                tools::LoggerManager::consoleLogger() << "[IPC MESSAGE QUEUE OPEN] ID " << msgid_
-                << " | Total active queues: " << counter;
-                tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
-            }
-            else
-            {
-                tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE OPEN] ID " << msgid_
-                << " | Total active queues: " << counter;
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-            }
-        }
+        /*
+              // Log some attributes of the message queue
+        tools::LogOpt::getInstance().logInfo("Message queue created with ID " + std::to_string(msgid_));
+        tools::LogOpt::getInstance().logInfo("Number of messages in queue: " + std::to_string(buf.msg_qnum));
+        tools::LogOpt::getInstance().logInfo("Last message sent time: " + std::to_string(buf.msg_stime));
+        tools::LogOpt::getInstance().logInfo("Last message received time: " + std::to_string(buf.msg_rtime));
+        tools::LogOpt::getInstance().logInfo("Last change time: " + std::to_string(buf.msg_ctime));
+        */
     }
 
     Messenger::~Messenger()
@@ -69,14 +42,6 @@ namespace process
         {
             perror("msgctl");
         }
-        else
-        {
-            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE DESTROYED] ID " << msgid_;
-        }
-
-        counter--;
-        tools::LoggerManager::getInstance() << " | Total remaining queues: " << counter;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     void Messenger::sendMessage(const std::string &text, int msgType)

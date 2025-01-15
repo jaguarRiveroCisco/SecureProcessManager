@@ -3,20 +3,8 @@
 #include <sstream>
 #include <string>
 #include "timestamp.h"
-#include <iostream>
-
 namespace tools
 {
-
-    Logger::Logger()
-    {
-        std::cout << TimeStamp::get() + "INFO: [LOGGER CREATED] Logger Initialized: " << this << std::endl;
-    }
-
-    Logger::~Logger()
-    {
-        // std::cout << TimeStamp::get() + "INFO: [LOGGER DESTROYED] Logger Finished: " << this << std::endl;
-    }
 
     void Logger::log(LogLevel level, const std::string &message)
     {

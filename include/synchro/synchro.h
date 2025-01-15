@@ -10,35 +10,6 @@ struct Synchro final
     std::mutex              mtx;
     std::condition_variable cv;
     std::queue<pid_t>       eventQueue;
-
-    Synchro()
-    {
-        if(process::BaseProcess::consoleFlag())
-        {
-            tools::LoggerManager::consoleLogger() << "[SYNCHRO CREATED] Synchro object created: " << this;
-            tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
-        }
-        else
-        {
-            tools::LoggerManager::getInstance() << "[SYNCHRO CREATED] Synchro object created: " << this;
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-        }
-    }
-
-    ~Synchro()
-    {
-        if(process::BaseProcess::consoleFlag())
-        {
-            tools::LoggerManager::consoleLogger() << "[SYNCHRO DESTROYED] ~Synchro object destroyed: " << this;
-            tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
-        }
-        else
-        {
-            tools::LoggerManager::getInstance() << "[SYNCHRO DESTROYED] ~Synchro object destroyed: " << this;
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-        }
-    }
-
     // Delete the new and delete operators to prevent dynamic allocation
     void* operator new(size_t) = delete;
     void operator delete(void*) = delete;
