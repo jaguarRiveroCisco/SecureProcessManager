@@ -7,15 +7,15 @@
 
 namespace tools
 {
-    struct LogOpt 
-    {
+    struct LogOpt {
     public:
-        static void        createLoggerType(const std::string &);
+        static void         createLoggerType(const std::string &);
         static std::string &loggerType();
         static Logger      &getInstance();
+        static Logger      &consoleLogger();
 
     private:
-        static Logger* loggerInstance;
+        static Logger     *loggerInstance;
         static std::string loggerType_;
         static void        createLogger();
         static void        resetLogger();
