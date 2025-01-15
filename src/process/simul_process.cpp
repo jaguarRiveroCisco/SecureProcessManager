@@ -41,7 +41,6 @@ namespace process
         // Maximum allowed lifetime to prevent indefinite execution
         auto maxLifetime   = std::chrono::milliseconds(msSleepDuration + 5000); // Add a buffer to the sleep duration
         auto currentTime   = std::chrono::high_resolution_clock::now();
-        std::string reason = "Sleep duration completed";
 
         while (continue_)
         {
