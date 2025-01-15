@@ -30,16 +30,16 @@ namespace process
 
         if (buf.msg_qnum == 0)
         {
-            tools::LogOpt::getInstance() << "[CREATED] New IPC message queue created with ID " << msgid_;    
+            tools::LoggerManager::getInstance() << "[CREATED] New IPC message queue created with ID " << msgid_;    
         }
         else
         {
-            tools::LogOpt::getInstance() << "[OPEN] Opened existing IPC message queue with ID " << msgid_;
+            tools::LoggerManager::getInstance() << "[OPEN] Opened existing IPC message queue with ID " << msgid_;
         }
 
         counter++;
-        tools::LogOpt::getInstance() << " | Total active queues: " << counter;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance() << " | Total active queues: " << counter;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     Messenger::~Messenger()
@@ -51,12 +51,12 @@ namespace process
         }
         else
         {
-            tools::LogOpt::getInstance() << "[DESTROYED] Successfully removed message queue with ID " << msgid_;
+            tools::LoggerManager::getInstance() << "[DESTROYED] Successfully removed message queue with ID " << msgid_;
         }
 
         counter--;
-        tools::LogOpt::getInstance() << " | Total remaining queues: " << counter;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance() << " | Total remaining queues: " << counter;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     void Messenger::sendMessage(const std::string &text, int msgType)
@@ -71,8 +71,8 @@ namespace process
             throw std::runtime_error("Failed to send message");
         }
 
-        tools::LogOpt::getInstance() << "[MESSAGE] Sent message of type " << msgType << " to queue with ID " << msgid_;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance() << "[MESSAGE] Sent message of type " << msgType << " to queue with ID " << msgid_;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     std::string Messenger::receiveMessage(int msgType)
@@ -84,9 +84,9 @@ namespace process
             throw std::runtime_error("Failed to receive message");
         }
 
-        tools::LogOpt::getInstance() << "[MESSAGE] Received message of type " << msgType << " from queue with ID "
+        tools::LoggerManager::getInstance() << "[MESSAGE] Received message of type " << msgType << " from queue with ID "
                                      << msgid_;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
 
         return std::string(message.msgText);
     }

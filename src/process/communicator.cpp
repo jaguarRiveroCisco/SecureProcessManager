@@ -15,8 +15,8 @@ namespace process
         }
         catch (const std::runtime_error &e)
         {
-            tools::LogOpt::getInstance() << "Failed to send message: " << e.what();
-            tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LoggerManager::getInstance() << "Failed to send message: " << e.what();
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
 

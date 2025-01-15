@@ -37,8 +37,8 @@ namespace process
             catch (const std::exception &e)
             {
 
-                tools::LogOpt::getInstance() << "Error creating process handler: " << e.what();
-                tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
+                tools::LoggerManager::getInstance() << "Error creating process handler: " << e.what();
+                tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             }
         }
     }

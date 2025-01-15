@@ -9,7 +9,7 @@ namespace tools
 {
     class FileLogger final : public Logger 
     {
-        friend LogOpt;
+        friend LoggerManager;
 
     public:
         ~FileLogger() override;

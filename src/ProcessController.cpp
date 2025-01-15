@@ -28,7 +28,7 @@ void displayCompilationInfo(const char *appName)
 
 auto main(int argc, char *argv[]) -> int
 {
-    tools::LogOpt::createLoggerType("console");
+    tools::LoggerManager::createLoggerType("console");
 
     displayCompilationInfo(argv[0]);
 

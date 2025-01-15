@@ -8,7 +8,7 @@ namespace tools
 {
     class ConsoleLogger final : public Logger 
     {
-        friend LogOpt;
+        friend LoggerManager;
     public:
         ConsoleLogger() = default; // Private constructor
 

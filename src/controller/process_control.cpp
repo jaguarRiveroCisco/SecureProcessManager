@@ -20,23 +20,23 @@ namespace cli::driver
     template <typename T>
     void printpid(const std::string& str, const T& x)
     {
-        tools::LogOpt::getInstance() << str << " " << x;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance() << str << " " << x;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     template<typename T> 
     void printpidE(const std::string &str, const T &x)
     {
 
-        tools::LogOpt::getInstance() << str << " " << x;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
+        tools::LoggerManager::getInstance() << str << " " << x;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
     }
 
    template<typename T> 
     void printpidW(const std::string &str, const T &x)
     {
-        tools::LogOpt::getInstance() << str << " " << x;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::WARNING);
+        tools::LoggerManager::getInstance() << str << " " << x;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
     }
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
@@ -92,12 +92,12 @@ namespace cli::driver
                 // Set the logging type from the argument
                 if (std::string(optarg) == "file")
                 {
-                    tools::LogOpt::loggerType() = "file";
+                    tools::LoggerManager::loggerType() = "file";
                 }
                 else
                 {
                     printpidW("Invalid logging type defaulting to ", "console");
-                    tools::LogOpt::loggerType() = "console";
+                    tools::LoggerManager::loggerType() = "console";
                 }
                 printpid("Logging type: ", process::ControllerBase::loggingTypeToString());
                 break;
@@ -283,15 +283,15 @@ namespace cli::driver
     int LoggerExample()
     {
         //
-        tools::LogOpt::getInstance().log(tools::LogLevel::INFO, "This is an info message.");
-        tools::LogOpt::getInstance().log(tools::LogLevel::WARNING, "This is a warning message.");
-        tools::LogOpt::getInstance().log(tools::LogLevel::ERROR, "This is an error message.");
-        tools::LogOpt::getInstance().logInfo("This is an info message.");
-        tools::LogOpt::getInstance().logWarning("This is a warning message.");
-        tools::LogOpt::getInstance().logError("This is an error message.");
-        tools::LogOpt::getInstance() << "Starting a new log entry with operator<< ";
-        tools::LogOpt::getInstance() << "and adding more details.";
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance().log(tools::LogLevel::INFO, "This is an info message.");
+        tools::LoggerManager::getInstance().log(tools::LogLevel::WARNING, "This is a warning message.");
+        tools::LoggerManager::getInstance().log(tools::LogLevel::ERROR, "This is an error message.");
+        tools::LoggerManager::getInstance().logInfo("This is an info message.");
+        tools::LoggerManager::getInstance().logWarning("This is a warning message.");
+        tools::LoggerManager::getInstance().logError("This is an error message.");
+        tools::LoggerManager::getInstance() << "Starting a new log entry with operator<< ";
+        tools::LoggerManager::getInstance() << "and adding more details.";
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         //
         return 0;
     }

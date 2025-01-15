@@ -14,7 +14,7 @@ namespace process
     void ProcessSimulator::setRndUpper(int rndUpper)
     {
         rndUpper_ = rndUpper;
-        tools::LogOpt::getInstance().logInfo("Random work duration set between " + std::to_string(baseSleepDuration) +
+        tools::LoggerManager::getInstance().logInfo("Random work duration set between " + std::to_string(baseSleepDuration) +
                                          " and " + std::to_string(baseSleepDuration + rndUpper_) + " seconds for child processes.");
     }
 
@@ -26,7 +26,7 @@ namespace process
 
     void ProcessSimulator::work()
     {
-        tools::LogOpt::createLoggerType(tools::LogOpt::loggerType());
+        tools::LoggerManager::createLoggerType(tools::LoggerManager::loggerType());
 
         setSleepDuration();
         Communicator::getInstance().sendCreationMessage(sleepDuration_);
@@ -34,7 +34,7 @@ namespace process
         auto msSleepDuration = sleepDuration_ * 1000;
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
-        tools::LogOpt::getInstance().logInfo(
+        tools::LoggerManager::getInstance().logInfo(
                 "[EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
                 std::to_string(msSleepDuration) + " ms)");
 
@@ -58,8 +58,8 @@ namespace process
 
             if (getppid() == 1)
             {
-                tools::LogOpt::getInstance() << "Parent process has terminated. Exiting child process.";
-                tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+                tools::LoggerManager::getInstance() << "Parent process has terminated. Exiting child process.";
+                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
                 break;
             }
 

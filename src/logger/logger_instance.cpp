@@ -5,10 +5,10 @@
 #include "timestamp.h"
 namespace tools
 {
-    Logger* LogOpt::loggerInstance = nullptr;
-    std::string LogOpt::loggerType_ = "console";
+    Logger* LoggerManager::loggerInstance = nullptr;
+    std::string LoggerManager::loggerType_ = "console";
 
-    Logger &LogOpt::getInstance()
+    Logger &LoggerManager::getInstance()
     {
         if (!loggerInstance)
         {
@@ -17,20 +17,21 @@ namespace tools
         return *loggerInstance;
     }
 
-    void LogOpt::createLoggerType(const std::string &loggerType)
+    void LoggerManager::createLoggerType(const std::string &loggerType)
     {
         loggerType_ = loggerType;
-        std::cout << TimeStamp::get() + "INFO: [CREATING] LogOpt creating Logger type: " << loggerType_ << std::endl;
+        std::cout << TimeStamp::get() + "INFO: [CREATING] LoggerManager creating Logger type: " << loggerType_
+                  << std::endl;
         resetLogger();
         createLogger();
     }
 
-    std::string &LogOpt::loggerType()
+    std::string &LoggerManager::loggerType()
     {
         return loggerType_;
     }
 
-    void LogOpt::createLogger()
+    void LoggerManager::createLogger()
     {
         if (loggerType_ == "console")
         {
@@ -45,7 +46,7 @@ namespace tools
             throw std::invalid_argument("Invalid logging choice");
         }
     }
-    void LogOpt::resetLogger()
+    void LoggerManager::resetLogger()
     {
         if (loggerInstance)
         {
@@ -55,7 +56,7 @@ namespace tools
         FileLogger::resetInstance();
     }
 
-    Logger &LogOpt::consoleLogger() 
+    Logger &LoggerManager::consoleLogger() 
     {
         static ConsoleLogger cl;
         return cl;

@@ -12,14 +12,14 @@ struct Synchro final
 
     Synchro()
     {
-        tools::LogOpt::getInstance() << "[CREATED] Synchro object created: " << this;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance() << "[CREATED] Synchro object created: " << this;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     ~Synchro()
     {
-        tools::LogOpt::getInstance() << "[DESTROYED] ~Synchro object destroyed: " << this;
-        tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance() << "[DESTROYED] ~Synchro object destroyed: " << this;
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     // Delete the new and delete operators to prevent dynamic allocation

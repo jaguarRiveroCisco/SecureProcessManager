@@ -9,12 +9,12 @@ namespace process
     {
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        tools::LogOpt::getInstance().logInfo("[DONE]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason);
+        tools::LoggerManager::getInstance().logInfo("[DONE]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason);
     }
 
     void signalHandler(int signum)
     {
-        tools::LogOpt::getInstance().logInfo("Received signal: " + std::to_string(signum));
+        tools::LoggerManager::getInstance().logInfo("Received signal: " + std::to_string(signum));
         BaseProcess::continueFlag() = false;
     }
 

@@ -16,13 +16,13 @@ namespace process
         {
             if (WIFSIGNALED(status))
             {
-                tools::LogOpt::getInstance() << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
-                tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
+                tools::LoggerManager::getInstance() << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
+                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             }
             else
             {
-                tools::LogOpt::getInstance() << "Child process " << pid_ << " exited with status " << status << ".";
-                tools::LogOpt::getInstance().flush(tools::LogLevel::WARNING);
+                tools::LoggerManager::getInstance() << "Child process " << pid_ << " exited with status " << status << ".";
+                tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
             }
         }
     }
@@ -33,8 +33,8 @@ namespace process
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
-            tools::LogOpt::getInstance() << "Process " << pid_ << " is not running.";
-            tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LoggerManager::getInstance() << "Process " << pid_ << " is not running.";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             return false;
         }
         return true;
@@ -63,8 +63,8 @@ namespace process
         }
         catch (const std::system_error &e)
         {
-            tools::LogOpt::getInstance() << "Thread creation failed: " << e.what();
-            tools::LogOpt::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LoggerManager::getInstance() << "Thread creation failed: " << e.what();
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             _exit(EXIT_FAILURE); // Ensure the child process exits
         }
     }

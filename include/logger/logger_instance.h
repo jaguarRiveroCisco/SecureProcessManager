@@ -7,7 +7,7 @@
 
 namespace tools
 {
-    struct LogOpt {
+    struct LoggerManager {
     public:
         static void         createLoggerType(const std::string &);
         static std::string &loggerType();

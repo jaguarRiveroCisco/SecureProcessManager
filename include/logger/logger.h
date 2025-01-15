@@ -6,10 +6,10 @@
 
 namespace tools
 {
-    struct LogOpt;
+    struct LoggerManager;
     class Logger : public ILogger 
     {
-        friend struct LogOpt;
+        friend struct LoggerManager;
     public:
         void flush(LogLevel level);
         void log(LogLevel level, const std::string &message);
