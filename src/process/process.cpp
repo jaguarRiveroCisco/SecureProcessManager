@@ -18,7 +18,8 @@ namespace process
             /* code */
             if (getppid() == 1)
             {
-                std::cout << "Parent process has terminated. Exiting child process." << std::endl;
+                tools::LogOpt::getInstance() << "Parent process has terminated. Exiting child process.";
+                tools::LogOpt::getInstance().flush(tools::LogLevel::INFO);
                 break;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate some work
