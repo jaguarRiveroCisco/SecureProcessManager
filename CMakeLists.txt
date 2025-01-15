@@ -28,7 +28,7 @@ src/process/base_process.cpp
 
 # Controller sources
 src/controller/process_handler.cpp
-src/controller/process_control.cpp
+src/controller/console_control.cpp
 src/controller/controller_base.cpp
 
 # Tools
