@@ -6,7 +6,7 @@
 #include "process.h"
 #include "process_handler.h"
 #include "simul_process.h"
-#include "process_control.h"
+#include "console_control.h"
 #include "logger_instance.h"
 
 std::atomic<bool> g_display = true;
@@ -38,7 +38,7 @@ auto main(int argc, char *argv[]) -> int
     cli::driver::parseArguments(argc, argv, numProcesses, processType, rndUpper);
 
     tools::LoggerManager::createLoggerType();
-    
+
     cli::driver::printHelp(); // Call to printHelp
 
     process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value

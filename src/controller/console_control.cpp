@@ -1,4 +1,4 @@
-#include "process_control.h"
+#include "console_control.h"
 #include <atomic>
 #include <unistd.h>
 #include <iostream>
@@ -15,7 +15,6 @@ namespace cli::driver
     void terminatePid(const std::string &input);
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
-
 
     template <typename T>
     void printpid(const std::string& str, const T& x)
@@ -38,6 +37,7 @@ namespace cli::driver
         tools::LoggerManager::consoleLogger() << str << " " << x;
         tools::LoggerManager::consoleLogger().flush(tools::LogLevel::WARNING);
     }
+
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
         int opt;
@@ -147,7 +147,7 @@ namespace cli::driver
                   << "  context         - Display the current context\n"
                   << "  print on        - Turn on display progress\n"
                   << "  print off       - Turn off display progress\n"
-                  << "  exit            - Sets exist signal to gracefully exits the program once the next process is "
+                  << "  exit            - Sets exist signal to gracefully exits the program once the next child process is "
                      "done\n"
                   << "  terminate all   - Terminate all processes and exit the program\n"
                   << "  terminate <pid> - Terminate a specific process by PID\n"
@@ -196,7 +196,7 @@ namespace cli::driver
         else if (input == "exit")
         {
             process::ControllerBase::running() = false;
-            printpid("[EXIT] Exiting program after current process completes.", "");
+            printpid("[EXIT] Exiting program after next child process completes.", "");
         }
         else if (input == "terminate all")
         {
