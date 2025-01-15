@@ -37,6 +37,8 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::parseArguments(argc, argv, numProcesses, processType, rndUpper);
 
+    process::BaseProcess::consoleFlag() = true;
+
     tools::LoggerManager::createLoggerType();
 
     cli::driver::printHelp(); // Call to printHelp
@@ -45,7 +47,7 @@ auto main(int argc, char *argv[]) -> int
 
     std::thread readerThread(cli::driver::main);
 
-    process::Controller::run(processType, numProcesses);
+    process::Controller::run(processType, numProcesses, true);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
 

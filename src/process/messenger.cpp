@@ -3,7 +3,7 @@
 #include <sys/msg.h>
 #include <unistd.h>
 #include "logger_instance.h"
-
+#include "base_process.h"
 namespace process
 {
     static int counter = 0; // Initialize the counter
@@ -30,16 +30,36 @@ namespace process
 
         if (buf.msg_qnum == 0)
         {
-            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE CREATED] New IPC message queue created with ID " << msgid_;    
+            counter++;
+
+            if(process::BaseProcess::consoleFlag())
+            {
+                tools::LoggerManager::consoleLogger() << "[IPC MESSAGE QUEUE CREATED] ID " << msgid_
+                << " | Total active queues: " << counter;
+                tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
+            }
+            else
+            {
+                tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE CREATED] ID " << msgid_
+                << " | Total active queues: " << counter;    
+                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+            }
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE OPEN] Opened existing IPC message queue with ID " << msgid_;
+            if(process::BaseProcess::consoleFlag())
+            {
+                tools::LoggerManager::consoleLogger() << "[IPC MESSAGE QUEUE OPEN] ID " << msgid_
+                << " | Total active queues: " << counter;
+                tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
+            }
+            else
+            {
+                tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE OPEN] ID " << msgid_
+                << " | Total active queues: " << counter;
+                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+            }
         }
-
-        counter++;
-        tools::LoggerManager::getInstance() << " | Total active queues: " << counter;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     Messenger::~Messenger()
@@ -51,7 +71,7 @@ namespace process
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE DESTROYED] Successfully removed message queue with ID " << msgid_;
+            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE DESTROYED] ID " << msgid_;
         }
 
         counter--;

@@ -5,6 +5,7 @@
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
+    std::atomic<bool> BaseProcess::console_{false};
     void BaseProcess::logLifetime() const
     {
         auto endTime  = std::chrono::high_resolution_clock::now();

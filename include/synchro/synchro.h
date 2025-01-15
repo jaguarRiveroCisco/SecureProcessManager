@@ -3,6 +3,7 @@
 #include <condition_variable>
 #include <queue>
 #include "logger_instance.h"
+#include "base_process.h"
 
 struct Synchro final
 {
@@ -12,14 +13,30 @@ struct Synchro final
 
     Synchro()
     {
-        tools::LoggerManager::getInstance() << "[SYNCHRO CREATED] Synchro object created: " << this;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        if(process::BaseProcess::consoleFlag())
+        {
+            tools::LoggerManager::consoleLogger() << "[SYNCHRO CREATED] Synchro object created: " << this;
+            tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
+        }
+        else
+        {
+            tools::LoggerManager::getInstance() << "[SYNCHRO CREATED] Synchro object created: " << this;
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        }
     }
 
     ~Synchro()
     {
-        tools::LoggerManager::getInstance() << "[SYNCHRO DESTROYED] ~Synchro object destroyed: " << this;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        if(process::BaseProcess::consoleFlag())
+        {
+            tools::LoggerManager::consoleLogger() << "[SYNCHRO DESTROYED] ~Synchro object destroyed: " << this;
+            tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
+        }
+        else
+        {
+            tools::LoggerManager::getInstance() << "[SYNCHRO DESTROYED] ~Synchro object destroyed: " << this;
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        }
     }
 
     // Delete the new and delete operators to prevent dynamic allocation
