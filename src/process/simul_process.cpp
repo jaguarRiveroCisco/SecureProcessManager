@@ -52,14 +52,13 @@ namespace process
 
             if (currentTime - startTime_ >= maxLifetime)
             {
-                reason = "Maximum allowed lifetime exceeded";
+                reason_ = "Maximum allowed lifetime exceeded";
                 break;
             }
 
             if (getppid() == 1)
             {
-                tools::LoggerManager::getInstance() << "Parent process has terminated. Exiting child process.";
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+                reason_ = "Parent process has terminated. Exiting child process.";
                 break;
             }
 
@@ -68,7 +67,7 @@ namespace process
             currentTime = std::chrono::high_resolution_clock::now();
         }
 
-        logLifetime(reason);
+        logLifetime();
         _exit(0); // Ensure the child process exits immediately
     }
 } // namespace process

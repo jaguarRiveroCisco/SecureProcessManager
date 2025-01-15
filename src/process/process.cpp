@@ -19,13 +19,12 @@ namespace process
             /* code */
             if (getppid() == 1)
             {
-                tools::LoggerManager::getInstance() << "Parent process has terminated. Exiting child process.";
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+                reason_ = "Parent process has terminated. Exiting child process.";
                 break;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate some work
         }
-        logLifetime("Process ended");
+        logLifetime();
         _exit(0); // Ensure the child process exits immediately
     }
 } // namespace process

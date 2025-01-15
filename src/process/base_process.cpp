@@ -5,11 +5,11 @@
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
-    void BaseProcess::logLifetime(const std::string &reason) const
+    void BaseProcess::logLifetime() const
     {
         auto endTime  = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        tools::LoggerManager::getInstance().logInfo("[DONE]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason);
+        tools::LoggerManager::getInstance().logInfo("[DONE]   | Lifetime: " + std::to_string(duration) + " ms" + " | Reason: " + reason_);
     }
 
     void signalHandler(int signum)

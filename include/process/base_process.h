@@ -26,9 +26,10 @@ namespace process
 
         BaseProcess() { setupSignalHandling(); }
 
-        void logLifetime(const std::string &reason = "End of life") const;
+        void logLifetime() const;
 
         static std::atomic<bool>               continue_;
+        std::string reason_ = "End of life";
     };
 
 } // namespace process
