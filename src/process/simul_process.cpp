@@ -13,8 +13,6 @@ namespace process
     void ProcessSimulator::setRndUpper(int rndUpper)
     {
         rndUpper_ = rndUpper;
-        tools::LoggerManager::getInstance().logInfo("Random work duration set between " + std::to_string(baseSleepDuration) +
-                                         " and " + std::to_string(baseSleepDuration + rndUpper_) + " seconds for child processes.");
     }
 
     void ProcessSimulator::setSleepDuration()

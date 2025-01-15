@@ -13,7 +13,7 @@ namespace tools
         ensureLogsDirectoryExists();
 
         // Create the log file path
-        auto name = "logs/" + std::to_string(getpid()) + "_.log";
+        auto name = "logs/" + std::to_string(getpid()) + ".log";
 
         // Open the log file
         outputFile.open(name, std::ios::app);
