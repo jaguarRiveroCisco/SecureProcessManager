@@ -23,7 +23,7 @@ namespace tools
         {
             throw std::invalid_argument("Logger type cannot be empty");
         }
-        std::cout << TimeStamp::get() + "INFO: [CREATING] LoggerManager creating Logger type: " << loggerType_
+        std::cout << TimeStamp::get() + "INFO: [CREATING LOGGER] LoggerManager creating Logger type: " << loggerType_
                   << std::endl;
         resetLogger();
         createLogger();

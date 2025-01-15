@@ -30,11 +30,11 @@ namespace process
 
         if (buf.msg_qnum == 0)
         {
-            tools::LoggerManager::getInstance() << "[CREATED] New IPC message queue created with ID " << msgid_;    
+            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE CREATED] New IPC message queue created with ID " << msgid_;    
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[OPEN] Opened existing IPC message queue with ID " << msgid_;
+            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE OPEN] Opened existing IPC message queue with ID " << msgid_;
         }
 
         counter++;
@@ -51,7 +51,7 @@ namespace process
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[DESTROYED] Successfully removed message queue with ID " << msgid_;
+            tools::LoggerManager::getInstance() << "[IPC MESSAGE QUEUE DESTROYED] Successfully removed message queue with ID " << msgid_;
         }
 
         counter--;
