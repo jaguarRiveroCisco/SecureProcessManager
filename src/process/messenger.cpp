@@ -71,8 +71,8 @@ namespace process
             throw std::runtime_error("Failed to send message");
         }
 
-        tools::LoggerManager::getInstance() << "[MESSAGE] Sent message of type " << msgType << " to queue with ID " << msgid_;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        // tools::LoggerManager::getInstance() << "[MESSAGE] Sent message of type " << msgType << " to queue with ID " << msgid_;
+        // tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
     std::string Messenger::receiveMessage(int msgType)
@@ -84,9 +84,8 @@ namespace process
             throw std::runtime_error("Failed to receive message");
         }
 
-        tools::LoggerManager::getInstance() << "[MESSAGE] Received message of type " << msgType << " from queue with ID "
-                                     << msgid_;
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        // tools::LoggerManager::getInstance() << "[MESSAGE] Received message of type " << msgType << " from queue with ID " << msgid_;
+        // tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
 
         return std::string(message.msgText);
     }
