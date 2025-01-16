@@ -5,7 +5,7 @@ namespace process
     class IProcess 
     {
     public:
-        virtual ~IProcess() {}
+        virtual ~IProcess() = default;
         virtual void work() = 0;
     };
 

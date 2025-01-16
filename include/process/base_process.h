@@ -13,12 +13,13 @@ namespace process
     class BaseProcess : public IProcess 
     {
     public:
-        virtual ~BaseProcess() = default;
 
         static std::atomic<bool> &continueFlag();
         static int               &exitCode();
 
     protected:
+        virtual ~BaseProcess() = default;
+
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
                 std::chrono::high_resolution_clock::now();
 
