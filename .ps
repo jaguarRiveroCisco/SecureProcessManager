@@ -1,15 +1,35 @@
 #!/usr/bin/env bash
 
+# Default process name
+process_name="ProcessController"
+
+# Check if a parameter is provided
+if [ $# -gt 0 ]; then
+  process_name="$1"
+fi
+
 previous_output=""
+current_pid=$$
 
 while true; do
-  current_output=$(ps -ax | egrep "waitPidProc" | grep -v grep)
+  # Capture the output excluding the script and its process
+  current_output=$(ps -ax -o pid,stat,comm,args | grep "$process_name" | grep -v grep | grep -v "$current_pid" | grep -v "$0")
+  
+  # Count the number of non-empty lines in current_output
+  line_count=$(echo "$current_output" | grep -c '[^[:space:]]')
 
   if [[ "$current_output" != "$previous_output" ]]; then
     echo  # Print an empty line to indicate a change
-    echo "$current_output"
+    
+    if [[ "$line_count" -eq 0 ]]; then
+      echo "Total number of $process_name processes: 0"
+    else
+      echo "$current_output"
+      echo "Total number of $process_name processes: $line_count"
+    fi
+
     previous_output="$current_output"
   fi
 
-  sleep 1
+  sleep 0.01  # Sleep for 100 milliseconds
 done

@@ -1,27 +1,26 @@
 #ifndef PROCESS_BASE_H
 #define PROCESS_BASE_H
 #include "synchro.h"
-
 namespace process
 {
     class BaseHandler 
     {
+    public:
+        pid_t getPid() const;
+
     protected:
-        BaseHandler();
-        virtual ~BaseHandler();
+        BaseHandler() = default;
+        virtual ~BaseHandler() = default;
         void          displayProcessStatus(int &status);
-        bool          isProcessRunning() const;
+        bool          isProcessRunning();
         void          terminateProcess();
         void          killProcess();
+        void          intProcess();
         void          sendSignal(int signal);
         void          createCheckProcessThread();
         void          checkProcessState();
         pid_t         pid_{0};
         Synchro      *synchro_{nullptr};
-        static size_t processCounter_;
-
-    private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> startTime_;
     };
 } // namespace process
 

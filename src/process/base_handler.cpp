@@ -1,48 +1,41 @@
-#include <csignal>
-#include <iostream>
-#include <thread>
-#include "process_base.h"
+#include "base_handler.h"
 #include <chrono>
-
-extern std::atomic<bool> g_display;
+#include <csignal>
+#include <thread>
+#include <unistd.h> // Include this header for _exit
+#include "logger_interface.h"
 
 namespace process
 {
-    size_t BaseHandler::processCounter_ = 0;
-
-    BaseHandler::BaseHandler() : startTime_(std::chrono::high_resolution_clock::now()) { ++processCounter_; }
-
-    BaseHandler::~BaseHandler()
-    {
-        --processCounter_;
-        auto endTime  = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        if (g_display)
-            std::cout << "Child process " << pid_ << " lifetime: " << duration << " milliseconds. Number of processes "
-                      << processCounter_ << std::endl;
-    }
 
     void BaseHandler::displayProcessStatus(int &status)
     {
-        // Child finished
-        if (!WIFEXITED(status))
+        if (WIFEXITED(status))
         {
-            if (WIFSIGNALED(status))
-            {
-                std::cout << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".\n";
-            }
-            else
-            {
-                std::cerr << "Child process " << pid_ << " exited with status " << status << ".\n";
-            }
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
+                                                << " exited normally with status " << WEXITSTATUS(status) << ".";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        }
+        else if (WIFSIGNALED(status))
+        {
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
+                                                << " was terminated by signal " << WTERMSIG(status) << ".";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
+        }
+        else
+        {
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_ << " exited with an unknown status.";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
         }
     }
+    pid_t BaseHandler::getPid() const { return pid_; }
 
-    bool BaseHandler::isProcessRunning() const
+    bool BaseHandler::isProcessRunning()
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
-            std::cerr << "Process " << pid_ << " is not running.\n";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process " << pid_ << " is not running.";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             return false;
         }
         return true;
@@ -51,6 +44,8 @@ namespace process
     void BaseHandler::terminateProcess() { sendSignal(SIGTERM); }
 
     void BaseHandler::killProcess() { sendSignal(SIGKILL); }
+
+    void BaseHandler::intProcess() { sendSignal(SIGINT); }
 
     void BaseHandler::sendSignal(int signal)
     {
@@ -71,7 +66,9 @@ namespace process
         }
         catch (const std::system_error &e)
         {
-            std::cerr << "Thread creation failed: " << e.what() << std::endl;
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Thread creation failed: " << e.what();
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
+            _exit(EXIT_FAILURE); // Ensure the child process exits
         }
     }
 
@@ -88,7 +85,7 @@ namespace process
             if (result == 0)
             {
                 // Child still running
-                std::this_thread::sleep_for(std::chrono::seconds(1));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
             else if (result == pid_)
             {

@@ -1,13 +1,11 @@
 #include <iostream>
-#include "process_helper.h"
-
+#include "communicator.h"
+#include "logger_instance.h"
 namespace process
 {
-    Messenger Communicator::messenger_;
-
     void Communicator::sendCreationMessage(int sleepDuration, pid_t pid)
     {
-        std::string messageText = "Child " + std::to_string(pid) +
+        std::string messageText = ":) Child " + std::to_string(pid) +
                                   " created. Sleep duration: " + std::to_string(sleepDuration) + " seconds";
         try
         {
@@ -15,7 +13,8 @@ namespace process
         }
         catch (const std::runtime_error &e)
         {
-            std::cerr << "Failed to send message: " << e.what() << std::endl;
+            tools::LoggerManager::getInstance() << "Failed to send message: " << e.what();
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
 

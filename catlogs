@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# List all .log files in the logs directory, sorted by modification time
+for file in $(ls -lt1 logs/*.log | awk '{print $NF}')
+do
+  # Print the file name
+  echo -e "\nFile: $file"
+  # Concatenate and print the file content
+  cat "$file"
+done
+echo

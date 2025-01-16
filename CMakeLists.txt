@@ -1,18 +1,42 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(MyCMakeProject)
+project(DynamicControlOfChildProcesses)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(include)
+# Include directories
+include_directories(
+    include/controller
+    include/process
+    include/synchro
+    include/tools
+    include/logger
+)
 
-add_executable(waitPidProc 
-src/waitPidProc.cpp 
-src/messenger.cpp 
-src/process_base.cpp
-src/process_helper.cpp
-src/simul_process.cpp
-src/process_handler.cpp
-src/process.cpp
-src/process_control.cpp
+
+add_executable(ProcessController 
+# Main source file
+src/ProcessController.cpp 
+
+# Process sources
+src/process/messenger.cpp 
+src/process/base_handler.cpp
+src/process/communicator.cpp
+src/process/simul_process.cpp
+src/process/process.cpp
+src/process/base_process.cpp
+
+# Controller sources
+src/controller/process_handler.cpp
+src/controller/console_control.cpp
+src/controller/controller_base.cpp
+
+# Tools
+src/tools/timestamp.cpp
+
+# Logger
+src/logger/logger.cpp
+src/logger/console_logger.cpp
+src/logger/file_logger.cpp
+src/logger/logger_instance.cpp
 )
