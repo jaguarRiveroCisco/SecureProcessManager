@@ -12,19 +12,19 @@ namespace process
     {
         if (WIFEXITED(status))
         {
-            tools::LoggerManager::getInstance()
-                    << "Child process " << pid_ << " exited normally with status " << WEXITSTATUS(status) << ".";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
+                                                << " exited normally with status " << WEXITSTATUS(status) << ".";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         }
         else if (WIFSIGNALED(status))
         {
-            tools::LoggerManager::getInstance()
-                    << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
+                                                << " was terminated by signal " << WTERMSIG(status) << ".";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
         }
         else
         {
-            tools::LoggerManager::getInstance() << "Child process " << pid_ << " exited with an unknown status.";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_ << " exited with an unknown status.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
         }
     }
@@ -34,7 +34,7 @@ namespace process
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
-            tools::LoggerManager::getInstance() << "Process " << pid_ << " is not running.";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process " << pid_ << " is not running.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             return false;
         }
@@ -44,6 +44,8 @@ namespace process
     void BaseHandler::terminateProcess() { sendSignal(SIGTERM); }
 
     void BaseHandler::killProcess() { sendSignal(SIGKILL); }
+
+    void BaseHandler::intProcess() { sendSignal(SIGINT); }
 
     void BaseHandler::sendSignal(int signal)
     {
@@ -64,7 +66,7 @@ namespace process
         }
         catch (const std::system_error &e)
         {
-            tools::LoggerManager::getInstance() << "Thread creation failed: " << e.what();
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Thread creation failed: " << e.what();
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             _exit(EXIT_FAILURE); // Ensure the child process exits
         }

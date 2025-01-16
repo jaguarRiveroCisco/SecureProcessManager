@@ -15,6 +15,7 @@ namespace process
         bool          isProcessRunning();
         void          terminateProcess();
         void          killProcess();
+        void          intProcess();
         void          sendSignal(int signal);
         void          createCheckProcessThread();
         void          checkProcessState();

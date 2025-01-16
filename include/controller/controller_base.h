@@ -16,6 +16,8 @@ namespace process
             static LoggingType &loggingType();
             static void  terminateAll();
             static void  terminateProcessByPid(pid_t pid);
+            static void intProcessByPid(pid_t pid);
+            static void intAll();
             static void  killAll();
             static void  killProcessByPid(pid_t pid);
             static void  displayAllPids();

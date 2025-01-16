@@ -11,6 +11,7 @@ namespace cli::driver
 {
     void killPid(const std::string &input);
     void terminatePid(const std::string &input);
+    void intPid(const std::string &input);
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
 
@@ -140,6 +141,8 @@ namespace cli::driver
                      "done\n"
                   << "  terminate all   - Terminate all processes and exit the program\n"
                   << "  terminate <pid> - Terminate a specific process by PID\n"
+                  << "  int all         - Interrupt all processes and exit the program\n"
+                  << "  int <pid>       - Interrupt a specific process by PID\n"
                   << "  kill all        - Kill all processes and exit the program\n"
                   << "  kill <pid>      - Kill a specific process by PID\n"
                   << "  display pids    - Display all current PIDs\n"
@@ -177,16 +180,27 @@ namespace cli::driver
             process::ControllerBase::running() = false;
             printpid("[EXIT] Exiting program after next child process completes.", "");
         }
-        else if (input == "terminate all")
+        else if (input == "term all")
         {
             process::ControllerBase::running() = false;
             printpid("[TERMINATE] Terminating all processes and exiting.", "");
             process::Controller::terminateAll();
         }
-        else if (input.rfind("terminate ", 0) == 0)
+        else if (input.rfind("term ", 0) == 0)
         {
             printpid("[TERMINATE] Terminating process with PID:", input.substr(10));
             terminatePid(input);
+        }
+        else if (input == "int all")
+        {
+            process::ControllerBase::running() = false;
+            printpid("[INT] Interrupting all processes and exiting.", "");
+            process::Controller::intAll();
+        }
+        else if (input.rfind("int ", 0) == 0)
+        {
+            printpid("[INT] Interrupting process with PID:", input.substr(4));
+            int(input);
         }
         else if (input == "kill all")
         {
@@ -256,6 +270,24 @@ namespace cli::driver
             printpidE("PID out of range.","");
         }
     }
+
+    void intPid(const std::string &input)
+    {
+        try
+        {
+            pid_t pid = std::stoi(input.substr(4)); // Extract PID from input
+            process::Controller::intProcessByPid(pid);
+        }
+        catch (const std::invalid_argument &)
+        {
+            printpidE("Invalid PID format.","");
+        }
+        catch (const std::out_of_range &)
+        {
+            printpidE("PID out of range.","");
+        }
+    }
+
     int LoggerExample()
     {
         //
