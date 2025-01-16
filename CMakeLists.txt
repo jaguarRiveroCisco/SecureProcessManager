@@ -33,6 +33,7 @@ src/controller/controller_base.cpp
 
 # Tools
 src/tools/timestamp.cpp
+src/tools/semaphore_guard.cpp
 
 # Logger
 src/logger/logger.cpp
