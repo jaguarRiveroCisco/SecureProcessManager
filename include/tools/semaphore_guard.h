@@ -13,14 +13,18 @@ namespace tools
     class SemaphoreGuard 
     {
     public:
-        SemaphoreGuard(const std::string &name = "/console_logger_semaphore");
-        ~SemaphoreGuard();
+        static SemaphoreGuard &getInstance(const std::string &name = "/console_logger_semaphore");
         void lock();
         void unlock();
         // Separate function to unlink semaphore when appropriate
         static void unlinkSemaphore(const std::string &name);
+        const std::string &getName() const { return sem_name; }
 
     private:
+        SemaphoreGuard(const std::string &name = "/console_logger_semaphore");
+        ~SemaphoreGuard();
+        SemaphoreGuard(const SemaphoreGuard &)            = delete;
+        SemaphoreGuard &operator=(const SemaphoreGuard &) = delete;
         std::string sem_name;
         sem_t      *sem;
     };

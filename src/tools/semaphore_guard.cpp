@@ -2,6 +2,12 @@
 
 namespace tools
 {
+    SemaphoreGuard &SemaphoreGuard::getInstance(const std::string &name)
+    {
+        static SemaphoreGuard instance(name);
+        return instance;
+    }
+
     SemaphoreGuard::SemaphoreGuard(const std::string &name) : sem_name(name)
     {
         sem = sem_open(sem_name.c_str(), O_CREAT, 0644, 1);

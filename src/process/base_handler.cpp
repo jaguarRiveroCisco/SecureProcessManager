@@ -28,6 +28,7 @@ namespace process
             tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
         }
     }
+    
     pid_t BaseHandler::getPid() const { return pid_; }
 
     bool BaseHandler::isProcessRunning()

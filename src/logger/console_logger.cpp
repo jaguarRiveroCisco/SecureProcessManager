@@ -8,8 +8,7 @@ namespace tools
     std::unique_ptr<ConsoleLogger> ConsoleLogger::instance = nullptr;
     void ConsoleLogger::outputLog(const std::string &message) 
     {
-        static SemaphoreGuard semaphore; // Static to ensure single semaphore across calls
-        locker lock(&semaphore);
+        locker lock(&SemaphoreGuard::getInstance());
         std::cout << message << std::endl; 
     }
 }
