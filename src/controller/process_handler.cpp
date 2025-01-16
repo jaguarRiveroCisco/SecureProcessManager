@@ -6,7 +6,6 @@
 #include "communicator.h"
 #include "logger_instance.h"
 
-extern std::atomic<bool> g_display;
 namespace process
 {
     void Controller::createHandler()

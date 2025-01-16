@@ -4,7 +4,6 @@
 #include <thread>
 #include <unistd.h> // Include this header for _exit
 #include "logger_interface.h"
-extern std::atomic<bool> g_display;
 
 namespace process
 {

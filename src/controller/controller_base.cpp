@@ -89,7 +89,7 @@ namespace process
         tools::LoggerManager::getInstance() << "Current PIDs:";
         for (const auto &handler: handlers_)
         {
-            tools::LoggerManager::getInstance() << handler->getPid() ;
+            tools::LoggerManager::getInstance() << handler->getPid() << " | ";
         }
         tools::LoggerManager::getInstance() << "Total number of processes: " << handlers_.size();
         tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);

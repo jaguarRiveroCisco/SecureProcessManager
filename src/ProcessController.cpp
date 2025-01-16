@@ -9,9 +9,6 @@
 #include "console_control.h"
 #include "logger_instance.h"
 
-std::atomic<bool> g_display = true;
-
-
 void displayCompilationInfo(const char *appName)
 {
     std::cout << "*******************************************" << std::endl;

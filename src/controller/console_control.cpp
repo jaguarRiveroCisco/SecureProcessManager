@@ -7,8 +7,6 @@
 #include "process_handler.h"
 #include "logger_instance.h"
 
-extern std::atomic<bool> g_display;
-
 namespace cli::driver
 {
     void killPid(const std::string &input);
@@ -41,7 +39,7 @@ namespace cli::driver
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper)  
     {
         int opt;
-        while ((opt = getopt(argc, argv, "n:t:r:d:s:l:h")) != -1)
+        while ((opt = getopt(argc, argv, "n:t:r:s:l:h")) != -1)
         {
             switch (opt)
             {
@@ -76,11 +74,7 @@ namespace cli::driver
                 }
 
                 break;
-            case 'd':
-                // Set the display flag from the argument (0 or 1)
-                g_display = std::atoi(optarg) != 0;
-                printpid("Display flag: ", (g_display ? "Enabled" : "Disabled"));
-                break;
+    
             case 's':
                 // Set the respawn flag from the argument (0 or 1)
                 process::ControllerBase::respawn() = std::atoi(optarg) != 0;
@@ -125,10 +119,10 @@ namespace cli::driver
 
         // Print the stored context
         std::cout << "\n========================= Context =========================\n"
+                  << " PID                 : " << getpid() << "\n"
                   << " Number of Processes : " << lastNumProcesses << "\n"
                   << " Process Type        : " << lastProcessType << "\n"
                   << " Random Upper Limit  : " << lastRndUpper << "\n"
-                  << " Display Flag        : " << (g_display ? "Enabled" : "Disabled") << "\n"
                   << " Respawn             : " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << "\n"
                   << " Logging Type        : " << process::ControllerBase::loggingTypeToString() << "\n"
                   << "==========================================================\n\n"
@@ -138,12 +132,10 @@ namespace cli::driver
     void printHelp()
     {
         std::cout << "\n==========================================================\n"
-                  << "Process Control Help Menu\n"
+                  << "Process Control Help Menu (" << "PID: " << getpid() << ")\n"
                   << "==========================================================\n"
                   << "Available commands:\n"
                   << "  context         - Display the current context\n"
-                  << "  print on        - Turn on display progress\n"
-                  << "  print off       - Turn off display progress\n"
                   << "  exit            - Sets exist signal to gracefully exits the program once the next child process is "
                      "done\n"
                   << "  terminate all   - Terminate all processes and exit the program\n"
@@ -176,17 +168,7 @@ namespace cli::driver
             return;
         }
 
-        if (input == "print on")
-        {
-            g_display = true;
-            printpid("[PROGRESS] Display progress is now", "ON");
-        }
-        else if (input == "print off")
-        {
-            g_display = false;
-            printpid("[PROGRESS] Display progress is now", "OFF");
-        }
-        else if (input == "context")
+        if (input == "context")
         {
             printContext();
         }
@@ -219,7 +201,6 @@ namespace cli::driver
         }
         else if (input == "display pids")
         {
-            printpid("[INFO] Current Process IDs:","");
             process::Controller::displayAllPids();
         }
         else if (input == "help")
