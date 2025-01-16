@@ -64,6 +64,6 @@ namespace process
         }
 
         logLifetime();
-        _exit(0); // Ensure the child process exits immediately
+        _exit(exitCode_); // Ensure the child process exits immediately
     }
 } // namespace process

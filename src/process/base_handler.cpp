@@ -10,22 +10,24 @@ namespace process
 
     void BaseHandler::displayProcessStatus(int &status)
     {
-        // Child finished
-        if (!WIFEXITED(status))
+        if (WIFEXITED(status))
         {
-            if (WIFSIGNALED(status))
-            {
-                tools::LoggerManager::getInstance() << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-            }
-            else
-            {
-                tools::LoggerManager::getInstance() << "Child process " << pid_ << " exited with status " << status << ".";
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
-            }
+            tools::LoggerManager::getInstance()
+                    << "Child process " << pid_ << " exited normally with status " << WEXITSTATUS(status) << ".";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        }
+        else if (WIFSIGNALED(status))
+        {
+            tools::LoggerManager::getInstance()
+                    << "Child process " << pid_ << " was terminated by signal " << WTERMSIG(status) << ".";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        }
+        else
+        {
+            tools::LoggerManager::getInstance() << "Child process " << pid_ << " exited with an unknown status.";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
         }
     }
-
     pid_t BaseHandler::getPid() const { return pid_; }
 
     bool BaseHandler::isProcessRunning()

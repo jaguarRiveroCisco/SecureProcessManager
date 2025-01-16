@@ -14,21 +14,20 @@ namespace process
     {
     public:
         virtual ~BaseProcess() = default;
-    
-        static std::atomic<bool>& continueFlag() 
-        {
-            return continue_;
-        }
+
+        static std::atomic<bool> &continueFlag();
+        static int               &exitCode();
 
     protected:
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
                 std::chrono::high_resolution_clock::now();
 
-        BaseProcess() { setupSignalHandling(); }
+        BaseProcess();
 
         void logLifetime() const;
 
         static std::atomic<bool> continue_;
+        static int exitCode_;
         std::string reason_ = "End of life";
     };
 

@@ -25,6 +25,6 @@ namespace process
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate some work
         }
         logLifetime();
-        _exit(0); // Ensure the child process exits immediately
+        _exit(exitCode_); // Ensure the child process exits immediately
     }
 } // namespace process
