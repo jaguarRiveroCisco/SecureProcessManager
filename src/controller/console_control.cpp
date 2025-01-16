@@ -219,10 +219,8 @@ namespace cli::driver
         }
         else
         {
-            printpidE("[UNK] Unknown command. Type 'help' for a list of available commands.","");
+            printpidE("[UNK] Unknown command []" + input + " ] Type 'help' for a list of available commands.","");
         }
-
-        std::cout << std::string(40, '-') << std::endl; // Separator for readability
     }
     
     void killPid(const std::string &input)
