@@ -55,7 +55,9 @@ namespace process
         else
         {
             // Parent process
-            // std::cout << "Parent process created child process with PID: " << pid_ << std::endl;
+            tools::LoggerManager::getInstance()
+                    << "Parent process created child process with PID: " << pid_;
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         }
     }
 

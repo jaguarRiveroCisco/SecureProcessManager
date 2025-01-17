@@ -53,7 +53,6 @@ namespace cli::driver
                         printpidW("Number of processes must be greater than 0. Defaulting to  ", 4);
                         numProcesses = 4;
                     }
-
                     break;
                 case 't':
                     // Set the process type from the argument
@@ -63,8 +62,6 @@ namespace cli::driver
                         printpidW("Invalid process type defaulting to ", "simul");
                         processType = "simul";
                     }
-                    else
-                        printpid("Process type: ", processType);
                     break;
                 case 'r':
                     // Set the random upper limit from the argument
@@ -80,7 +77,6 @@ namespace cli::driver
                 case 's':
                     // Set the respawn flag from the argument (0 or 1)
                     process::ControllerBase::respawn() = std::atoi(optarg) != 0;
-                    printpid("Respawn flag: ", (process::ControllerBase::respawn() ? "Enabled" : "Disabled"));
                     break;
                 case 'l':
                     // Set the logging type from the argument
