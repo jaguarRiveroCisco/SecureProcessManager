@@ -1,10 +1,9 @@
 
-#include <unistd.h>
-#include "process.h"
-#include "simul_process.h"
 #include "process_handler.h"
 #include "communicator.h"
-#include "logger_instance.h"
+#include "network_process.h"
+#include "process.h"
+#include "simul_process.h"
 
 namespace process
 {
@@ -18,6 +17,14 @@ namespace process
         else if (processType_ == "simul")
         {
             handler->init(synchro(), std::make_unique<ProcessSimulator>());
+        }
+        else if (processType_ == "network")
+        {
+            handler->init(synchro(), std::make_unique<NetworkProcess>());
+        }
+        else
+        {
+            throw std::runtime_error("Invalid process type");
         }
 
         Communicator::getInstance().receiveCreationMessage();
@@ -80,7 +87,7 @@ namespace process
             {
                 removeHandler();
                 restoreHandlerCount();
-                if(handlers_.empty())
+                if (handlers_.empty())
                 {
                     process::Controller::running() = false;
                 }
@@ -97,6 +104,5 @@ namespace process
             createHandlers_(numHandlersToCreate);
         }
     }
-
 
 } // namespace process

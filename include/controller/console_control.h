@@ -3,13 +3,10 @@
 #include <string>
 namespace cli::driver
 {
-    void main();
-    void printHelp();
-    void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, int &rndUpper);
+    void                      main();
+    void                      parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType);
     template<typename T> void printpid(const std::string &str, const T &x = T());
-
-    template<typename T> void printpidE(const std::string &str, const T &x = T());
-    int LoggerExample();
+    int                       LoggerExample();
 
 } // namespace cli::driver
 

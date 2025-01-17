@@ -1,13 +1,7 @@
-#include <atomic>
-#include <chrono>
 #include <iostream>
-#include <string>
 #include <thread>
-#include "process.h"
-#include "process_handler.h"
-#include "simul_process.h"
 #include "console_control.h"
-#include "logger_instance.h"
+#include "process_handler.h"
 
 void displayCompilationInfo(const char *appName)
 {
@@ -19,10 +13,6 @@ void displayCompilationInfo(const char *appName)
     std::cout << "*******************************************" << std::endl;
 }
 
-
-// Declare a static instance to trigger the display
-
-
 auto main(int argc, char *argv[]) -> int
 {
 
@@ -30,15 +20,10 @@ auto main(int argc, char *argv[]) -> int
 
     int         numProcesses = 4;
     std::string processType  = "simul";
-    int         rndUpper     = 10; // Default value for rndUpper
 
-    cli::driver::parseArguments(argc, argv, numProcesses, processType, rndUpper);
+    cli::driver::parseArguments(argc, argv, numProcesses, processType);
 
     tools::LoggerManager::createLoggerType();
-
-    cli::driver::printHelp(); // Call to printHelp
-
-    process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
 
     std::thread readerThread(cli::driver::main);
 
@@ -47,6 +32,8 @@ auto main(int argc, char *argv[]) -> int
     readerThread.join(); // Ensure the reader thread is joined before exiting
 
     cli::driver::printpid("[INFO] Main process exiting", "");
+
+    // cli::driver::LoggerExample(); // Call to example
 
     return 0;
 }
