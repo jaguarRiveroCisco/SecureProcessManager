@@ -1,7 +1,7 @@
 #include "base_process.h"
 #include <unistd.h>
 #include "logger_instance.h"
-
+#include "communicator.h"
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
@@ -20,8 +20,19 @@ namespace process
 
     BaseProcess::BaseProcess() { setupSignalHandling(); }
 
-    void BaseProcess::preWork() { tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Pre-work"); }
-    void BaseProcess::postWork() { tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Post-work"); }
+    void BaseProcess::preWork() 
+    {
+        tools::LoggerManager::createLoggerType();
+        // Real process work implementation
+        Communicator::getInstance().sendCreationMessage();
+        tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Process work started";
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+    }
+    void BaseProcess::postWork() 
+    {
+        logLifetime();
+        _exit(exitCode_); // Ensure the child process exits immediately
+    }
 
     void signalHandler(int signum)
     {

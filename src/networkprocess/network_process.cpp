@@ -10,13 +10,6 @@ namespace process
     void NetworkProcess::work()
     {
         preWork();
-        tools::LoggerManager::createLoggerType();
-        // Real process work implementation
-        Communicator::getInstance().sendCreationMessage();
-        tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Process work started";
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-        // Add real process work code here
-
         try
         {
             asio::io_context io_context;
@@ -113,8 +106,7 @@ namespace process
             tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
         }
         postWork();
-        logLifetime();
-        _exit(exitCode_); // Ensure the child process exits immediately
+
     }
 
 } // namespace process
