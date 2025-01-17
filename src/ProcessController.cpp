@@ -8,7 +8,6 @@
 #include "simul_process.h"
 #include "console_control.h"
 #include "logger_instance.h"
-#include "semaphore_guard.h"
 
 void displayCompilationInfo(const char *appName)
 {
@@ -43,15 +42,11 @@ auto main(int argc, char *argv[]) -> int
 
     std::thread readerThread(cli::driver::main);
 
-    auto& sem = tools::SemaphoreGuard::getInstance();
     process::Controller::run(processType, numProcesses);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
-    sem.unlinkSemaphore(sem.getName());
 
     cli::driver::printpid("[INFO] Main process exiting", "");
-
-    // cli::driver::LoggerExample(); // Call to example
 
     return 0;
 }

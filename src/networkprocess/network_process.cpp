@@ -28,7 +28,7 @@ namespace process
             request += "Host: www.example.com\r\n";
             request += "Connection: close\r\n\r\n";
 
-tools::LoggerManager::getInstance() << "Sending request";
+            tools::LoggerManager::getInstance() << "Sending request";
             // Send the request
             asio::write(socket, asio::buffer(request));
 
@@ -97,7 +97,7 @@ tools::LoggerManager::getInstance() << "Sending request";
         catch (const std::exception &e)
         {
             tools::LoggerManager::getInstance() << "Exception: " << e.what();
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
         }
     }
 
