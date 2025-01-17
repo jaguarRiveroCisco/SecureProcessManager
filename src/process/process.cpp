@@ -8,6 +8,7 @@ namespace process
 {
     void Process::work()
     {
+        preWork();  
         tools::LoggerManager::createLoggerType();
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
@@ -24,6 +25,7 @@ namespace process
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate some work
         }
+        postWork();
         logLifetime();
         _exit(exitCode_); // Ensure the child process exits immediately
     }

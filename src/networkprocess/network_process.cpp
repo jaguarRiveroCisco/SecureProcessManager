@@ -9,6 +9,7 @@ namespace process
 {
     void NetworkProcess::work()
     {
+        preWork();
         tools::LoggerManager::createLoggerType();
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
@@ -111,6 +112,7 @@ namespace process
             tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Exception: " << e.what();
             tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
         }
+        postWork();
         logLifetime();
         _exit(exitCode_); // Ensure the child process exits immediately
     }

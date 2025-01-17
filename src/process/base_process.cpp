@@ -15,10 +15,13 @@ namespace process
     }
 
     std::atomic<bool> &BaseProcess::continueFlag() { return continue_; }
+
     int &BaseProcess::exitCode() { return exitCode_; }
 
     BaseProcess::BaseProcess() { setupSignalHandling(); }
 
+    void BaseProcess::preWork() { tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Pre-work"); }
+    void BaseProcess::postWork() { tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Post-work"); }
 
     void signalHandler(int signum)
     {
