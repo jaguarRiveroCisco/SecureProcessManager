@@ -61,7 +61,5 @@ namespace process
             currentTime = std::chrono::high_resolution_clock::now();
         }
         postWork();
-        logLifetime();
-        _exit(exitCode_); // Ensure the child process exits immediately
     }
 } // namespace process
