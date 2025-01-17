@@ -25,14 +25,13 @@ namespace process
     {
         preWork();
         setSleepDuration();
-//        Communicator::getInstance().sendCreationMessage(sleepDuration_);
 
-        auto msSleepDuration = sleepDuration_ * 1000;
+        msSleepDuration = sleepDuration_ * 1000;
         auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
 
-        //tools::LoggerManager::getInstance().logInfo(
-        //        "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
-        //        std::to_string(msSleepDuration) + " ms)");
+        tools::LoggerManager::getInstance().logInfo(
+                "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
+                std::to_string(msSleepDuration) + " ms)");
 
         // Maximum allowed lifetime to prevent indefinite execution
         auto maxLifetime   = std::chrono::milliseconds(msSleepDuration + 5000); // Add a buffer to the sleep duration

@@ -15,6 +15,7 @@ namespace process
         void       setSleepDuration();
         static int rndUpper_;
         int        sleepDuration_ = 0;
+        int        msSleepDuration = 0;
     };
 } // namespace process
 
