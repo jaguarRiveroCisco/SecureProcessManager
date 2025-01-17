@@ -34,7 +34,6 @@ namespace process
         pid_ = fork();
         if (pid_ == 0)
         {
-            //setupSignalHandling();
             try
             {
                 process_->work();
