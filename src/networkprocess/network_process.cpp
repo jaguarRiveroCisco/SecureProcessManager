@@ -7,9 +7,6 @@
 
 namespace process
 {
-
-
-
     void NetworkProcess::work()
     {
         tools::LoggerManager::createLoggerType();
