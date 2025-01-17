@@ -25,11 +25,11 @@ auto main(int argc, char *argv[]) -> int
 
     tools::LoggerManager::createLoggerType();
 
-    std::thread readerThread(cli::driver::main);
+    //std::thread readerThread(cli::driver::main);
 
     process::Controller::run(processType, numProcesses);
 
-    readerThread.join(); // Ensure the reader thread is joined before exiting
+    //readerThread.join(); // Ensure the reader thread is joined before exiting
 
     cli::driver::printpid("[INFO] Main process exiting", "");
 

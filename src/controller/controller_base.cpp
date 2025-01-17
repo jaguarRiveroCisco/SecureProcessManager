@@ -41,7 +41,7 @@ namespace process
             catch (const std::exception &e)
             {
                 // Handle exceptions in child process
-                tools::LoggerManager::getInstance() << "Exception in child process: " << e.what();
+                tools::LoggerManager::getInstance() << "[PARENT PROCESS] Exception in child process: " << e.what();
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
                 _exit(EXIT_FAILURE); // Ensure child process exits
             }
@@ -50,13 +50,13 @@ namespace process
         {
             // Fork failed
             perror("fork");
-            throw std::runtime_error("Failed to fork process");
+            throw std::runtime_error("[PARENT PROCESS] Failed to fork process");
         }
         else
         {
             // Parent process
             tools::LoggerManager::getInstance()
-                    << "Parent process created child process with PID: " << pid_;
+                    << "[PARENT PROCESS] created child process with PID: " << pid_;
             tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         }
     }
@@ -87,7 +87,7 @@ namespace process
 
     void  ControllerBase::displayAllPids()
     {
-        tools::LoggerManager::getInstance() << "Current PIDs: ";
+        tools::LoggerManager::getInstance() << "[PARENT PROCESS] Current PIDs: ";
         for (const auto &handler: handlers_)
         {
             tools::LoggerManager::getInstance() << handler->getPid() << " | ";
@@ -145,7 +145,7 @@ namespace process
         }
         else
         {
-            tools::LoggerManager::getInstance() << "Process with PID: " << pid << " not found.";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process with PID: " << pid << " not found.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
@@ -160,7 +160,7 @@ namespace process
         }
         else
         {
-            tools::LoggerManager::getInstance() << "Process with PID: " << pid << " not found.";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process with PID: " << pid << " not found.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
     }

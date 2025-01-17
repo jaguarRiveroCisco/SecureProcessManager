@@ -2,6 +2,7 @@
 #include <asio.hpp>
 #include <thread>
 #include <unistd.h>
+#include "communicator.h"
 #include "logger_instance.h"
 
 namespace process
@@ -11,6 +12,13 @@ namespace process
 
     void NetworkProcess::work()
     {
+        tools::LoggerManager::createLoggerType();
+        // Real process work implementation
+        Communicator::getInstance().sendCreationMessage();
+        tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Process work started";
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        // Add real process work code here
+
         try
         {
             asio::io_context io_context;
@@ -28,7 +36,8 @@ namespace process
             request += "Host: www.example.com\r\n";
             request += "Connection: close\r\n\r\n";
 
-            tools::LoggerManager::getInstance() << "Sending request";
+            tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Sending request";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             // Send the request
             asio::write(socket, asio::buffer(request));
 
@@ -47,13 +56,14 @@ namespace process
 
             if (!response_stream || http_version.substr(0, 5) != "HTTP/")
             {
-                tools::LoggerManager::getInstance() << "Invalid response";
+                tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Invalid response";
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
                 return;
             }
             if (status_code != 200)
             {
-                tools::LoggerManager::getInstance() << "Response returned with status code " << status_code;
+                tools::LoggerManager::getInstance()
+                        << "[PROCESS EXECUTING] | Response returned with status code " << status_code;
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
                 return;
             }
@@ -61,13 +71,16 @@ namespace process
             // Read the headers
             asio::read_until(socket, response, "\r\n\r\n");
             std::string header;
-            tools::LoggerManager::getInstance() << "Response returned with status code " << status_code;
+            tools::LoggerManager::getInstance()
+                    << "[PROCESS EXECUTING] | Response returned with status code " << status_code;
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             while (std::getline(response_stream, header) && header != "\r")
             {
                 tools::LoggerManager::getInstance() << header;
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             }
-            tools::LoggerManager::getInstance() << "Afterresponse_stream\n";
+            tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | After response_stream\n";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
 
             // Write the remaining response to the output
             if (response.size() > 0)
@@ -93,12 +106,16 @@ namespace process
             {
                 throw asio::system_error(error);
             }
+            tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Response received. Ending...";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         }
         catch (const std::exception &e)
         {
-            tools::LoggerManager::getInstance() << "Exception: " << e.what();
+            tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Exception: " << e.what();
             tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
         }
+        logLifetime();
+        _exit(exitCode_); // Ensure the child process exits immediately
     }
 
 } // namespace process
