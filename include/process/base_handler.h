@@ -8,17 +8,17 @@ namespace process
     public:
         pid_t getPid() const;
         std::atomic<bool>& monitoring() { return monitoring_; }
+        void               createMonitorProcessThread();
 
     protected:
         BaseHandler() = default;
         virtual ~BaseHandler() = default;
-        void          displayProcessStatus(int &status);
+        void          displayProcessStatus(int &status, const std::string&);
         bool          isProcessRunning();
         void          terminateProcess();
         void          killProcess();
         void          intProcess();
         void          sendSignal(int signal);
-        void          createMonitorProcessThread();
         void          monitorProcessThread();
         pid_t         pid_{0};
         std::atomic<bool> monitoring_ {true};

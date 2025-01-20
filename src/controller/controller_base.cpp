@@ -49,8 +49,6 @@ namespace process
         }
     }
 
-    void  ControllerBase::startMonitorProcessThread() { createMonitorProcessThread(); }
-    
     bool &ControllerBase::running() { return running_; }
 
     bool &ControllerBase::respawn() { return respawn_; }

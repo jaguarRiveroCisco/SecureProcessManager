@@ -4,6 +4,7 @@
 #include "network_process.h"
 #include "process.h"
 #include "simul_process.h"
+#include <thread>
 
 namespace process
 {
@@ -57,7 +58,8 @@ namespace process
     {
         for (auto &handler : handlers_)
         {
-            handler->startMonitorProcessThread();
+            handler->createMonitorProcessThread();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     }
 
@@ -103,7 +105,7 @@ namespace process
                 if (handlers_.empty())
                 {
                     process::Controller::running() = false;
-                    tools::LoggerManager::getInstance() << "All handlers removed, exiting...";
+                    tools::LoggerManager::getInstance() << "[PARENT PROCESS] All handlers removed, exiting...";
                     tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
                 }
             }

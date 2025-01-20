@@ -8,24 +8,25 @@
 namespace process
 {
 
-    void BaseHandler::displayProcessStatus(int &status)
+    void BaseHandler::displayProcessStatus(int &status, const std::string& tid)
     {
-        if (WIFEXITED(status))
+        if (WIFSTOPPED(status))
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
-                                                << " exited normally with status " << WEXITSTATUS(status) << ".";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS][MONITORING THREAD] " + tid + " Child process " + std::to_string(pid_) + " was stopped by signal " + std::to_string(WSTOPSIG(status)) + ".");}
+        else if (WIFEXITED(status))
+        {
+            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS][MONITORING THREAD] " + tid + " Child process " + std::to_string(pid_)
+                                                        + " exited normally with status " + std::to_string(WEXITSTATUS(status)) + ".");
         }
         else if (WIFSIGNALED(status))
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
-                                                << " was terminated by signal " << WTERMSIG(status) << ".";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS][MONITORING THREAD] " + tid + " Child process " + std::to_string(pid_)
+                                                           + " was terminated by signal " + std::to_string(WTERMSIG(status)) + ".");
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_ << " exited with an unknown status.";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
+            tools::LoggerManager::getInstance().logError("[PARENT PROCESS][MONITORING THREAD] " + tid + " Child process " + std::to_string(pid_)
+                                                           + " exited with an unknown status.");
         }
     }
     
@@ -35,8 +36,7 @@ namespace process
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process " << pid_ << " is not running.";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
+            tools::LoggerManager::getInstance().logError("[PARENT PROCESS] Process " + std::to_string(pid_) + " is not running.");
             return false;
         }
         return true;
@@ -76,6 +76,10 @@ namespace process
     void BaseHandler::monitorProcessThread()
     {
         int status = -1;
+        std::stringstream ss;
+        ss << std::this_thread::get_id();
+        tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS][MONITORING THREAD] " + ss.str() + " started for process " + std::to_string(pid_));
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         while (monitoring_)
         {
             // Check if the process with PID = pid_ is running
@@ -90,7 +94,7 @@ namespace process
             }
             else if (result == pid_)
             {
-                displayProcessStatus(status);
+                displayProcessStatus(status, ss.str());
                 concurrency::Synchro::getInstance().pushPid(pid_);
                 monitoring_ = false;
                 break;
