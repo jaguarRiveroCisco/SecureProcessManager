@@ -7,6 +7,7 @@ namespace process
     {
     public:
         pid_t getPid() const;
+        std::atomic<bool>& monitoring() { return monitoring_; }
 
     protected:
         BaseHandler() = default;
@@ -21,6 +22,7 @@ namespace process
         void          checkProcessState();
         pid_t         pid_{0};
         Synchro      *synchro_{nullptr};
+        std::atomic<bool> monitoring_ {true};
     };
 } // namespace process
 

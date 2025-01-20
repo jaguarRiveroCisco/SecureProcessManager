@@ -76,7 +76,7 @@ namespace process
     void BaseHandler::checkProcessState()
     {
         int status = -1;
-        while (true)
+        while (monitoring_)
         {
             // Check if the process with PID = pid_ is running
             if (!isProcessRunning())
@@ -97,6 +97,7 @@ namespace process
                     synchro_->eventQueue.push(pid_);
                 }
                 synchro_->cv.notify_one();
+                monitoring_ = false;
                 break;
             }
             else
