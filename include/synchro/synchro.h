@@ -21,7 +21,7 @@ namespace concurrency
         // Wait for an event to be available
         void waitForEvent();
         // Check if the queue is empty
-        bool isEmpty();
+        bool isPidQueueEmpty();
 
         static Synchro &getInstance();
 
@@ -36,7 +36,7 @@ namespace concurrency
 
         std::mutex              mtx_;
         std::condition_variable cv_;
-        std::queue<pid_t>       eventQueue_;
+        std::queue<pid_t>       pidQueue_;
     };
 }
 

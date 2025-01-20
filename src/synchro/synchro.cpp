@@ -10,7 +10,7 @@ namespace concurrency
     void Synchro::addEvent(pid_t pid)
     {
         std::lock_guard<std::mutex> lock(mtx_);
-        eventQueue_.push(pid);
+        pidQueue_.push(pid);
         cv_.notify_one();
     }
 
@@ -18,10 +18,10 @@ namespace concurrency
     pid_t Synchro::getAndPopFront()
     {
         std::lock_guard<std::mutex> lock(mtx_);
-        if (!eventQueue_.empty())
+        if (!pidQueue_.empty())
         {
-            pid_t frontElement = eventQueue_.front();
-            eventQueue_.pop();
+            pid_t frontElement = pidQueue_.front();
+            pidQueue_.pop();
             return frontElement;
         }
         return -1; // Return -1 if the queue is empty
@@ -31,13 +31,13 @@ namespace concurrency
     void Synchro::waitForEvent()
     {
         std::unique_lock<std::mutex> lock(mtx_);
-        cv_.wait(lock, [this] { return !eventQueue_.empty(); });
+        cv_.wait(lock, [this] { return !pidQueue_.empty(); });
     }
 
     // Check if the queue is empty
-    bool Synchro::isEmpty()
+    bool Synchro::isPidQueueEmpty()
     {
         std::lock_guard<std::mutex> lock(mtx_);
-        return eventQueue_.empty();
+        return pidQueue_.empty();
     }
 } // namespace sync

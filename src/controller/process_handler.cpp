@@ -85,7 +85,7 @@ namespace process
             concurrency::Synchro::getInstance().waitForEvent();
 
             // Process all events
-            while (!concurrency::Synchro::getInstance().isEmpty())
+            while (!concurrency::Synchro::getInstance().isPidQueueEmpty())
             {
                 removeHandler();
                 restoreHandlerCount();
