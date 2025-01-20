@@ -17,6 +17,7 @@ struct Synchro final
     // Function to get and pop the front element of the queue
     pid_t getAndPopFront()
     {
+        std::lock_guard<std::mutex> lock(mymutex_);
         if (!eventQueue.empty())
         {
             pid_t frontElement = eventQueue.front();
@@ -25,6 +26,8 @@ struct Synchro final
         }
         return -1; // Return -1 if the queue is empty
     }
+    private:
+        std::mutex mymutex_;
 };
 
 #endif // SYNCHRO_H
