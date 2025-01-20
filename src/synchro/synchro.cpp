@@ -1,6 +1,11 @@
 #include "synchro.h"
 namespace concurrency
 {
+    Synchro &Synchro::getInstance()
+    {
+        static Synchro instance; // Guaranteed to be destroyed, instantiated on first use
+        return instance;
+    }
 
     void Synchro::addEvent(pid_t pid)
     {

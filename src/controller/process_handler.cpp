@@ -12,15 +12,15 @@ namespace process
         auto handler = std::make_unique<ControllerBase>();
         if (processType_ == "real")
         {
-            handler->init(synchro(), std::make_unique<Process>());
+            handler->init(std::make_unique<Process>());
         }
         else if (processType_ == "simul")
         {
-            handler->init(synchro(), std::make_unique<ProcessSimulator>());
+            handler->init(std::make_unique<ProcessSimulator>());
         }
         else if (processType_ == "network")
         {
-            handler->init(synchro(), std::make_unique<NetworkProcess>());
+            handler->init(std::make_unique<NetworkProcess>());
         }
         else
         {
@@ -63,7 +63,7 @@ namespace process
     {
         if (!handlers_.empty())
         {
-            pid_t pid = synchro()->getAndPopFront();
+            pid_t pid = concurrency::Synchro::getInstance().getAndPopFront();
             if (pid != -1)
             {
                 // Find and remove the handler with the matching PID
@@ -82,10 +82,10 @@ namespace process
     {
         while (process::Controller::running())
         {
-            synchro()->waitForEvent();
+            concurrency::Synchro::getInstance().waitForEvent();
 
             // Process all events
-            while (!synchro()->isEmpty())
+            while (!concurrency::Synchro::getInstance().isEmpty())
             {
                 removeHandler();
                 restoreHandlerCount();

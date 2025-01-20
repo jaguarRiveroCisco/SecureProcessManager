@@ -52,4 +52,19 @@ namespace tools
             }
         }
     }
+
+    FileLogger &FileLogger::getInstance()
+    {
+        if (!instance)
+        {
+            instance = std::make_unique<FileLogger>();
+        }
+        return *instance;
+    }
+
+    // Reset the singleton instance
+    void FileLogger::resetInstance()
+    {
+        instance.reset(); // Automatically deletes the instance and sets to nullptr
+    }
 }

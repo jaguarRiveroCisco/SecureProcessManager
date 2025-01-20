@@ -22,20 +22,10 @@ namespace tools
         std::ofstream outputFile;
         static std::unique_ptr<FileLogger> instance;
         static void ensureLogsDirectoryExists();
-        static FileLogger &getInstance()
-        {
-            if (!instance)
-            {
-                instance = std::make_unique<FileLogger>();
-            }
-            return *instance;
-        }
+        static FileLogger &getInstance();
 
         // Reset the singleton instance
-        static void resetInstance()
-        {
-            instance.reset(); // Automatically deletes the instance and sets to nullptr
-        }
+        static void resetInstance();
     };
 }
 #endif // FILE_LOGGER_H

@@ -23,7 +23,17 @@ namespace concurrency
         // Check if the queue is empty
         bool isEmpty();
 
+        static Synchro &getInstance();
+
     private:
+        // Private constructor to prevent instantiation
+        Synchro() = default;
+
+        // Delete copy constructor and assignment operator
+        Synchro(const Synchro &) = delete;
+        Synchro &operator=(const Synchro &) = delete;
+
+
         std::mutex              mtx_;
         std::condition_variable cv_;
         std::queue<pid_t>       eventQueue_;

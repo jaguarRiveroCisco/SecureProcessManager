@@ -11,20 +11,8 @@ namespace process
     // Initialize static members
     LoggingType ControllerBase::loggingType_ = LoggingType::Console;
 
-
-    concurrency::Synchro *ControllerBase::synchro()
+    void ControllerBase::init(std::unique_ptr<IProcess> process)
     {
-        static concurrency::Synchro instance;
-        return &instance;
-    }
-
-    void ControllerBase::init(concurrency::Synchro *synchro, std::unique_ptr<IProcess> process)
-    {
-        if (synchro == nullptr)
-        {
-            throw std::runtime_error("Synchro object is null");
-        }
-        synchro_ = synchro;
         process_ = std::move(process);
         forkAndExecuteChildProcess();
     }

@@ -91,7 +91,7 @@ namespace process
             else if (result == pid_)
             {
                 displayProcessStatus(status);
-                synchro_->addEvent(pid_);
+                concurrency::Synchro::getInstance().addEvent(pid_);
                 monitoring_ = false;
                 break;
             }

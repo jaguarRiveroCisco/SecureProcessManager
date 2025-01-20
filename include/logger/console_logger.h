@@ -20,20 +20,10 @@ namespace tools
 
 
         // Public method to get the instance
-        static ConsoleLogger &getInstance()
-        {
-            if (!instance)
-            {
-                instance = std::make_unique<ConsoleLogger>();
-            }
-            return *instance;
-        }
+        static ConsoleLogger &getInstance();
 
         // Reset the singleton instance
-        static void resetInstance()
-        {
-            instance.reset(); // Automatically deletes the instance and sets to nullptr
-        }
+        static void resetInstance();
     };
 } // namespace tools
 

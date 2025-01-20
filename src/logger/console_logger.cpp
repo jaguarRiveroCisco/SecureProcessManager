@@ -10,4 +10,19 @@ namespace tools
         locker lock(&SemaphoreGuard::getInstance());
         std::cout << message << std::endl; 
     }
+
+    ConsoleLogger &ConsoleLogger::getInstance()
+    {
+        if (!instance)
+        {
+            instance = std::make_unique<ConsoleLogger>();
+        }
+        return *instance;
+    }
+
+    // Reset the singleton instance
+    void ConsoleLogger::resetInstance()
+    {
+        instance.reset(); // Automatically deletes the instance and sets to nullptr
+    }
 }

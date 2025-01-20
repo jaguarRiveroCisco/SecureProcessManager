@@ -21,7 +21,6 @@ namespace process
         void          createMonitorProcessThread();
         void          monitorProcessThread();
         pid_t         pid_{0};
-        concurrency::Synchro *synchro_{nullptr};
         std::atomic<bool> monitoring_ {true};
     };
 } // namespace process

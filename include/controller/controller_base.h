@@ -21,8 +21,7 @@ namespace process
             static void  killAll();
             static void  killProcessByPid(pid_t pid);
             static void  displayAllPids();
-            static concurrency::Synchro *synchro();
-            void            init(concurrency::Synchro *synchro, std::unique_ptr<IProcess> process);
+            void            init(std::unique_ptr<IProcess> process);
             void            startMonitorProcessThread();
             static void     setProcessType(const std::string &processType);
             static void     setLoggingType(LoggingType type);
