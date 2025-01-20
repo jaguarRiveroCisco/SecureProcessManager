@@ -16,6 +16,7 @@ namespace process
         static void createHandlers_(int numHandlers);
         static void createHandler();
         static void removeHandler();
+        static void startMonitoring();
     };
 } // namespace process
 

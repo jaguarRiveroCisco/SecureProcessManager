@@ -28,7 +28,6 @@ namespace process
         }
 
         Communicator::getInstance().receiveCreationMessage();
-        handler->startMonitorProcessThread();
         handlers_.push_back(std::move(handler));
     }
 
@@ -47,15 +46,27 @@ namespace process
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             }
         }
-    }
+
+        tools::LoggerManager::getInstance() << "Number of handlers: " << handlers_.size();
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        }
 
     void Controller::createHandlers() { createHandlers_(numProcesses_); }
+
+    void Controller::startMonitoring()
+    {
+        for (auto &handler : handlers_)
+        {
+            handler->startMonitorProcessThread();
+        }
+    }
 
     void Controller::run(const std::string &processType, int numProcesses)
     {
         setProcessType(processType);
         setNumProcesses(numProcesses);
         createHandlers();
+        startMonitoring();
         waitForEvents();
     }
 
