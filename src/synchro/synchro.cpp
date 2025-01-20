@@ -1,4 +1,6 @@
 #include "synchro.h"
+namespace concurrency
+{
 
     void Synchro::addEvent(pid_t pid)
     {
@@ -33,3 +35,4 @@
         std::lock_guard<std::mutex> lock(mtx_);
         return eventQueue_.empty();
     }
+} // namespace sync

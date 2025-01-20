@@ -12,13 +12,13 @@ namespace process
     LoggingType ControllerBase::loggingType_ = LoggingType::Console;
 
 
-    Synchro *ControllerBase::synchro()
+    concurrency::Synchro *ControllerBase::synchro()
     {
-        static Synchro instance;
+        static concurrency::Synchro instance;
         return &instance;
     }
-    
-    void ControllerBase::init(Synchro *synchro, std::unique_ptr<IProcess> process)
+
+    void ControllerBase::init(concurrency::Synchro *synchro, std::unique_ptr<IProcess> process)
     {
         if (synchro == nullptr)
         {
