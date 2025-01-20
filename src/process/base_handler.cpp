@@ -56,13 +56,13 @@ namespace process
         }
     }
 
-    void BaseHandler::createCheckProcessThread()
+    void BaseHandler::createMonitorProcessThread()
     {
         // Parent process
         // Create a thread to check the state of the child process
         try
         {
-            std::thread checkThread(&BaseHandler::checkProcessState, this);
+            std::thread checkThread(&BaseHandler::monitorProcessThread, this);
             checkThread.detach();
         }
         catch (const std::system_error &e)
@@ -73,7 +73,7 @@ namespace process
         }
     }
 
-    void BaseHandler::checkProcessState()
+    void BaseHandler::monitorProcessThread()
     {
         int status = -1;
         while (monitoring_)

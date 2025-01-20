@@ -23,7 +23,7 @@ namespace process
             static void  displayAllPids();
             static concurrency::Synchro *synchro();
             void            init(concurrency::Synchro *synchro, std::unique_ptr<IProcess> process);
-            void            start();
+            void            startMonitorProcessThread();
             static void     setProcessType(const std::string &processType);
             static void     setLoggingType(LoggingType type);
             static LoggingType getLoggingType();
@@ -36,7 +36,7 @@ namespace process
             static std::string                                  processType_;
             static LoggingType loggingType_;
         private:
-            void                      createChild();
+            void                      forkAndExecuteChildProcess();
             std::unique_ptr<IProcess> process_;
             static bool               running_;
             static bool               respawn_;

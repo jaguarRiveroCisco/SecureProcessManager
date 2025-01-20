@@ -18,8 +18,8 @@ namespace process
         void          killProcess();
         void          intProcess();
         void          sendSignal(int signal);
-        void          createCheckProcessThread();
-        void          checkProcessState();
+        void          createMonitorProcessThread();
+        void          monitorProcessThread();
         pid_t         pid_{0};
         concurrency::Synchro *synchro_{nullptr};
         std::atomic<bool> monitoring_ {true};

@@ -26,10 +26,10 @@ namespace process
         }
         synchro_ = synchro;
         process_ = std::move(process);
-        createChild();
+        forkAndExecuteChildProcess();
     }
     
-    void ControllerBase::createChild()
+    void ControllerBase::forkAndExecuteChildProcess()
     {
         pid_ = fork();
         if (pid_ == 0)
@@ -61,7 +61,7 @@ namespace process
         }
     }
 
-    void  ControllerBase::start() { createCheckProcessThread(); }
+    void  ControllerBase::startMonitorProcessThread() { createMonitorProcessThread(); }
     
     bool &ControllerBase::running() { return running_; }
 
