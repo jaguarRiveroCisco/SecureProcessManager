@@ -29,15 +29,14 @@ auto main(int argc, char *argv[]) -> int
     std::thread readerThread(cli::driver::main);
 
     auto &sem = tools::SemaphoreGuard::getInstance();
-    sem.unlinkSemaphore();
-    
+
     process::Controller::run(processType, numProcesses);
 
     readerThread.join(); // Ensure the reader thread is joined before exiting
 
-    sem.unlinkSemaphore();
-
     cli::driver::printpid("[INFO] Main process exiting", "");
+
+    sem.unlinkSemaphore();
 
     return 0;
 }
