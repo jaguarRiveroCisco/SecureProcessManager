@@ -11,39 +11,14 @@ class Synchro final
 {
 public:
     // Add an event to the queue and notify waiting threads
-    void addEvent(pid_t pid)
-    {
-        std::lock_guard<std::mutex> lock(mtx_);
-        eventQueue_.push(pid);
-        cv_.notify_one();
-    }
-
+    void addEvent(pid_t pid);
     // Get and pop the front element of the queue
-    pid_t getAndPopFront()
-    {
-        std::lock_guard<std::mutex> lock(mtx_);
-        if (!eventQueue_.empty())
-        {
-            pid_t frontElement = eventQueue_.front();
-            eventQueue_.pop();
-            return frontElement;
-        }
-        return -1; // Return -1 if the queue is empty
-    }
+    pid_t getAndPopFront();
 
     // Wait for an event to be available
-    void waitForEvent()
-    {
-        std::unique_lock<std::mutex> lock(mtx_);
-        cv_.wait(lock, [this] { return !eventQueue_.empty(); });
-    }
-
+    void waitForEvent();
     // Check if the queue is empty
-    bool isEmpty()
-    {
-        std::lock_guard<std::mutex> lock(mtx_);
-        return eventQueue_.empty();
-    }
+    bool isEmpty();
 
 private:
     std::mutex              mtx_;
