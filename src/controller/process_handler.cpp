@@ -70,7 +70,10 @@ namespace process
                 auto it = std::remove_if(
                         handlers_.begin(), handlers_.end(),
                         [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
-                handlers_.erase(it, handlers_.end());
+                if (it != handlers_.end())
+                {
+                    handlers_.erase(it, handlers_.end());
+                }
             }
         }
     }
@@ -90,6 +93,8 @@ namespace process
                 if (handlers_.empty())
                 {
                     process::Controller::running() = false;
+                    tools::LoggerManager::getInstance() << "All handlers removed, exiting...";
+                    tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
                 }
             }
         }
