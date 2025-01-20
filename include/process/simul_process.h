@@ -1,10 +1,10 @@
 #ifndef SIMUL_PROCESS_H
 #define SIMUL_PROCESS_H
-#include "base_process.h"
+#include "process.h"
 
 namespace process
 {
-    class ProcessSimulator : public BaseProcess 
+    class ProcessSimulator : public Process 
     {
     public:
         void work() override;
