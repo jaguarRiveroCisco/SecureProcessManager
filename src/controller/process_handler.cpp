@@ -82,11 +82,10 @@ namespace process
     {
         while (process::Controller::running())
         {
-            std::unique_lock<std::mutex> lock(synchro()->mtx);
-            synchro()->cv.wait(lock, [&] { return !synchro()->eventQueue.empty(); });
+            synchro()->waitForEvent();
 
             // Process all events
-            while (!synchro()->eventQueue.empty())
+            while (!synchro()->isEmpty())
             {
                 removeHandler();
                 restoreHandlerCount();

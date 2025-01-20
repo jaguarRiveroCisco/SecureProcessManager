@@ -91,12 +91,7 @@ namespace process
             else if (result == pid_)
             {
                 displayProcessStatus(status);
-                // Child finished
-                {
-                    std::lock_guard<std::mutex> lock(synchro_->mtx);
-                    synchro_->eventQueue.push(pid_);
-                }
-                synchro_->cv.notify_one();
+                synchro_->addEvent(pid_);
                 monitoring_ = false;
                 break;
             }
