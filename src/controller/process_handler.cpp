@@ -63,7 +63,7 @@ namespace process
     {
         if (!handlers_.empty())
         {
-            pid_t pid = concurrency::Synchro::getInstance().getAndPopFront();
+            pid_t pid = concurrency::Synchro::getInstance().removeFrontPid();
             if (pid != -1)
             {
                 // Find and remove the handler with the matching PID
@@ -82,7 +82,7 @@ namespace process
     {
         while (process::Controller::running())
         {
-            concurrency::Synchro::getInstance().waitForEvent();
+            concurrency::Synchro::getInstance().blockUntilPidAvailable();
 
             // Process all events
             while (!concurrency::Synchro::getInstance().isPidQueueEmpty())

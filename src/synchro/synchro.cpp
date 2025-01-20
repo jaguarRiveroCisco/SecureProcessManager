@@ -7,7 +7,7 @@ namespace concurrency
         return instance;
     }
 
-    void Synchro::addEvent(pid_t pid)
+    void Synchro::pushPid(pid_t pid)
     {
         std::lock_guard<std::mutex> lock(mtx_);
         pidQueue_.push(pid);
@@ -15,7 +15,7 @@ namespace concurrency
     }
 
     // Get and pop the front element of the queue
-    pid_t Synchro::getAndPopFront()
+    pid_t Synchro::removeFrontPid()
     {
         std::lock_guard<std::mutex> lock(mtx_);
         if (!pidQueue_.empty())
@@ -28,7 +28,7 @@ namespace concurrency
     }
 
     // Wait for an event to be available
-    void Synchro::waitForEvent()
+    void Synchro::blockUntilPidAvailable()
     {
         std::unique_lock<std::mutex> lock(mtx_);
         cv_.wait(lock, [this] { return !pidQueue_.empty(); });

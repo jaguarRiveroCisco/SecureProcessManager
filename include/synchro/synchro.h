@@ -14,12 +14,12 @@ namespace concurrency
     {
     public:
         // Add an event to the queue and notify waiting threads
-        void addEvent(pid_t pid);
+        void pushPid(pid_t pid);
         // Get and pop the front element of the queue
-        pid_t getAndPopFront();
+        pid_t removeFrontPid();
 
         // Wait for an event to be available
-        void waitForEvent();
+        void blockUntilPidAvailable();
         // Check if the queue is empty
         bool isPidQueueEmpty();
 
