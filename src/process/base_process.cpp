@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include "logger_instance.h"
 #include "communicator.h"
+#include <thread>
+#include <random>
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
@@ -31,6 +33,19 @@ namespace process
     {
         logLifetime();
         _exit(exitCode_); // Ensure the child process exits immediately
+    }
+
+    void BaseProcess::sleepRandom()
+    {
+        // Initialize random number generator
+        std::random_device rd;
+        std::mt19937       gen(rd());
+
+        // Sleep for a random duration in milliseconds
+        std::uniform_int_distribution<> disMs(NapTimeMs::SMALL, NapTimeMs::LONG);
+        auto nappy = disMs(gen);
+        tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " mS.");
+        std::this_thread::sleep_for(std::chrono::milliseconds(nappy));
     }
 
     void signalHandler(int signum)

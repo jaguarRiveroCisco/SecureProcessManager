@@ -26,6 +26,8 @@ namespace process
 
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
                 std::chrono::high_resolution_clock::now();
+        void sleepRandom();
+
     protected:
         void preWork() override;
         void postWork() override;
