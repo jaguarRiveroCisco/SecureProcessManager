@@ -36,6 +36,8 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::printpid("[INFO] Main process exiting", "");
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
     sem.unlinkSemaphore();
 
     return 0;
