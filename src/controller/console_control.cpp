@@ -10,9 +10,9 @@
 
 namespace cli::driver
 {
-    void killPid(const std::string &input);
-    void terminatePid(const std::string &input);
-    void intPid(const std::string &input);
+    void killPid(pid_t pid);
+    void terminatePid(pid_t pid);
+    void intPid(pid_t pid);
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
     void printHelp();
@@ -165,6 +165,21 @@ namespace cli::driver
         }
     }
 
+    std::vector<std::string> splitString(const std::string &input, char delimiter)
+    {
+        std::vector<std::string> tokens;
+        std::istringstream       stream(input);
+        std::string              token;
+
+        while (std::getline(stream, token, delimiter))
+        {
+            tokens.push_back(token);
+        }
+
+        return tokens;
+    }
+
+
     void doCommand(const std::string &input)
     {
         if (input.empty())
@@ -189,8 +204,9 @@ namespace cli::driver
         }
         else if (input.rfind("term ", 0) == 0)
         {
-            printpid("[TERMINATE] Terminating process with PID:", input.substr(5));
-            terminatePid(input);
+            auto vals = splitString(input, ' ');
+            printpid("[TERMINATE] Terminating process with PID:", vals[1]);
+            terminatePid(std::stoi(vals[1]));
         }
         else if (input == "int all")
         {
@@ -200,8 +216,10 @@ namespace cli::driver
         }
         else if (input.rfind("int ", 0) == 0)
         {
-            printpid("[INT] Interrupting process with PID:", input.substr(4));
-            intPid(input);
+            auto vals = splitString(input, ' ');
+
+            printpid("[INT] Interrupting process with PID:", vals[1]);
+            intPid( std::stoi(vals[1]) );
         }
         else if (input == "kill all")
         {
@@ -211,8 +229,9 @@ namespace cli::driver
         }
         else if (input.rfind("kill ", 0) == 0)
         {
-            printpid("[KILL] Killing process with PID:", input.substr(5));
-            killPid(input);
+            auto vals = splitString(input, ' ');
+            printpid("[KILL] Killing process with PID:", vals[1]);
+            killPid(std::stoi(vals[1]));
         }
         else if (input == "display pids")
         {
@@ -238,11 +257,10 @@ namespace cli::driver
         }
     }
 
-    void killPid(const std::string &input)
+    void killPid(pid_t pid)
     {
         try
         {
-            pid_t pid = std::stoi(input.substr(5)); // Extract PID from input
             process::Controller::killProcessByPid(pid);
         }
         catch (const std::invalid_argument &)
@@ -255,11 +273,10 @@ namespace cli::driver
         }
     }
 
-    void terminatePid(const std::string &input)
+    void terminatePid(pid_t pid)
     {
         try
         {
-            pid_t pid = std::stoi(input.substr(5)); // Extract PID from input
             process::Controller::terminateProcessByPid(pid);
         }
         catch (const std::invalid_argument &)
@@ -272,11 +289,10 @@ namespace cli::driver
         }
     }
 
-    void intPid(const std::string &input)
+    void intPid(pid_t pid)
     {
         try
         {
-            pid_t pid = std::stoi(input.substr(4)); // Extract PID from input
             process::Controller::intProcessByPid(pid);
         }
         catch (const std::invalid_argument &)
