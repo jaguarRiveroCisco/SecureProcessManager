@@ -10,8 +10,18 @@ namespace process
     void NetworkProcess::work()
     {
         preWork();
-        while(continue_)
+        setSleepDuration();
+        tools::LoggerManager::getInstance().logInfo(
+                "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) +
+                " seconds (" + std::to_string(msSleepDuration) + " ms)");
+
+        while (proceed())
         {
+            static bool done = false;
+            if(!done)
+            {
+                done = true
+            }
             try
             {
                 asio::io_context io_context;
@@ -102,6 +112,7 @@ namespace process
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
             }
             sleepRandomSec(true);
+            currentTime_ = std::chrono::high_resolution_clock::now();
         }
 
         postWork();
