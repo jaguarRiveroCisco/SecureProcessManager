@@ -198,7 +198,6 @@ namespace cli::driver
         }
         else if (input == "term all")
         {
-            process::ControllerBase::running() = false;
             printpid("[TERMINATE] Terminating all processes and exiting.", "");
             process::Controller::terminateAll();
         }
@@ -210,7 +209,6 @@ namespace cli::driver
         }
         else if (input == "int all")
         {
-            process::ControllerBase::running() = false;
             printpid("[INT] Interrupting all processes and exiting.", "");
             process::Controller::intAll();
         }
@@ -223,7 +221,6 @@ namespace cli::driver
         }
         else if (input == "kill all")
         {
-            process::ControllerBase::running() = false;
             printpid("[KILL] Killing all processes and exiting.", "");
             process::Controller::killAll();
         }

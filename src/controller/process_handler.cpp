@@ -91,7 +91,7 @@ namespace process
 
     void Controller::waitForEvents()
     {
-        while (process::Controller::running())
+        while (running())
         {
             concurrency::Synchro::getInstance().blockUntilPidAvailable();
 
@@ -102,7 +102,7 @@ namespace process
                 restoreHandlerCount();
                 if (handlers_.empty())
                 {
-                    process::Controller::running() = false;
+                    running() = false;
                     tools::LoggerManager::getInstance() << "All handlers removed, exiting...";
                     tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
                 }
@@ -113,7 +113,7 @@ namespace process
     void Controller::restoreHandlerCount()
     {
         // Check if the number of handlers is less than numProcesses_
-        if (process::Controller::respawn() && (handlers_.size() < numProcesses_))
+        if (running() && respawn() && (handlers_.size() < numProcesses_))
         {
             int numHandlersToCreate = numProcesses_ - handlers_.size();
             createHandlers(numHandlersToCreate);

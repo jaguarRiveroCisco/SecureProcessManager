@@ -84,29 +84,17 @@ namespace process
 
     void ControllerBase::killAll()
     {
+        running() = false;
+
         for (auto &handler: handlers_)
         {
             handler->killProcess();
         }
     }
 
-    void ControllerBase::killProcessByPid(pid_t pid)
-    {
-        auto it = std::find_if(handlers_.begin(), handlers_.end(),
-                               [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
-        if (it != handlers_.end())
-        {
-            (*it)->killProcess();
-        }
-        else
-        {
-            tools::LoggerManager::getInstance() << "Process with PID: " << pid << " not found.";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
-        }
-    }
-    
     void ControllerBase::terminateAll()
     {
+        running() = false;
         for (auto &handler: handlers_)
         {
             handler->terminateProcess();
@@ -115,9 +103,27 @@ namespace process
 
     void ControllerBase::intAll()
     {
+        running() = false;
         for (auto &handler: handlers_)
         {
             handler->intProcess();
+        }
+    }
+
+    void ControllerBase::killProcessByPid(pid_t pid)
+    {
+        auto it =
+                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ControllerBase> &handler) {
+                    return handler->getPid() == pid;
+                });
+        if (it != handlers_.end())
+        {
+            (*it)->killProcess();
+        }
+        else
+        {
+            tools::LoggerManager::getInstance() << "Process with PID: " << pid << " not found.";
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
 
