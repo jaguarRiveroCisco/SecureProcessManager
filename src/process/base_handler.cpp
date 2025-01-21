@@ -12,20 +12,17 @@ namespace process
     {
         if (WIFEXITED(status))
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
-                                                << " exited normally with status " << WEXITSTATUS(status) << ".";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] Child process " + std::to_string(pid_)
+                                                        + " exited normally with status " + std::to_string(WEXITSTATUS(status)) + ".");
         }
         else if (WIFSIGNALED(status))
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_
-                                                << " was terminated by signal " << WTERMSIG(status) << ".";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Child process " + std::to_string(pid_)
+                                                           + " was terminated by signal " + std::to_string(WTERMSIG(status)) + ".");
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Child process " << pid_ << " exited with an unknown status.";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::WARNING);
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Child process " + std::to_string(pid_) + " exited with an unknown status.");
         }
     }
     
