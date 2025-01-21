@@ -35,7 +35,7 @@ namespace process
         _exit(exitCode_); // Ensure the child process exits immediately
     }
 
-    void BaseProcess::sleepRandom()
+    void BaseProcess::sleepRandomMs()
     {
         // Initialize random number generator
         std::random_device rd;
@@ -46,6 +46,19 @@ namespace process
         auto nappy = disMs(gen);
         tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " mS.");
         std::this_thread::sleep_for(std::chrono::milliseconds(nappy));
+    }
+
+    void BaseProcess::sleepRandomSec()
+    {
+        // Initialize random number generator
+        std::random_device rd;
+        std::mt19937       gen(rd());
+
+        // Sleep for a random duration in seconds
+        std::uniform_int_distribution<> disSec(NapTimeSec::SHORTS, NapTimeSec::LONGS);
+        auto nappy = disSec(gen);
+        tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " s.");
+        std::this_thread::sleep_for(std::chrono::seconds(nappy));
     }
 
     void signalHandler(int signum)

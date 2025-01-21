@@ -32,7 +32,7 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::printpid("[INFO] Main process exiting", "");
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(process::NapTimeMs::LONG));
+    std::this_thread::sleep_for(std::chrono::milliseconds(process::NapTimeMs::MEDIUM));
 
     sem.unlinkSemaphore();
 
