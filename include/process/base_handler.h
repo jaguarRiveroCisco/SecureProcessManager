@@ -21,7 +21,7 @@ namespace process
         void          sendSignal(int signal);
         void          monitorProcessThread();
         pid_t         pid_{0};
-        std::atomic<bool> monitoring_ {true};
+        std::atomic<bool> monitoring_ {false};
     };
 } // namespace process
 

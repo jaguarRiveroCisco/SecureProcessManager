@@ -30,8 +30,8 @@ namespace process
             {
                 // Handle exceptions in child process
                 tools::LoggerManager::getInstance() << "[PARENT PROCESS] Exception in child process: " << e.what();
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
-                _exit(EXIT_FAILURE); // Ensure child process exits
+                tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
+                exit(EXIT_FAILURE); // Ensure child process exits
             }
         }
         else if (pid_ < 0)

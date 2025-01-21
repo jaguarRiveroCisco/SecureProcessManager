@@ -25,8 +25,7 @@ namespace process
         tools::LoggerManager::createLoggerType();
         // Real process work implementation
         Communicator::getInstance().sendCreationMessage();
-        tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Process work started";
-        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Process work started");
     }
     void BaseProcess::postWork() 
     {

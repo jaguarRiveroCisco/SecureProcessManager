@@ -69,13 +69,14 @@ namespace process
         {
             tools::LoggerManager::getInstance() << "[PARENT PROCESS] Thread creation failed: " << e.what();
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
-            _exit(EXIT_FAILURE); // Ensure the child process exits
+            exit(EXIT_FAILURE); // Ensure the child process exits
         }
     }
 
     void BaseHandler::monitorProcessThread()
     {
         int status = -1;
+        monitoring_ = true;
         while (monitoring_)
         {
             // Check if the process with PID = pid_ is running
@@ -101,5 +102,6 @@ namespace process
                 break;
             }
         }
+        monitoring_ = false;
     }
 } // namespace process
