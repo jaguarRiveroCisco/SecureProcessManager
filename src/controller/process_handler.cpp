@@ -1,6 +1,8 @@
 
 #include "process_handler.h"
+#include <thread>
 #include "communicator.h"
+#include "console_control.h"
 #include "network_process.h"
 #include "process.h"
 #include "simul_process.h"
@@ -63,7 +65,9 @@ namespace process
         setNumProcesses(numProcesses);
         createHandlers(numProcesses_);
         CreateMonitoringThreads();
+        std::thread readerThread(cli::driver::main);
         waitForEvents();
+        readerThread.join(); // Ensure the reader thread is joined before exiting
     }
 
     void Controller::removeHandler()
