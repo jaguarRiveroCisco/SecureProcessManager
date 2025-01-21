@@ -92,7 +92,6 @@ namespace process
             {
                 displayProcessStatus(status);
                 concurrency::Synchro::getInstance().pushPid(pid_);
-                monitoring_ = false;
                 break;
             }
             else
