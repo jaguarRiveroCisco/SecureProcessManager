@@ -55,9 +55,7 @@ namespace process
                 reason_ = "Parent process has terminated. Exiting child process.";
                 break;
             }
-
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(NapTimeMs::SHORT)); // Simulate some work
+            sleepRandomMs();
             currentTime = std::chrono::high_resolution_clock::now();
         }
         postWork();

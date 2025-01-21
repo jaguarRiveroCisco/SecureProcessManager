@@ -101,7 +101,7 @@ namespace process
                 tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Exception: " << e.what();
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
             }
-            sleepRandomSec();
+            sleepRandomSec(true);
         }
 
         postWork();

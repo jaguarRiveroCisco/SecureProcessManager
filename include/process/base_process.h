@@ -11,7 +11,7 @@ namespace process
     void setupSignalHandling();
 
     enum NapTimeMs { SMALL = 50, SHORT = 100, MEDIUM = 500, LONG = 1000 };
-    enum NapTimeSec { SHORTS = 1, MEDIUMS = 5, LONGS = 10 };
+    enum NapTimeSec { SHORTS = 5, MEDIUMS = 15, LONGS = 30 };
     class BaseProcess : public IProcess 
     {
     public:
@@ -27,8 +27,8 @@ namespace process
 
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
                 std::chrono::high_resolution_clock::now();
-        void sleepRandomMs();
-        void sleepRandomSec();
+        void sleepRandomMs(bool display = false);
+        void sleepRandomSec(bool display = false);
         void preWork() override;
         void postWork() override;
         static std::atomic<bool> continue_;

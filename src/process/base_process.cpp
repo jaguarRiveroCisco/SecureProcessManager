@@ -35,7 +35,7 @@ namespace process
         _exit(exitCode_); // Ensure the child process exits immediately
     }
 
-    void BaseProcess::sleepRandomMs()
+    void BaseProcess::sleepRandomMs(bool display)
     {
         // Initialize random number generator
         std::random_device rd;
@@ -44,11 +44,14 @@ namespace process
         // Sleep for a random duration in milliseconds
         std::uniform_int_distribution<> disMs(NapTimeMs::SMALL, NapTimeMs::LONG);
         auto nappy = disMs(gen);
-        tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " mS.");
+        if(display)
+        {
+            tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " mS.");
+        }
         std::this_thread::sleep_for(std::chrono::milliseconds(nappy));
     }
 
-    void BaseProcess::sleepRandomSec()
+    void BaseProcess::sleepRandomSec(bool display)
     {
         // Initialize random number generator
         std::random_device rd;
@@ -57,7 +60,10 @@ namespace process
         // Sleep for a random duration in seconds
         std::uniform_int_distribution<> disSec(NapTimeSec::SHORTS, NapTimeSec::LONGS);
         auto nappy = disSec(gen);
-        tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " s.");
+        if(display)
+        {
+            tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " s.");
+        }
         std::this_thread::sleep_for(std::chrono::seconds(nappy));
     }
 
