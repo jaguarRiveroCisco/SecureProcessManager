@@ -41,7 +41,7 @@ namespace cli::driver
         int rndUpper = 10; // Default value for rndUpper
 
         int opt;
-        while ((opt = getopt(argc, argv, "n:t:r:s:l:h")) != -1)
+        while ((opt = getopt(argc, argv, "n:t:s:l:h")) != -1)
         {
             switch (opt)
             {
@@ -63,17 +63,6 @@ namespace cli::driver
                         processType = "simul";
                     }
                     break;
-                case 'r':
-                    // Set the random upper limit from the argument
-                    rndUpper = std::atoi(optarg);
-                    if (rndUpper < 10)
-                    {
-                        printpidW("Random upper limit must be >= than 10. Defaulting to ", 10);
-                        rndUpper = 10;
-                    }
-                    process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
-                    break;
-
                 case 's':
                     // Set the respawn flag from the argument (0 or 1)
                     process::ControllerBase::respawn() = std::atoi(optarg) != 0;

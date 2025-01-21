@@ -9,13 +9,17 @@ namespace process
     public:
         void work() override;
         virtual ~ProcessSimulator() = default;
-        static void setRndUpper(int rndUpper);
+
+    protected:
+        void setSleepDuration();
+        bool proceed();
 
     private:
-        void       setSleepDuration();
-        static int rndUpper_;
         int        sleepDuration_ = 0;
         int        msSleepDuration = 0;
+        std::chrono::time_point<std::chrono::high_resolution_clock> endTime_;
+        std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_ = std::chrono::high_resolution_clock::now();
+        std::chrono::milliseconds                                    maxLifeTime_;
     };
 } // namespace process
 

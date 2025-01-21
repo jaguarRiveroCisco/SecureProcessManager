@@ -7,56 +7,51 @@
 #include "logger_instance.h"
 namespace process
 {
-    int           ProcessSimulator::rndUpper_ = 20;
-    constexpr int baseSleepDuration           = 10;
-
-    void ProcessSimulator::setRndUpper(int rndUpper)
-    {
-        rndUpper_ = rndUpper;
-    }
-
     void ProcessSimulator::setSleepDuration()
     {
-        std::srand(std::time(nullptr) ^ getpid()); // Seed using time and PID for unique seeds
-        sleepDuration_ = std::rand() % rndUpper_ + baseSleepDuration; // Random sleep duration between 1 and x seconds
+       sleepDuration_ = randomSec();
+       msSleepDuration = sleepDuration_ * 1000;
+       endTime_        = startTime_ + std::chrono::milliseconds(msSleepDuration);
+       // Maximum allowed lifetime to prevent indefinite execution
+       maxLifeTime_ = std::chrono::milliseconds(msSleepDuration + NapTimeMs::LONG); // Add a buffer to the sleep duration
+    }
+
+    bool ProcessSimulator::proceed()
+    {
+        bool res = continue_;
+        if (res)
+        {
+            if (currentTime_ >= endTime_)
+            {
+                res = false;
+            }
+            else if (currentTime_ - startTime_ >= maxLifeTime_)
+            {
+                reason_ = "Maximum allowed lifetime exceeded";
+                res = false;
+            }
+            else if (getppid() == 1)
+            {
+                reason_ = "Parent process has terminated. Exiting child process.";
+                res = false;
+            }
+        }
+
+        return res;
     }
 
     void ProcessSimulator::work()
     {
         preWork();
         setSleepDuration();
-
-        msSleepDuration = sleepDuration_ * 1000;
-        auto endTime         = startTime_ + std::chrono::milliseconds(msSleepDuration);
-
         tools::LoggerManager::getInstance().logInfo(
                 "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
                 std::to_string(msSleepDuration) + " ms)");
 
-        // Maximum allowed lifetime to prevent indefinite execution
-        auto maxLifetime   = std::chrono::milliseconds(msSleepDuration + 5000); // Add a buffer to the sleep duration
-        auto currentTime   = std::chrono::high_resolution_clock::now();
-
-        while (continue_)
+        while (proceed())
         {
-            if (currentTime >= endTime)
-            {
-                break;
-            }
-
-            if (currentTime - startTime_ >= maxLifetime)
-            {
-                reason_ = "Maximum allowed lifetime exceeded";
-                break;
-            }
-
-            if (getppid() == 1)
-            {
-                reason_ = "Parent process has terminated. Exiting child process.";
-                break;
-            }
             sleepRandomMs();
-            currentTime = std::chrono::high_resolution_clock::now();
+            currentTime_ = std::chrono::high_resolution_clock::now();
         }
         postWork();
     }
