@@ -22,7 +22,6 @@ namespace process
             static void  killProcessByPid(pid_t pid);
             static void  displayAllPids();
             void            init(std::unique_ptr<IProcess> process);
-            void            startMonitorProcessThread();
             static void     setProcessType(const std::string &processType);
             static void     setLoggingType(LoggingType type);
             static LoggingType getLoggingType();

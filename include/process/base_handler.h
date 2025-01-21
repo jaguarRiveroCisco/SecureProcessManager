@@ -8,6 +8,7 @@ namespace process
     public:
         pid_t getPid() const;
         std::atomic<bool>& monitoring() { return monitoring_; }
+        void               createMonitorProcessThread();
 
     protected:
         BaseHandler() = default;
@@ -18,7 +19,6 @@ namespace process
         void          killProcess();
         void          intProcess();
         void          sendSignal(int signal);
-        void          createMonitorProcessThread();
         void          monitorProcessThread();
         pid_t         pid_{0};
         std::atomic<bool> monitoring_ {true};

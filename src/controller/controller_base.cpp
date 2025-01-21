@@ -48,8 +48,6 @@ namespace process
             tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         }
     }
-
-    void  ControllerBase::startMonitorProcessThread() { createMonitorProcessThread(); }
     
     bool &ControllerBase::running() { return running_; }
 

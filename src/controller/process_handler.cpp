@@ -28,7 +28,7 @@ namespace process
         }
 
         Communicator::getInstance().receiveCreationMessage();
-        handler->startMonitorProcessThread();
+        handler->createMonitorProcessThread();
         handlers_.push_back(std::move(handler));
     }
 
