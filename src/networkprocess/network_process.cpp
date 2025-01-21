@@ -96,6 +96,7 @@ namespace process
             tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Exception: " << e.what();
             tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(NapTimeMs::MEDIUM));
         postWork();
 
     }

@@ -10,6 +10,7 @@ namespace process
     void signalHandler(int signum);
     void setupSignalHandling();
 
+    enum NapTimeMs { SMALL = 50, SHORT = 100, MEDIUM = 500, LONG = 1000 };
     class BaseProcess : public IProcess 
     {
     public:

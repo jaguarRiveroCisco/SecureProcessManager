@@ -57,7 +57,7 @@ namespace process
             }
 
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate some work
+            std::this_thread::sleep_for(std::chrono::milliseconds(NapTimeMs::SHORT)); // Simulate some work
             currentTime = std::chrono::high_resolution_clock::now();
         }
         postWork();
