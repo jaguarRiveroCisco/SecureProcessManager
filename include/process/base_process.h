@@ -29,8 +29,6 @@ namespace process
                 std::chrono::high_resolution_clock::now();
         void sleepRandomMs();
         void sleepRandomSec();
-
-    protected:
         void preWork() override;
         void postWork() override;
         static std::atomic<bool> continue_;
