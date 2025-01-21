@@ -56,9 +56,20 @@ namespace process
         }
     }
 
+
+    std::atomic<bool> BaseHandler::monitoring() 
+    {
+        return monitor_.get();
+    }
+
+    void BaseHandler::monitoring(bool value) 
+    { 
+        monitor_.set(value);
+    }
+
     void BaseHandler::createMonitorProcessThread()
     {
-        if(monitoring_)
+        if( monitoring() )
         {
             tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Monitoring thread already running.");
             return;
@@ -85,8 +96,8 @@ namespace process
         oss << threadId;
         tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] Monitoring thread started with ID: " + oss.str());
         int  status   = -1;
-        monitoring_ = true;
-        while (monitoring_)
+        monitoring(true);
+        while (monitoring())
         {
             // Check if the process with PID = pid_ is running
             if (!isProcessRunning())
@@ -111,6 +122,6 @@ namespace process
                 break;
             }
         }
-        monitoring_ = false;
-    }
+        monitoring(false);
+        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] Monitoring thread stopped with ID: " + oss.str());}
 } // namespace process
