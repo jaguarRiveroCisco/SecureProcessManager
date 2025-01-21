@@ -13,6 +13,7 @@ namespace process
         static void waitForEvents();
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);
+        static void CreateMonitoringThreads();
         static void createHandler();
         static void removeHandler();
     };

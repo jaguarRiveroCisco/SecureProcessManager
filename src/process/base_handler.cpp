@@ -58,6 +58,11 @@ namespace process
 
     void BaseHandler::createMonitorProcessThread()
     {
+        if(monitoring_)
+        {
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Monitoring thread already running.");
+            return;
+        }
         // Parent process
         // Create a thread to check the state of the child process
         try
@@ -75,7 +80,11 @@ namespace process
 
     void BaseHandler::monitorProcessThread()
     {
-        int status = -1;
+        auto threadId = std::this_thread::get_id();
+        std::ostringstream oss;
+        oss << threadId;
+        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] Monitoring thread started with ID: " + oss.str());
+        int  status   = -1;
         monitoring_ = true;
         while (monitoring_)
         {

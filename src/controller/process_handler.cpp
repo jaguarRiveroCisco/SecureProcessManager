@@ -28,7 +28,6 @@ namespace process
         }
 
         Communicator::getInstance().receiveCreationMessage();
-        handler->createMonitorProcessThread();
         handlers_.push_back(std::move(handler));
     }
 
@@ -49,11 +48,21 @@ namespace process
         }
     }
 
+    void Controller::CreateMonitoringThreads()
+    {
+        for (auto &handler : handlers_)
+        {
+            if(!handler->monitoring())
+                handler->createMonitorProcessThread();
+        }
+    }
+
     void Controller::run(const std::string &processType, int numProcesses)
     {
         setProcessType(processType);
         setNumProcesses(numProcesses);
         createHandlers(numProcesses_);
+        CreateMonitoringThreads();
         waitForEvents();
     }
 
@@ -104,6 +113,7 @@ namespace process
         {
             int numHandlersToCreate = numProcesses_ - handlers_.size();
             createHandlers(numHandlersToCreate);
+            CreateMonitoringThreads();
         }
     }
 
