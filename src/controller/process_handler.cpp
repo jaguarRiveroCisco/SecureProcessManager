@@ -32,7 +32,7 @@ namespace process
         handlers_.push_back(std::move(handler));
     }
 
-    void Controller::createHandlers_(int numHandlers)
+    void Controller::createHandlers(int numHandlers)
     {
         for (int i = 0; i < numHandlers; ++i)
         {
@@ -49,13 +49,11 @@ namespace process
         }
     }
 
-    void Controller::createHandlers() { createHandlers_(numProcesses_); }
-
     void Controller::run(const std::string &processType, int numProcesses)
     {
         setProcessType(processType);
         setNumProcesses(numProcesses);
-        createHandlers();
+        createHandlers(numProcesses_);
         waitForEvents();
     }
 
@@ -105,7 +103,7 @@ namespace process
         if (process::Controller::respawn() && (handlers_.size() < numProcesses_))
         {
             int numHandlersToCreate = numProcesses_ - handlers_.size();
-            createHandlers_(numHandlersToCreate);
+            createHandlers(numHandlersToCreate);
         }
     }
 
