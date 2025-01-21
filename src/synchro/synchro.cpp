@@ -15,7 +15,7 @@ namespace concurrency
     }
 
     // Get and pop the front element of the queue
-    pid_t Synchro::removeFrontPid()
+    pid_t Synchro::removeFrontPidQueue()
     {
         std::lock_guard<std::mutex> lock(mtx_);
         if (!pidQueue_.empty())

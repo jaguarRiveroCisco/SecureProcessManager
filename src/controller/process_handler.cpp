@@ -61,7 +61,7 @@ namespace process
     {
         if (!handlers_.empty())
         {
-            pid_t pid = concurrency::Synchro::getInstance().removeFrontPid();
+            pid_t pid = concurrency::Synchro::getInstance().removeFrontPidQueue();
             if (pid != -1)
             {
                 // Find and remove the handler with the matching PID

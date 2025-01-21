@@ -16,7 +16,7 @@ namespace concurrency
         // Add an event to the queue and notify waiting threads
         void pushPid(pid_t pid);
         // Get and pop the front element of the queue
-        pid_t removeFrontPid();
+        pid_t removeFrontPidQueue();
 
         // Wait for an event to be available
         void blockUntilPidAvailable();
