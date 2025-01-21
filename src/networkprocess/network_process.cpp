@@ -47,30 +47,23 @@ namespace process
 
             if (!response_stream || http_version.substr(0, 5) != "HTTP/")
             {
-                tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Invalid response";
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
+                tools::LoggerManager::getInstance().logError("[PROCESS EXECUTING] | Invalid response: " + http_version);
                 return;
             }
             if (status_code != 200)
             {
-                tools::LoggerManager::getInstance()
-                        << "[PROCESS EXECUTING] | Response returned with status code " << status_code;
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
+                tools::LoggerManager::getInstance().logError("[PROCESS EXECUTING] | Response returned with status code " + std::to_string(status_code));
                 return;
             }
 
             // Read the headers
             asio::read_until(socket, response, "\r\n\r\n");
             std::string header;
-            tools::LoggerManager::getInstance()
-                    << "[PROCESS EXECUTING] | Response returned with status code " << status_code;
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+            tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Response returned with status code " + std::to_string(status_code));
             while (std::getline(response_stream, header) && header != "\r")
             {
                 tools::LoggerManager::getInstance() << header;
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             }
-            tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | After response_stream\n";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
 
             // Write the remaining response to the output
@@ -80,7 +73,6 @@ namespace process
                 std::string  remaining_content((std::istreambuf_iterator<char>(remaining_stream)),
                                                std::istreambuf_iterator<char>());
                 tools::LoggerManager::getInstance() << remaining_content;
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             }
 
             // Read until EOF
@@ -91,14 +83,13 @@ namespace process
                 std::string  content((std::istreambuf_iterator<char>(response_stream)),
                                      std::istreambuf_iterator<char>());
                 tools::LoggerManager::getInstance() << content;
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             }
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             if (error != asio::error::eof)
             {
                 throw asio::system_error(error);
             }
-            tools::LoggerManager::getInstance() << "[PROCESS EXECUTING] | Response received. Ending...";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+            tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Response received. Ending...");
         }
         catch (const std::exception &e)
         {

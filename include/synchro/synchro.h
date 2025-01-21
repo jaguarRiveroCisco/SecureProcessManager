@@ -13,16 +13,19 @@ namespace concurrency
     class Synchro final 
     {
     public:
-        // Add an event to the queue and notify waiting threads
+        // Add pid to the queue and notify waiting threads
         void pushPid(pid_t pid);
+
         // Get and pop the front element of the queue
         pid_t removeFrontPidQueue();
 
-        // Wait for an event to be available
+        // Wait for a pid is available
         void blockUntilPidAvailable();
+
         // Check if the queue is empty
         bool isPidQueueEmpty();
 
+        // Singleton instance
         static Synchro &getInstance();
 
     private:
