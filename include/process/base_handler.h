@@ -1,6 +1,7 @@
 #ifndef PROCESS_BASE_H
 #define PROCESS_BASE_H
 #include "synchro.h"
+#include "locked_boolean.h"
 namespace process
 {
     class BaseHandler 
@@ -23,27 +24,7 @@ namespace process
         void          monitorProcessThread();
         pid_t         pid_{0};
     private:
-        class Monitor 
-        {
-        public:
-            bool get() const
-            {
-                std::lock_guard<std::mutex> lock(monitoring_mutex_);
-                return monitoring_;
-            }
-
-            void set(bool value)
-            {
-                std::lock_guard<std::mutex> lock(monitoring_mutex_);
-                monitoring_ = value;
-            }
-
-        private:
-            std::atomic<bool>  monitoring_{false};
-            mutable std::mutex monitoring_mutex_;
-        };
-
-        Monitor monitor_;
+        concurrency::LockedBoolean monitor_;
     };
 
 } // namespace process
