@@ -11,17 +11,10 @@ namespace process
     {
         preWork();
         setSleepDuration();
-        tools::LoggerManager::getInstance().logInfo(
-                "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) +
-                " seconds (" + std::to_string(msSleepDuration) + " ms)");
 
         while (proceed())
         {
-            static bool done = false;
-            if(!done)
-            {
-                done = true
-            }
+
             try
             {
                 asio::io_context io_context;
@@ -77,9 +70,9 @@ namespace process
                         "[PROCESS EXECUTING] | Response returned with status code " + std::to_string(status_code));
                 while (std::getline(response_stream, header) && header != "\r")
                 {
-                    tools::LoggerManager::getInstance() << header;
+                    //tools::LoggerManager::getInstance() << header;
                 }
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+                //tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
 
                 // Write the remaining response to the output
                 if (response.size() > 0)
@@ -87,7 +80,7 @@ namespace process
                     std::istream remaining_stream(&response);
                     std::string  remaining_content((std::istreambuf_iterator<char>(remaining_stream)),
                                                    std::istreambuf_iterator<char>());
-                    tools::LoggerManager::getInstance() << remaining_content;
+                    //tools::LoggerManager::getInstance() << remaining_content;
                 }
 
                 // Read until EOF
@@ -97,14 +90,14 @@ namespace process
                     std::istream response_stream(&response);
                     std::string  content((std::istreambuf_iterator<char>(response_stream)),
                                          std::istreambuf_iterator<char>());
-                    tools::LoggerManager::getInstance() << content;
+                    //tools::LoggerManager::getInstance() << content;
                 }
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+                //tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
                 if (error != asio::error::eof)
                 {
                     throw asio::system_error(error);
                 }
-                tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Response received. Ending...");
+                //tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Response received. Ending...");
             }
             catch (const std::exception &e)
             {

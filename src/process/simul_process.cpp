@@ -14,6 +14,9 @@ namespace process
        endTime_        = startTime_ + std::chrono::milliseconds(msSleepDuration);
        // Maximum allowed lifetime to prevent indefinite execution
        maxLifeTime_ = std::chrono::milliseconds(msSleepDuration + NapTimeMs::LONG); // Add a buffer to the sleep duration
+       tools::LoggerManager::getInstance().logInfo(
+               "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) +
+               " seconds (" + std::to_string(msSleepDuration) + " ms)");
     }
 
     bool ProcessSimulator::proceed()
@@ -44,10 +47,6 @@ namespace process
     {
         preWork();
         setSleepDuration();
-        tools::LoggerManager::getInstance().logInfo(
-                "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) + " seconds (" +
-                std::to_string(msSleepDuration) + " ms)");
-
         while (proceed())
         {
             sleepRandomMs();
