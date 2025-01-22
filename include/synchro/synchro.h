@@ -5,7 +5,7 @@
 #include <mutex>
 #include <queue>
 #include "base_process.h"
-
+#include "locked_boolean.h"
 
 namespace concurrency
 {
@@ -13,7 +13,7 @@ namespace concurrency
     {
     public:
         // Add pid to the queue and notify waiting threads
-        void pushPid(pid_t pid);
+        void pushPid(pid_t);
 
         // Get and pop the front element of the queue
         pid_t removeFrontPidQueue();
@@ -23,6 +23,10 @@ namespace concurrency
 
         // Check if the queue is empty
         bool isPidQueueEmpty();
+
+        void pauseMonitoring(bool);
+
+        bool pauseMonitoring() const;
 
         // Singleton instance
         static Synchro &getInstance();
@@ -35,10 +39,10 @@ namespace concurrency
         Synchro(const Synchro &) = delete;
         Synchro &operator=(const Synchro &) = delete;
 
-
         std::mutex              mtx_;
         std::condition_variable cv_;
         std::queue<pid_t>       pidQueue_;
+        concurrency::LockedBoolean pauseMonitoring_;
     };
 }
 

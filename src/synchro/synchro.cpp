@@ -33,7 +33,20 @@ namespace concurrency
     void Synchro::blockUntilPidAvailable()
     {
         std::unique_lock<std::mutex> lock(mtx_);
-        cv_.wait(lock, [this] { return !pidQueue_.empty(); });
+        cv_.wait(lock, [this] { return !pidQueue_.empty() || pauseMonitoring_.get(); });
+    }
+
+    void Synchro::pauseMonitoring(bool value) 
+    {
+        tools::LoggerManager::getInstance() << "[SYNCHRO] Stop monitoring set to " << (value ? "[ON]" : "[OFF]");
+        tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        pauseMonitoring_.set(value); 
+        cv_.notify_all();
+    }
+
+    bool Synchro::pauseMonitoring() const
+    { 
+        return pauseMonitoring_.get(); 
     }
 
     // Check if the queue is empty
