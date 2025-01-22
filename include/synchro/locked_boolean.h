@@ -7,7 +7,11 @@
 
 namespace concurrency
 {
-    struct LockedBoolean final : public LockedVariable<bool> {};
+    struct LockedBoolean final : public LockedVariable<bool> 
+    {
+        LockedBoolean() : LockedVariable<bool>(false) {}
+        LockedBoolean(bool value) : LockedVariable<bool>(value) {}
+    };
 } // namespace concurrency
 
 

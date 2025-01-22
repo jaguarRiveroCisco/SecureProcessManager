@@ -8,7 +8,8 @@
 
 namespace concurrency
 {
-    template<typename T> class LockedVariable 
+    template<typename T> 
+    class LockedVariable 
     {
     public:
         LockedVariable() = default;
