@@ -8,40 +8,22 @@
 
 namespace concurrency
 {
-    class Synchro final 
-    {
+    class Synchro final {
     public:
-        // Add pid to the queue and notify waiting threads
-        void pushPid(pid_t);
-
-        // Get and pop the front element of the queue
-        pid_t removeFrontPidQueue();
-
-        // Wait for a pid is available
-        void blockUntilPidAvailable();
-
-        // Check if the queue is empty
-        bool isPidQueueEmpty();
-
-        void pauseMonitoring(bool);
-
-        bool pauseMonitoring() const;
-
-        // Singleton instance
+        void            pushPid(pid_t) noexcept;
+        pid_t           removeFrontPidQueue() noexcept;
+        bool            isPidQueueEmpty() const noexcept;
+        void            pauseMonitoring(bool) noexcept;
+        bool            pauseMonitoring() const noexcept;
         static Synchro &getInstance();
 
     private:
-        // Private constructor to prevent instantiation
-        Synchro() = default;
-
-        // Delete copy constructor and assignment operator
-        Synchro(const Synchro &) = delete;
-        Synchro &operator=(const Synchro &) = delete;
-
-        std::mutex              mtx_;
-        std::condition_variable cv_;
-        std::queue<pid_t>       pidQueue_;
-        std::atomic<bool> pauseMonitoring_;
+        Synchro()                                                  = default;
+        Synchro(const Synchro &)                                   = delete;
+        Synchro                        &operator=(const Synchro &) = delete;
+        mutable std::mutex              mtx_;
+        std::queue<pid_t>               pidQueue_;
+        std::atomic<bool>               pauseMonitoring_;
     };
 }
 

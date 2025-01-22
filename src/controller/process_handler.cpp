@@ -97,20 +97,30 @@ namespace process
     {
         while (running())
         {
-            concurrency::Synchro::getInstance().blockUntilPidAvailable();
-
-            if(concurrency::Synchro::getInstance().pauseMonitoring())
+            if (concurrency::Synchro::getInstance().pauseMonitoring())
             {
+                // Sleep for a random short duration to simulate pause
                 BaseProcess::sleepRandomMs();
                 continue; // Check again if monitoring has been resumed
             }
 
-            // Process all events
+            bool processedEvent = false;
+
+            // Process all events if available
             while (!concurrency::Synchro::getInstance().isPidQueueEmpty())
             {
                 removeHandler();
+                processedEvent = true;
             }
+
+            if (!processedEvent)
+            {
+                // Sleep briefly if no events were processed to prevent tight looping
+                std::this_thread::sleep_for(std::chrono::milliseconds(NapTimeMs::SMALL));
+            }
+
             restoreHandlerCount();
+
             if (handlers_.empty())
             {
                 running(false);
