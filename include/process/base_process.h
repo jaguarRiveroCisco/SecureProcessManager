@@ -19,6 +19,11 @@ namespace process
         static std::atomic<bool> &continueFlag();
         static int               &exitCode();
 
+        static void               sleepRandomMs(bool display = false);
+        static void               sleepRandomSec(bool display = false);
+        static int                randomMs();
+        static int                randomSec();
+
     protected:
         virtual ~BaseProcess() = default;
         BaseProcess();
@@ -27,10 +32,6 @@ namespace process
 
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
                 std::chrono::high_resolution_clock::now();
-        void sleepRandomMs(bool display = false);
-        void sleepRandomSec(bool display = false);
-        int randomMs();
-        int randomSec();
         void preWork() override;
         void postWork() override;
         static std::atomic<bool> continue_;
