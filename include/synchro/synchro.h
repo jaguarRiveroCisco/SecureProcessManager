@@ -5,7 +5,6 @@
 #include <mutex>
 #include <queue>
 #include "base_process.h"
-#include "logger_instance.h"
 
 
 namespace concurrency

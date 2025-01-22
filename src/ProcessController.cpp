@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include "console_control.h"
+#include "logger_instance.h"
 #include "process_handler.h"
 #include "semaphore_guard.h"
 

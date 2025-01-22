@@ -1,4 +1,6 @@
 #include "synchro.h"
+#include "logger_instance.h"
+
 namespace concurrency
 {
     Synchro &Synchro::getInstance()

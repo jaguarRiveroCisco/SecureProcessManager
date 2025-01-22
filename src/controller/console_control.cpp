@@ -14,7 +14,7 @@ namespace cli::driver
     void terminatePid(pid_t pid);
     void intPid(pid_t pid);
     void doCommand(const std::string &input);
-    void printContext(int numProcesses = -1, const std::string &processType = "", int rndUpper = -1);
+    void printContext(int numProcesses = -1, const std::string &processType = "");
     void printHelp();
 
     template<typename T> void printpid(const std::string &str, const T &x)
@@ -38,8 +38,6 @@ namespace cli::driver
 
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType)
     {
-        int rndUpper = 10; // Default value for rndUpper
-
         int opt;
         while ((opt = getopt(argc, argv, "n:t:s:l:h")) != -1)
         {
@@ -88,31 +86,27 @@ namespace cli::driver
                     std::exit(EXIT_SUCCESS);
             }
         }
-        printContext(numProcesses, processType, rndUpper);
+        printContext(numProcesses, processType);
         printHelp(); // Call to printHelp
     }
 
-    void printContext(int numProcesses, const std::string &processType, int rndUpper)
+    void printContext(int numProcesses, const std::string &processType)
     {
         // Static variables to store the latest values
         static int         lastNumProcesses = 0;
         static std::string lastProcessType  = "unknown";
-        static int         lastRndUpper     = 0;
 
         // Update static variables only if new values are provided
         if (numProcesses != -1)
             lastNumProcesses = numProcesses;
         if (!processType.empty())
             lastProcessType = processType;
-        if (rndUpper != -1)
-            lastRndUpper = rndUpper;
 
         // Print the stored context
         std::cout << "\n========================= Context =========================\n"
                   << " PID                 : " << getpid() << "\n"
                   << " Number of Processes : " << lastNumProcesses << "\n"
                   << " Process Type        : " << lastProcessType << "\n"
-                  << " Random Upper Limit  : " << lastRndUpper << "\n"
                   << " Respawn             : " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << "\n"
                   << " Logging Type        : " << process::ControllerBase::loggingTypeToString() << "\n"
                   << "==========================================================\n\n"

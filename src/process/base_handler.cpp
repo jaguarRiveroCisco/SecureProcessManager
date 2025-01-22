@@ -3,7 +3,7 @@
 #include <csignal>
 #include <thread>
 #include <unistd.h> // Include this header for _exit
-#include "logger_interface.h"
+#include "logger_instance.h"
 
 namespace process
 {
