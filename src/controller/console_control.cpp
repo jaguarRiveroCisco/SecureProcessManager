@@ -63,7 +63,7 @@ namespace cli::driver
                     break;
                 case 's':
                     // Set the respawn flag from the argument (0 or 1)
-                    process::ControllerBase::respawn() = std::atoi(optarg) != 0;
+                    process::ControllerBase::respawn(std::atoi(optarg) != 0);
                     break;
                 case 'l':
                     // Set the logging type from the argument
@@ -176,7 +176,7 @@ namespace cli::driver
         }
         else if (input == "exit")
         {
-            process::ControllerBase::running() = false;
+            process::ControllerBase::running(false);
             printpid("[EXIT] Exiting program after next child process completes.", "");
         }
         else if (input == "term all")
@@ -223,12 +223,12 @@ namespace cli::driver
         }
         else if (input == "respawn on")
         {
-            process::ControllerBase::respawn() = true;
+            process::ControllerBase::respawn(true);
             printpid("[RESPAWN] Respawn feature is now", "ON");
         }
         else if (input == "respawn off")
         {
-            process::ControllerBase::respawn() = false;
+            process::ControllerBase::respawn(false);
             printpid("[RESPAWN] Respawn feature is now", "OFF");
         }
         else

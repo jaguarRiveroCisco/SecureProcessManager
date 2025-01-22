@@ -5,8 +5,8 @@ namespace process
 {
     int         ControllerBase::numProcesses_ = 4; // Default number of processes
     std::string ControllerBase::processType_  = "simul"; // Default process type
-    bool        ControllerBase::running_      = true;
-    bool        ControllerBase::respawn_      = true;
+    concurrency::LockedBoolean ControllerBase::running_ = true;
+    concurrency::LockedBoolean ControllerBase::respawn_ = true;
     std::vector<std::unique_ptr<ControllerBase>> ControllerBase::handlers_;
     // Initialize static members
     LoggingType ControllerBase::loggingType_ = LoggingType::Console;
@@ -49,9 +49,12 @@ namespace process
         }
     }
     
-    bool &ControllerBase::running() { return running_; }
+    bool ControllerBase::running() { return running_.get(); }
 
-    bool &ControllerBase::respawn() { return respawn_; }
+    bool ControllerBase::respawn() { return respawn_.get(); }
+
+    void ControllerBase::running(bool value) { running_.set(value); }
+    void ControllerBase::respawn(bool value) { respawn_.set(value); }
 
     LoggingType &ControllerBase::loggingType() { return loggingType_; }
 
@@ -84,7 +87,7 @@ namespace process
 
     void ControllerBase::killAll()
     {
-        running() = false;
+        running(false);
 
         for (auto &handler: handlers_)
         {
@@ -94,7 +97,7 @@ namespace process
 
     void ControllerBase::terminateAll()
     {
-        running() = false;
+        running(false);
         for (auto &handler: handlers_)
         {
             handler->terminateProcess();
@@ -103,7 +106,7 @@ namespace process
 
     void ControllerBase::intAll()
     {
-        running() = false;
+        running(false);
         for (auto &handler: handlers_)
         {
             handler->intProcess();

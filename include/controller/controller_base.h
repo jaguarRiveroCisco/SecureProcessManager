@@ -1,9 +1,11 @@
 #include "base_handler.h"
 #include "process_interface.h"
+#include "locked_boolean.h"
 
 namespace process
 {
-    enum class LoggingType {
+    enum class LoggingType 
+    {
         Console,
         File
     };
@@ -11,8 +13,10 @@ namespace process
     class ControllerBase : public BaseHandler 
     {
         public:
-            static bool    &running();
-            static bool    &respawn();
+            static bool    running();
+            static bool    respawn();
+            static void    running(bool);
+            static void    respawn(bool);
             static LoggingType &loggingType();
             static void  terminateAll();
             static void  terminateProcessByPid(pid_t pid);
@@ -36,7 +40,7 @@ namespace process
         private:
             void                      forkAndExecuteChildProcess();
             std::unique_ptr<IProcess> process_;
-            static bool               running_;
-            static bool               respawn_;
+            static concurrency::LockedBoolean running_;
+            static concurrency::LockedBoolean respawn_;
     };
 }
