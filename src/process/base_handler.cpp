@@ -56,12 +56,12 @@ namespace process
 
     std::atomic<bool> BaseHandler::monitoring() 
     {
-        return monitor_.get();
+        return monitor_ == true;
     }
 
     void BaseHandler::monitoring(bool value) 
     { 
-        monitor_.set(value);
+        monitor_ = value;
     }
 
     void BaseHandler::createMonitorProcessThread()

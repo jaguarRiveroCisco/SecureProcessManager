@@ -3,11 +3,12 @@
 #include "semaphore_guard.h"
 namespace tools
 {
+
     // Initialize the static member
     std::unique_ptr<ConsoleLogger> ConsoleLogger::instance = nullptr;
     void ConsoleLogger::outputLog(const std::string &message) 
     {
-        locker lock(&SemaphoreGuard::getInstance());
+        locker lock(sem_.get());
         std::cout << message << std::endl; 
     }
 

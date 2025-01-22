@@ -6,27 +6,28 @@
 #include <semaphore.h>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace tools
 {
-
     class SemaphoreGuard 
     {
     public:
-        static SemaphoreGuard &getInstance();
         void lock();
         void unlock();
         // Separate function to unlink semaphore when appropriate
-        static void unlinkSemaphore();
+        static void        unlinkSemaphores();
+        static void        unlinkSemaphore(const std::string &sem_name);
         const std::string &getName() const { return sem_name; }
+        SemaphoreGuard(const std::string &name);
+        ~SemaphoreGuard();
 
     private:
-        SemaphoreGuard();
-        ~SemaphoreGuard();
         SemaphoreGuard(const SemaphoreGuard &)            = delete;
         SemaphoreGuard &operator=(const SemaphoreGuard &) = delete;
-        static std::string sem_name;
+        std::string sem_name;
         sem_t      *sem;
+        static std::vector<std::string> sem_names;
     };
 
     struct locker 

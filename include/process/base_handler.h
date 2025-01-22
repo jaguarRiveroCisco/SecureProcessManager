@@ -1,7 +1,6 @@
 #ifndef PROCESS_BASE_H
 #define PROCESS_BASE_H
 #include "synchro.h"
-#include "locked_boolean.h"
 namespace process
 {
     class BaseHandler 
@@ -24,7 +23,7 @@ namespace process
         void          monitorProcessThread();
         pid_t         pid_{0};
     private:
-        concurrency::LockedBoolean monitor_;
+        std::atomic<bool> monitor_ {false};
     };
 
 } // namespace process

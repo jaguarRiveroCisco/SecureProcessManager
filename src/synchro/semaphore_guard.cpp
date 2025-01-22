@@ -2,15 +2,9 @@
 
 namespace tools
 {
-    std::string SemaphoreGuard::sem_name = "/semaphore_guard";
+    std::vector<std::string> SemaphoreGuard::sem_names;
 
-    SemaphoreGuard &SemaphoreGuard::getInstance()
-    {
-        static SemaphoreGuard instance;
-        return instance;
-    }
-
-    SemaphoreGuard::SemaphoreGuard()
+    SemaphoreGuard::SemaphoreGuard(const std::string& name) : sem_name(name)
     {
         sem = sem_open(sem_name.c_str(), O_CREAT, 0644, 1);
         if (sem == SEM_FAILED)
@@ -18,6 +12,7 @@ namespace tools
             perror("sem_open");
             throw std::runtime_error("Failed to open semaphore");
         }
+        sem_names.push_back(sem_name);
     }
 
     SemaphoreGuard ::~SemaphoreGuard()
@@ -49,11 +44,36 @@ namespace tools
     }
 
     // Separate function to unlink semaphore when appropriate
-    void SemaphoreGuard::unlinkSemaphore()
+    void SemaphoreGuard::unlinkSemaphores()
     {
+        for(const auto &sem_name : sem_names)
+        {
+            unlinkSemaphore(sem_name);
+        }
+    }
+    void SemaphoreGuard::unlinkSemaphore(const std::string &sem_name)
+    {
+        std::string strError;
+        sem_t      *sem = sem_open(sem_name.c_str(), 0);
+        if (sem == SEM_FAILED)
+        {
+            strError = "sem_open: Failed to open semaphore: " + sem_name;
+            perror(strError.c_str());
+            return;
+        }
+        if (sem_close(sem) == -1)
+        {
+            strError = "sem_close: Failed to close semaphore: " + sem_name;
+            perror(strError.c_str());
+        }
         if (sem_unlink(sem_name.c_str()) == -1)
         {
-            perror("sem_unlink");
+            strError = "sem_unlink: Failed to unlink semaphore: " + sem_name;
+            perror(strError.c_str());
+        }
+        else
+        {
+            std::cout << "Unlinked semaphore: " << sem_name << std::endl;
         }
     }
 }

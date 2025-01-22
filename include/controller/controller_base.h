@@ -1,5 +1,4 @@
 #include "base_handler.h"
-#include "locked_boolean.h"
 #include "process_interface.h"
 
 namespace process
@@ -37,7 +36,7 @@ namespace process
     private:
         void                              forkAndExecuteChildProcess();
         std::unique_ptr<IProcess>         process_;
-        static concurrency::LockedBoolean running_;
-        static concurrency::LockedBoolean respawn_;
+        static std::atomic<bool> running_;
+        static std::atomic<bool> respawn_;
     };
 } // namespace process

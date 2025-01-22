@@ -5,7 +5,6 @@
 #include <mutex>
 #include <queue>
 #include "base_process.h"
-#include "locked_boolean.h"
 
 namespace concurrency
 {
@@ -42,7 +41,7 @@ namespace concurrency
         std::mutex              mtx_;
         std::condition_variable cv_;
         std::queue<pid_t>       pidQueue_;
-        concurrency::LockedBoolean pauseMonitoring_;
+        std::atomic<bool> pauseMonitoring_;
     };
 }
 

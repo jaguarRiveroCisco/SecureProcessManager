@@ -3,19 +3,23 @@
 
 #include <memory> // For std::unique_ptr
 #include "logger.h"
-
+#include "semaphore_guard.h" // Ensure SemaphoreGuard is defined
 namespace tools
 {
     class ConsoleLogger final : public Logger 
     {
         friend LoggerManager;
     public:
-        ConsoleLogger() = default; // Private constructor
+        ConsoleLogger() 
+        {
+            sem_ = std::make_unique<SemaphoreGuard>("/console_logger");
+        }
 
     protected:
         void outputLog(const std::string &message) override;
 
     private:
+        std::unique_ptr <SemaphoreGuard>      sem_;
         static std::unique_ptr<ConsoleLogger> instance;
 
 
