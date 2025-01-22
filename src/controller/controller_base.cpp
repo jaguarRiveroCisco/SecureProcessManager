@@ -54,6 +54,7 @@ namespace process
     bool ControllerBase::respawn() { return respawn_.get(); }
 
     void ControllerBase::running(bool value) { running_.set(value); }
+    
     void ControllerBase::respawn(bool value) { respawn_.set(value); }
 
     // Implementation of the new method
