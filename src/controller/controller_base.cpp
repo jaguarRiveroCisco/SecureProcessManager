@@ -56,8 +56,6 @@ namespace process
     void ControllerBase::running(bool value) { running_.set(value); }
     void ControllerBase::respawn(bool value) { respawn_.set(value); }
 
-    LoggingType &ControllerBase::loggingType() { return loggingType_; }
-
     // Implementation of the new method
     std::string ControllerBase::loggingTypeToString()
     {
