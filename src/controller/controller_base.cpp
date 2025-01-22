@@ -104,6 +104,20 @@ namespace process
         }
     }
 
+    void ControllerBase::pauseMonitoring()
+    {
+        concurrency::Synchro::getInstance().pauseMonitoring(true);
+        for(auto &handler: handlers_)
+        {
+            handler->monitoring(false);
+        }
+    }
+
+    void ControllerBase::continueMonitoring()
+    {
+        concurrency::Synchro::getInstance().pauseMonitoring(false);
+    }
+
     void ControllerBase::intAll()
     {
         running(false);
