@@ -132,6 +132,8 @@ namespace cli::driver
                   << "  display pids    - Display all current PIDs\n"
                   << "  respawn on      - Turn on respawn\n"
                   << "  respawn off     - Turn off respawn\n"
+                  << "  monitor on      - Turn on monitoring: spawn monitoring threads\n"
+                  << "  monitor off     - Turn off monitoring: end monitoring threads\n"
                   << "  help            - Display this help message\n\n"
                   << "==========================================================\n\n"
                   << std::flush;
@@ -206,6 +208,15 @@ namespace cli::driver
         {
             printpid("[KILL] Killing all processes and exiting.", "");
             process::Controller::killAll();
+        }
+        else if (input == "monitor on")
+        {
+            process::ControllerBase::continueMonitoring();
+            process::Controller::CreateMonitoringThreads();
+        }
+        else if (input == "monitor off")
+        {
+            process::ControllerBase::pauseMonitoring();
         }
         else if (input.rfind("kill ", 0) == 0)
         {

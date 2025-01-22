@@ -53,9 +53,12 @@ namespace process
 
     void Controller::CreateMonitoringThreads()
     {
-        for (auto &handler : handlers_)
+        if (concurrency::Synchro::getInstance().pauseMonitoring())
+            return;
+            
+        for (auto &handler: handlers_)
         {
-            if(!handler->monitoring())
+            if (!handler->monitoring())
                 handler->createMonitorProcessThread();
         }
     }
@@ -96,6 +99,12 @@ namespace process
         {
             concurrency::Synchro::getInstance().blockUntilPidAvailable();
 
+            if(concurrency::Synchro::getInstance().pauseMonitoring())
+            {
+                BaseProcess::sleepRandomMs();
+                continue; // Check again if monitoring has been resumed
+            }
+
             // Process all events
             while (!concurrency::Synchro::getInstance().isPidQueueEmpty())
             {
@@ -103,7 +112,7 @@ namespace process
                 restoreHandlerCount();
                 if (handlers_.empty())
                 {
-                    running() = false;
+                    running(false);
                     tools::LoggerManager::getInstance() << "All handlers removed, exiting...";
                     tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
                 }
