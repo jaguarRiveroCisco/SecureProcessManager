@@ -127,7 +127,7 @@ namespace process
             if (handlers_.empty())
             {
                 running(false);
-                tools::LoggerManager::getInstance() << "All handlers removed, exiting...";
+                tools::LoggerManager::getInstance() << "[PARENT PROCESS] | All handlers removed, exiting...";
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             }
         }

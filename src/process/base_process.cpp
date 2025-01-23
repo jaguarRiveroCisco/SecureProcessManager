@@ -13,7 +13,7 @@ namespace process
     void BaseProcess::logLifetime() const
     {
         tools::LoggerManager::getInstance().logInfo(
-                "[PROCESS FINISHED] | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + reason_);
+                "[PROCESS FINISHED] | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + " | " + reason_);
     }
 
     void BaseProcess::preWork()

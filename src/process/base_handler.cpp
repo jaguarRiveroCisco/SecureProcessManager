@@ -13,8 +13,6 @@ namespace process
     {
         if (WIFEXITED(status))
         {
-            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Child process " + std::to_string(pid_)
-                                                        + " exited normally with status " + std::to_string(WEXITSTATUS(status)) + ".");
         }
         else if (WIFSIGNALED(status))
         {
@@ -89,10 +87,6 @@ namespace process
 
     void BaseHandler::monitorProcessThread()
     {
-        auto threadId = std::this_thread::get_id();
-        std::ostringstream oss;
-        oss << threadId;
-        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] | Monitoring thread started with ID: " + oss.str());
         int  status   = -1;
         monitoring(true);
         while (monitoring())
@@ -121,5 +115,6 @@ namespace process
             }
         }
         monitoring(false);
-        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] | Monitoring thread stopped with ID: " + oss.str());}
+    }
+
 } // namespace process

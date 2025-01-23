@@ -59,6 +59,6 @@ namespace tools
     std::string TimeManager::timeToStr(long long elapsedMilliseconds) const
     {
         return std::to_string(elapsedMilliseconds / 60000) + " minutes (" + std::to_string(elapsedMilliseconds / 1000) +
-               " seconds, " + std::to_string(elapsedMilliseconds) + " ms) | ";
+               " seconds, " + std::to_string(elapsedMilliseconds) + " ms)";
     }
 } // namespace tools

@@ -32,7 +32,7 @@ auto main(int argc, char *argv[]) -> int
 
     process::Controller::run(processType, numProcesses);
 
-    cli::driver::printpid("[INFO] Main process exiting", "");
+    cli::driver::printpid("[PARENT PROCESS] Main process exiting", "");
 
     std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::MEDIUM));
 
