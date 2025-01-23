@@ -6,6 +6,8 @@
 
 namespace tools
 {
+    NapType SleepTime::type = NapType::MS;
+
     int randomMs()
     {
         // Initialize random number generator

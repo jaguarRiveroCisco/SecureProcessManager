@@ -16,7 +16,7 @@ namespace cli::driver
     void intPid(pid_t pid);
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "");
-    void printHelp();
+    void printCommands();
 
     template<typename T> void printpid(const std::string &str, const T &x)
     {
@@ -40,7 +40,7 @@ namespace cli::driver
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType)
     {
         int opt;
-        while ((opt = getopt(argc, argv, "n:t:s:l:h")) != -1)
+        while ((opt = getopt(argc, argv, "n:t:s:l:h:T:")) != -1)
         {
             switch (opt)
             {
@@ -78,17 +78,37 @@ namespace cli::driver
                         tools::LoggerManager::loggerType() = "console";
                     }
                     break;
+                case 'T':
+                    // Set the nap time type from the argument
+                    if (std::string(optarg) == "MS")
+                    {
+                        tools::SleepTime::type = tools::NapType::MS;
+                    }
+                    else if (std::string(optarg) == "SEC")
+                    {
+                        tools::SleepTime::type = tools::NapType::SEC;
+                    }
+                    else if (std::string(optarg) == "MIN")
+                    {
+                        tools::SleepTime::type = tools::NapType::MIN;
+                    }
+                    else
+                    {
+                        printpidW("Invalid nap time type defaulting to ", "MS");
+                        tools::SleepTime::type = tools::NapType::MS;
+                    }
+                    break;
                 case 'h':
                 default:
                     // Display usage information and exit
                     printpid(argv[0], "Usage: -n <number of processes> -t <process type 'real' or 'simul' (default)> "
                                       "-r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -l <logging "
-                                      "type 'console' or 'file'> -h -> help");
+                                      "type 'console' or 'file'> -T <nap time type 'MS', 'SEC', 'MIN'> -h -> help");
                     std::exit(EXIT_SUCCESS);
             }
         }
         printContext(numProcesses, processType);
-        printHelp(); // Call to printHelp
+        printCommands(); // Call to printHelp
     }
 
     void printContext(int numProcesses, const std::string &processType)
@@ -110,34 +130,34 @@ namespace cli::driver
                   << " Process Type        : " << lastProcessType << "\n"
                   << " Respawn             : " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << "\n"
                   << " Logging Type        : " << process::ControllerBase::loggingTypeToString() << "\n"
+                  << " Nap Time Type       : " << tools::SleepTime::NapTypeToString() << "\n"
                   << "==========================================================\n\n"
                   << std::flush;
     }
 
-    void printHelp()
+    void printCommands()
     {
-        std::cout << "\n==========================================================\n"
-                  << "Process Control Help Menu (" << "PID: " << getpid() << ")\n"
-                  << "==========================================================\n"
-                  << "Available commands:\n"
-                  << "  context         - Display the current context\n"
-                  << "  exit            - Sets exist signal to gracefully exits the program once the next child "
-                     "process is "
-                     "done\n"
-                  << "  term all        - Terminate (SIGTERM) all processes and exit the program\n"
-                  << "  term <pid>      - Terminate (SIGTERM) a specific process by PID\n"
-                  << "  int all         - Interrupt (SIGINT) all processes and exit the program\n"
-                  << "  int <pid>       - Interrupt (SIGINT) a specific process by PID\n"
-                  << "  kill all        - Kill all (SIGKILL) processes and exit the program\n"
-                  << "  kill <pid>      - Kill a (SIGKILL) specific process by PID\n"
-                  << "  display pids    - Display all current PIDs\n"
-                  << "  respawn on      - Turn on respawn\n"
-                  << "  respawn off     - Turn off respawn\n"
-                  << "  monitor on      - Turn on monitoring: spawn monitoring threads\n"
-                  << "  monitor off     - Turn off monitoring: end monitoring threads\n"
-                  << "  help            - Display this help message\n\n"
-                  << "==========================================================\n\n"
-                  << std::flush;
+        std::cout
+                << "\n==========================================================\n"
+                << "Process Commands Help Menu (" << "PID: " << getpid() << ")\n"
+                << "==========================================================\n"
+                << "Available commands:\n"
+                << "  context         - Display the current context\n"
+                << "  exit            - Signals the program to gracefully exit once the next child process completes\n"
+                << "  term all        - Terminate (SIGTERM) all processes and exit the program\n"
+                << "  term <pid>      - Terminate (SIGTERM) a specific process by PID\n"
+                << "  int all         - Interrupt (SIGINT) all processes and exit the program\n"
+                << "  int <pid>       - Interrupt (SIGINT) a specific process by PID\n"
+                << "  kill all        - Kill all (SIGKILL) processes and exit the program\n"
+                << "  kill <pid>      - Kill a (SIGKILL) specific process by PID\n"
+                << "  display pids    - Display all current PIDs\n"
+                << "  respawn on      - Turn on respawn\n"
+                << "  respawn off     - Turn off respawn\n"
+                << "  monitor on      - Turn on monitoring: spawn monitoring threads\n"
+                << "  monitor off     - Turn off monitoring: end monitoring threads\n"
+                << "  help            - Display this help message\n\n"
+                << "==========================================================\n\n"
+                << std::flush;
     }
 
     void main()
@@ -231,7 +251,7 @@ namespace cli::driver
         }
         else if (input == "help")
         {
-            printHelp();
+            printCommands();
         }
         else if (input == "respawn on")
         {
