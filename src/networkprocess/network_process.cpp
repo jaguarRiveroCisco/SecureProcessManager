@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "communicator.h"
 #include "logger_instance.h"
+#include "random_stuff.h"
 
 namespace process
 {
@@ -120,7 +121,7 @@ namespace process
         while (proceed())
         {
             std::make_shared<network_process>(true);
-            sleepRandomSec(true);
+            tools::sleepRandomSec(true);
             currentTime_ = std::chrono::high_resolution_clock::now();
         }
         postWork();

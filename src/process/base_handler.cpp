@@ -105,7 +105,7 @@ namespace process
             if (result == 0)
             {
                 // Child still running
-                std::this_thread::sleep_for(std::chrono::milliseconds(NapTimeMs::SHORT));
+                std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SHORT));
             }
             else if (result == pid_)
             {

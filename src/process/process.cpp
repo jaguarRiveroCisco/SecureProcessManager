@@ -3,7 +3,7 @@
 #include <thread>
 #include "communicator.h"
 #include "logger_instance.h"
-
+#include "random_stuff.h"
 namespace process
 {
     void Process::work()
@@ -19,7 +19,7 @@ namespace process
                 reason_ = "Parent process has terminated. Exiting child process.";
                 break;
             }
-            sleepRandomMs();
+            tools::sleepRandomMs();
         }
         postWork();
 

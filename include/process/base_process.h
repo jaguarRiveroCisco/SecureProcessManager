@@ -17,11 +17,6 @@ namespace process
         static std::atomic<bool> &continueFlag();
         static int               &exitCode();
 
-        static void               sleepRandomMs(bool display = false);
-        static void               sleepRandomSec(bool display = false);
-        static int                randomMs();
-        static int                randomSec();
-
     protected:
         virtual ~BaseProcess() = default;
         BaseProcess();

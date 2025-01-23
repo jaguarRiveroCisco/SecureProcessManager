@@ -147,7 +147,7 @@ namespace cli::driver
         {
             std::getline(std::cin, input);
             doCommand(input);
-            std::this_thread::sleep_for(std::chrono::milliseconds(process::NapTimeMs::SMALL));
+            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
         }
     }
 

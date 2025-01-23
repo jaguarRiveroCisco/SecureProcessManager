@@ -34,7 +34,7 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::printpid("[INFO] Main process exiting", "");
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(process::NapTimeMs::MEDIUM));
+    std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::MEDIUM));
 
     tools::SemaphoreGuard::unlinkSemaphores();
 

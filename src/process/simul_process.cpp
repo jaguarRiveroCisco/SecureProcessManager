@@ -6,16 +6,17 @@
 #include "communicator.h"
 #include "logger_instance.h"
 #include "nap_time.h"
+#include "random_stuff.h"
 
 namespace process
 {
     void ProcessSimulator::setSleepDuration()
     {
-       sleepDuration_ = randomSec();
+       sleepDuration_ = tools::randomSec();
        msSleepDuration = sleepDuration_ * 1000;
        endTime_        = startTime_ + std::chrono::milliseconds(msSleepDuration);
        // Maximum allowed lifetime to prevent indefinite execution
-       maxLifeTime_ = std::chrono::milliseconds(msSleepDuration + NapTimeMs::LONG); // Add a buffer to the sleep duration
+       maxLifeTime_ = std::chrono::milliseconds(msSleepDuration + tools::NapTimeMs::LONG); // Add a buffer to the sleep duration
        tools::LoggerManager::getInstance().logInfo(
                "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) +
                " seconds (" + std::to_string(msSleepDuration) + " ms)");
@@ -51,7 +52,7 @@ namespace process
         setSleepDuration();
         while (proceed())
         {
-            sleepRandomMs();
+            tools::sleepRandomMs();
             currentTime_ = std::chrono::high_resolution_clock::now();
         }
         postWork();

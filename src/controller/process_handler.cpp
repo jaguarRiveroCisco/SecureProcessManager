@@ -8,6 +8,7 @@
 #include "network_process.h"
 #include "process.h"
 #include "simul_process.h"
+#include "random_stuff.h"
 
 namespace process
 {
@@ -101,7 +102,7 @@ namespace process
             if (concurrency::Synchro::getInstance().pauseMonitoring())
             {
                 // Sleep for a random short duration to simulate pause
-                BaseProcess::sleepRandomMs();
+                tools::sleepRandomMs();
                 continue; // Check again if monitoring has been resumed
             }
 
@@ -117,7 +118,7 @@ namespace process
             if (!processedEvent)
             {
                 // Sleep briefly if no events were processed to prevent tight looping
-                std::this_thread::sleep_for(std::chrono::milliseconds(NapTimeMs::SMALL));
+                std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
                 continue;
             }
 
