@@ -21,8 +21,10 @@ while true; do
   if [[ "$current_output" != "$previous_output" ]]; then
     echo  # Print an empty line to indicate a change
 
+    # Play a beep sound
+    tput bel
+
     # Print the "PARENT" line
-    
     if [[ "$line_count" -eq 0 ]]; then
       echo "Total number of $process_name processes: 0"
     else
