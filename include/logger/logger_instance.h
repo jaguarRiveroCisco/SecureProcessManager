@@ -12,8 +12,6 @@ namespace tools
         static void         createLoggerType();
         static std::string &loggerType();
         static Logger      &getInstance();
-        static Logger      &consoleLogger();
-
     private:
         static Logger     *loggerInstance;
         static std::string loggerType_;

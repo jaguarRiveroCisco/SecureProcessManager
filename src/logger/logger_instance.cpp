@@ -56,10 +56,4 @@ namespace tools
         ConsoleLogger::resetInstance();
         FileLogger::resetInstance();
     }
-
-    Logger &LoggerManager::consoleLogger() 
-    {
-        static ConsoleLogger cl;
-        return cl;
-    }
 } 
