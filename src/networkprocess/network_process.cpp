@@ -8,8 +8,6 @@
 
 namespace process
 {
-
-
     struct network_process
     {
         network_process(bool log = false) { network(log); };
@@ -112,7 +110,6 @@ namespace process
             }
         }
     };
-
     
     void NetworkProcess::work()
     {
