@@ -72,7 +72,7 @@ namespace process
         createHandlers(numProcesses_);
         CreateMonitoringThreads();
         std::thread readerThread(cli::driver::main);
-        waitForEvents();
+        processLifecycleLoop();
         readerThread.join(); // Ensure the reader thread is joined before exiting
     }
 
@@ -95,7 +95,7 @@ namespace process
         }
     }
 
-    void Controller::waitForEvents()
+    void Controller::processLifecycleLoop()
     {
         while (running())
         {

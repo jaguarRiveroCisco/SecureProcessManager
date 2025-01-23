@@ -24,14 +24,8 @@ while true; do
     # Play a beep sound
     tput bel
 
-    # Print the "PARENT" line
-    if [[ "$line_count" -eq 0 ]]; then
-      echo "Total number of $process_name processes: 0"
-    else
-      echo -en "PARENT "
-      echo "$current_output"
-      echo "Total number of $process_name processes: $line_count"
-    fi
+    echo "$current_output"
+    echo "Total number of $process_name processes: $line_count"
 
     previous_output="$current_output"
   fi

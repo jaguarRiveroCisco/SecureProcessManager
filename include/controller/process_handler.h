@@ -11,7 +11,7 @@ namespace process
         static void CreateMonitoringThreads();
 
     private:
-        static void waitForEvents();
+        static void processLifecycleLoop();
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);
         static void createHandler();
