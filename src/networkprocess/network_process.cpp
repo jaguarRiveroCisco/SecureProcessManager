@@ -117,12 +117,12 @@ namespace process
     void NetworkProcess::work()
     {
         preWork();
-        setSleepDuration();
+        timeManager_.setSleepDuration();
         while (proceed())
         {
             std::make_shared<network_process>(true);
             tools::sleepRandomSec(true);
-            currentTime_ = std::chrono::high_resolution_clock::now();
+            timeManager_.currentTime() = std::chrono::high_resolution_clock::now();
         }
         postWork();
     }

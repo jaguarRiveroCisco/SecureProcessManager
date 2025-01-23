@@ -4,6 +4,7 @@
 #include "process_interface.h"
 #include <memory>
 #include <string>
+#include "time_manager.h"
 namespace process
 {
 
@@ -13,10 +14,8 @@ namespace process
     class BaseProcess : public IProcess 
     {
     public:
-
         static std::atomic<bool> &continueFlag();
         static std::atomic<int>  &exitCode();
-        std::chrono::milliseconds::rep getElapsedMilliseconds() const;
 
     protected:
         virtual ~BaseProcess() = default;
@@ -25,7 +24,8 @@ namespace process
         void preWork() override;
         void postWork() override;
 
-        std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ = std::chrono::high_resolution_clock::now();
+        tools::TimeManager timeManager_;
+
         static std::atomic<bool> continue_;
         static std::atomic<int>  exitCode_;
         std::string reason_ = "End of life";

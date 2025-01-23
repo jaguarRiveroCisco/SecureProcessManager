@@ -40,6 +40,7 @@ src/controller/controller_base.cpp
 # Tools
 src/tools/timestamp.cpp
 src/tools/random_stuff.cpp
+src/tools/time_manager.cpp
 src/synchro/semaphore_guard.cpp
 src/synchro/synchro.cpp
 
