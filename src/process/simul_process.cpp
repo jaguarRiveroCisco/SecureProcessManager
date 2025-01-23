@@ -12,14 +12,21 @@ namespace process
 {
     void ProcessSimulator::setSleepDuration()
     {
-       sleepDuration_ = tools::randomSec();
-       msSleepDuration = sleepDuration_ * 1000;
-       endTime_        = startTime_ + std::chrono::milliseconds(msSleepDuration);
-       // Maximum allowed lifetime to prevent indefinite execution
-       maxLifeTime_ = std::chrono::milliseconds(msSleepDuration + tools::NapTimeMs::LONG); // Add a buffer to the sleep duration
-       tools::LoggerManager::getInstance().logInfo(
-               "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDuration_) +
-               " seconds (" + std::to_string(msSleepDuration) + " ms)");
+        // Get random duration in minutes
+        int sleepDurationMin = tools::randomMin();
+        
+        // Convert minutes to seconds and milliseconds
+        int sleepDurationSec = sleepDurationMin * 60;
+        int msSleepDuration = sleepDurationSec * 1000;
+        
+        // Calculate end time and maximum allowed lifetime
+        endTime_ = startTime_ + std::chrono::milliseconds(msSleepDuration);
+        maxLifeTime_ = std::chrono::milliseconds(msSleepDuration + tools::NapTimeMs::LONG); // Add a buffer to the sleep duration
+        
+        // Log the information
+        tools::LoggerManager::getInstance().logInfo(
+            "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDurationMin) +
+            " minutes (" + std::to_string(sleepDurationSec) + " seconds, " + std::to_string(msSleepDuration) + " ms)");
     }
 
     bool ProcessSimulator::proceed()

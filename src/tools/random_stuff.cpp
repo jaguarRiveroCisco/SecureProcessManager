@@ -27,6 +27,17 @@ namespace tools
         return disSec(gen);
     }
 
+    int randomMin()
+    {
+        // Initialize random number generator
+        std::random_device rd;
+        std::mt19937       gen(rd());
+
+        // Sleep for a random duration in minutes
+        std::uniform_int_distribution<> disMin(NapTimeMin::SHORTM, NapTimeMin::LONGM);
+        return disMin(gen);
+    }
+
     void sleepRandomMs(bool display)
     {
         auto nappy = randomMs();

@@ -9,6 +9,7 @@ namespace tools
     void sleepRandomSec(bool display = false);
     int  randomMs();
     int  randomSec();
+    int  randomMin();
 }
 
 #endif // TOOLS_RANDOM_STUFF_H
