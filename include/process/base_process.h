@@ -28,7 +28,7 @@ namespace process
 
         static std::atomic<bool> continue_;
         static std::atomic<int>  exitCode_;
-        std::string reason_ = "End of life";
+        mutable std::string reason_ = "End of life";
     };
 
 } // namespace process

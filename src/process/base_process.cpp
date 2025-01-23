@@ -6,12 +6,13 @@
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
-    std::atomic<int>  BaseProcess::exitCode_{-1};
+    std::atomic<int>  BaseProcess::exitCode_{EXIT_SUCCESS};
 
     BaseProcess::BaseProcess() : timeManager_() { setupSignalHandling(); }
 
     void BaseProcess::logLifetime() const
     {
+        reason_ += " | exit code: " + std::to_string(exitCode_);
         tools::LoggerManager::getInstance().logInfo(
                 "[PROCESS FINISHED] | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + " | " + reason_);
     }
@@ -33,7 +34,6 @@ namespace process
 
     void signalHandler(int signum)
     {
-        tools::LoggerManager::getInstance().logInfo("[SIGNAL] Received signal | " + std::to_string(signum));
         BaseProcess::continueFlag() = false;
         BaseProcess::exitCode()     = signum;
     }
