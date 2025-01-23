@@ -117,6 +117,7 @@ namespace process
             {
                 // Sleep briefly if no events were processed to prevent tight looping
                 std::this_thread::sleep_for(std::chrono::milliseconds(NapTimeMs::SMALL));
+                continue;
             }
 
             restoreHandlerCount();
