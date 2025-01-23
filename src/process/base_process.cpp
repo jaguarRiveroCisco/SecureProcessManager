@@ -17,10 +17,13 @@ namespace process
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_);
         return duration.count();
     }
- 
+
     void BaseProcess::logLifetime() const
     {
-        tools::LoggerManager::getInstance().logInfo("[PROCESS FINISHED] | Lifetime: " + std::to_string(getElapsedMilliseconds()) + " ms" + " | " + reason_);
+        tools::LoggerManager::getInstance().logInfo(
+                "[PROCESS FINISHED] | Lifetime: " + std::to_string(getElapsedMilliseconds() / 60000) + " minutes (" +
+                std::to_string(getElapsedMilliseconds() / 1000) + " seconds, " +
+                std::to_string(getElapsedMilliseconds()) + " ms) | " + reason_);
     }
 
     std::atomic<bool> &BaseProcess::continueFlag() { return continue_; }

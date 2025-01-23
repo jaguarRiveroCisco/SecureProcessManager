@@ -6,7 +6,7 @@
 
 namespace tools
 {
-    NapType SleepTime::type = NapType::MS;
+    NapType SleepTime::type = NapType::SEC;
 
     int randomMs()
     {

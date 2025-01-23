@@ -13,7 +13,8 @@ namespace process
     protected:
         void setSleepDuration();
         bool proceed();
-        int        sleepDuration_ = 0;
+        int        sleepDurationMs_ = 0;
+        std::string sleepDurationStr_;
         int        msSleepDuration = 0;
         std::chrono::time_point<std::chrono::high_resolution_clock> endTime_;
         std::chrono::time_point<std::chrono::high_resolution_clock> currentTime_ = std::chrono::high_resolution_clock::now();

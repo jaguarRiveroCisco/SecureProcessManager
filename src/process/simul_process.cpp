@@ -12,21 +12,38 @@ namespace process
 {
     void ProcessSimulator::setSleepDuration()
     {
-        // Get random duration in minutes
-        int sleepDurationMin = tools::randomMin();
-        
-        // Convert minutes to seconds and milliseconds
-        int sleepDurationSec = sleepDurationMin * 60;
-        int msSleepDuration = sleepDurationSec * 1000;
-        
+        int val = 0;
+        switch (tools::SleepTime::type)
+        {
+            case tools::NapType::SEC:
+                val               = tools::randomSec();
+                sleepDurationMs_  = val * 1000; // Convert seconds to milliseconds
+                sleepDurationStr_ = std::to_string(val) + " seconds (" + std::to_string(sleepDurationMs_) + " ms)";
+                break;
+
+            case tools::NapType::MIN:
+                val               = tools::randomMin();
+                sleepDurationMs_  = val * 60 * 1000; // Convert minutes to milliseconds
+                sleepDurationStr_ = std::to_string(val) + " minutes (" + std::to_string(sleepDurationMs_) + " ms)";
+                break;
+
+            default:
+                val               = tools::randomMs();
+                sleepDurationMs_  = val;
+                sleepDurationStr_ = std::to_string(val) + " milliseconds";
+                break;
+        }
+
         // Calculate end time and maximum allowed lifetime
-        endTime_ = startTime_ + std::chrono::milliseconds(msSleepDuration);
-        maxLifeTime_ = std::chrono::milliseconds(msSleepDuration + tools::NapTimeMs::LONG); // Add a buffer to the sleep duration
-        
+        endTime_     = startTime_ + std::chrono::milliseconds(sleepDurationMs_);
+        maxLifeTime_ = std::chrono::milliseconds(sleepDurationMs_ +
+                                                 tools::NapTimeMs::LONG); // Add a buffer to the sleep duration
+
         // Log the information
-        tools::LoggerManager::getInstance().logInfo(
-            "[PROCESS EXECUTING] | Simulated Process started. Duration : " + std::to_string(sleepDurationMin) +
-            " minutes (" + std::to_string(sleepDurationSec) + " seconds, " + std::to_string(msSleepDuration) + " ms)");
+        tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Simulated Process started. Duration: " +
+                                                    std::to_string(sleepDurationMs_ / 60000) + " minutes (" +
+                                                    std::to_string(sleepDurationMs_ / 1000) + " seconds, " +
+                                                    std::to_string(sleepDurationMs_) + " ms)");
     }
 
     bool ProcessSimulator::proceed()

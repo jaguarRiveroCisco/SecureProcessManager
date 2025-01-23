@@ -40,7 +40,7 @@ namespace cli::driver
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType)
     {
         int opt;
-        while ((opt = getopt(argc, argv, "n:t:s:l:h:T:")) != -1)
+        while ((opt = getopt(argc, argv, "n:t:s:l:T:h")) != -1) // Removed colon after 'h'
         {
             switch (opt)
             {
@@ -49,7 +49,7 @@ namespace cli::driver
                     numProcesses = std::atoi(optarg);
                     if (numProcesses <= 0)
                     {
-                        printpidW("Number of processes must be greater than 0. Defaulting to  ", 4);
+                        printpidW("Number of processes must be greater than 0. Defaulting to ", 4);
                         numProcesses = 4;
                     }
                     break;
@@ -63,7 +63,6 @@ namespace cli::driver
                     }
                     break;
                 case 's':
-                    // Set the respawn flag from the argument (0 or 1)
                     process::ControllerBase::respawn(std::atoi(optarg) != 0);
                     break;
                 case 'l':
@@ -101,9 +100,13 @@ namespace cli::driver
                 case 'h':
                 default:
                     // Display usage information and exit
-                    printpid(argv[0], "Usage: -n <number of processes> -t <process type 'real' or 'simul' (default)> "
-                                      "-r <random upper limit> -d <display (0 or 1)> -s <respawn (0 or 1)> -l <logging "
-                                      "type 'console' or 'file'> -T <nap time type 'MS', 'SEC', 'MIN'> -h -> help");
+                    printpid(argv[0], "Usage:\n"
+                                      "-n <number of processes>\n"
+                                      "-t <process type 'real' or 'simul' (default)>\n"
+                                      "-s <respawn (0 or 1)>\n"
+                                      "-l <logging type 'console' or 'file'>\n"
+                                      "-T <nap time type 'MS', 'SEC', 'MIN'>\n"
+                                      "-h -> help");
                     std::exit(EXIT_SUCCESS);
             }
         }
