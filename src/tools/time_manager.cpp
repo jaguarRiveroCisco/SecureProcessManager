@@ -13,34 +13,52 @@ namespace tools
             case tools::NapType::SEC:
                 val               = tools::randomSec();
                 sleepDurationMs_  = val * 1000;
-                sleepDurationStr_ = std::to_string(val) + " seconds (" + std::to_string(sleepDurationMs_) + " ms)";
                 break;
             case tools::NapType::MIN:
                 val               = tools::randomMin();
                 sleepDurationMs_  = val * 60 * 1000;
-                sleepDurationStr_ = std::to_string(val) + " minutes (" + std::to_string(sleepDurationMs_) + " ms)";
                 break;
             default:
                 val               = tools::randomMs();
                 sleepDurationMs_  = val;
-                sleepDurationStr_ = std::to_string(val) + " milliseconds";
                 break;
         }
 
+        sleepDurationStr_ = timeToStr(sleepDurationMs_);
         endTime_     = startTime_ + std::chrono::milliseconds(sleepDurationMs_);
         maxLifeTime_ = std::chrono::milliseconds(sleepDurationMs_ + tools::NapTimeMs::LONG);
 
         // Log the information
         tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Simulated Process started. Duration: " +
-                                                    std::to_string(sleepDurationMs_ / 60000) + " minutes (" +
-                                                    std::to_string(sleepDurationMs_ / 1000) + " seconds, " +
-                                                    std::to_string(sleepDurationMs_) + " ms)");
+                                                    sleepDurationStr_);
     }
 
     std::chrono::milliseconds::rep TimeManager::getElapsedMilliseconds() const
     {
-        auto currentTime = std::chrono::high_resolution_clock::now();
-        auto duration    = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime_);
+        currentTime_ = std::chrono::high_resolution_clock::now();
+        auto duration    = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime_ - startTime_);
         return duration.count();
     }
-}
+
+    std::chrono::time_point<std::chrono::high_resolution_clock> &TimeManager::currentTime() { return currentTime_; }
+
+    int         TimeManager::sleepDurationMs() const { return sleepDurationMs_; }
+
+    bool        TimeManager::endOfLife() const { return currentTime_ >= endTime_; }
+
+    bool        TimeManager::maxLifeExceeded() const { return currentTime_ - startTime_ >= maxLifeTime_; }
+
+    std::string TimeManager::getSleepDurationStr() const { return sleepDurationStr_; }
+
+    std::string TimeManager::getFormattedElapsedTimeStr() const
+    {
+        auto elapsedMilliseconds = getElapsedMilliseconds();
+        return timeToStr(elapsedMilliseconds);
+    }
+
+    std::string TimeManager::timeToStr(long long elapsedMilliseconds) const
+    {
+        return std::to_string(elapsedMilliseconds / 60000) + " minutes (" + std::to_string(elapsedMilliseconds / 1000) +
+               " seconds, " + std::to_string(elapsedMilliseconds) + " ms) | ";
+    }
+} // namespace tools

@@ -13,9 +13,7 @@ namespace process
     void BaseProcess::logLifetime() const
     {
         tools::LoggerManager::getInstance().logInfo(
-                "[PROCESS FINISHED] | Lifetime: " + std::to_string(timeManager_.getElapsedMilliseconds() / 60000) +
-                " minutes (" + std::to_string(timeManager_.getElapsedMilliseconds() / 1000) + " seconds, " +
-                std::to_string(timeManager_.getElapsedMilliseconds()) + " ms) | " + reason_);
+                "[PROCESS FINISHED] | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + reason_);
     }
 
     void BaseProcess::preWork()
