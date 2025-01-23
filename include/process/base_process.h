@@ -16,6 +16,7 @@ namespace process
 
         static std::atomic<bool> &continueFlag();
         static int               &exitCode();
+        std::chrono::milliseconds::rep getElapsedMilliseconds() const;
 
     protected:
         virtual ~BaseProcess() = default;

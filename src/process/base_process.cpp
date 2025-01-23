@@ -10,12 +10,17 @@ namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
     int              BaseProcess::exitCode_{-1};
+
+    std::chrono::milliseconds::rep BaseProcess::getElapsedMilliseconds() const
+    {
+        auto endTime  = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_);
+        return duration.count();
+    }
  
     void BaseProcess::logLifetime() const
     {
-        auto endTime  = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        tools::LoggerManager::getInstance().logInfo("[PROCESS FINISHED] | Lifetime: " + std::to_string(duration) + " ms" + " | " + reason_);
+        tools::LoggerManager::getInstance().logInfo("[PROCESS FINISHED] | Lifetime: " + std::to_string(getElapsedMilliseconds()) + " ms" + " | " + reason_);
     }
 
     std::atomic<bool> &BaseProcess::continueFlag() { return continue_; }
