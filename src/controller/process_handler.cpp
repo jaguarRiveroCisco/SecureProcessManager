@@ -80,18 +80,42 @@ namespace process
     {
         if (!handlers_.empty())
         {
-            pid_t pid = concurrency::Synchro::getInstance().removeFrontPidQueue();
-            if (pid != -1)
+            try
             {
-                // Find and remove the handler with the matching PID
-                auto it = std::remove_if(
-                        handlers_.begin(), handlers_.end(),
-                        [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
-                if (it != handlers_.end())
+                pid_t pid = concurrency::Synchro::getInstance().removeFrontPidQueue();
+                if (pid != -1)
                 {
-                    handlers_.erase(it, handlers_.end());
+                    // Find and remove the handler with the matching PID
+                    auto it = std::remove_if(
+                            handlers_.begin(), handlers_.end(),
+                            [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
+
+                    if (it != handlers_.end())
+                    {
+                        handlers_.erase(it, handlers_.end());
+                    }
+                    else
+                    {
+                        // Log a warning if no handler was found for the given PID
+                        tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Warning: No handler found for PID: " + std::to_string(pid));
+                    }
+                }
+                else
+                {
+                    // Log a warning if the PID is invalid
+                    tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Warning: Invalid PID returned from queue");
                 }
             }
+            catch (const std::exception &e)
+            {
+                // Handle any potential exceptions and log the error
+                tools::LoggerManager::getInstance().logException("[PARENT PROCESS] Error in removeHandler: " + std::string(e.what()));
+            }
+        }
+        else
+        {
+            // Log a message if the handlers list is empty
+            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] No handlers to remove, the list is empty.");
         }
     }
 
