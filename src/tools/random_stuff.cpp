@@ -23,7 +23,7 @@ namespace tools
         std::mt19937       gen(rd());
 
         // Sleep for a random duration in seconds
-        std::uniform_int_distribution<> disSec(NapTimeSec::SHORTS, NapTimeSec::LONGS);
+        std::uniform_int_distribution<> disSec(NapTimeSec::SMALLS, NapTimeSec::LONGS);
         return disSec(gen);
     }
 
@@ -34,7 +34,7 @@ namespace tools
         std::mt19937       gen(rd());
 
         // Sleep for a random duration in minutes
-        std::uniform_int_distribution<> disMin(NapTimeMin::SHORTM, NapTimeMin::LONGM);
+        std::uniform_int_distribution<> disMin(NapTimeMin::SMALLM, NapTimeMin::LONGM);
         return disMin(gen);
     }
 
