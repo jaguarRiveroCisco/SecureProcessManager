@@ -9,7 +9,7 @@
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
-    int              BaseProcess::exitCode_{-1};
+    std::atomic<int>  BaseProcess::exitCode_{-1};
 
     std::chrono::milliseconds::rep BaseProcess::getElapsedMilliseconds() const
     {
@@ -25,7 +25,7 @@ namespace process
 
     std::atomic<bool> &BaseProcess::continueFlag() { return continue_; }
 
-    int &BaseProcess::exitCode() { return exitCode_; }
+    std::atomic<int> &BaseProcess::exitCode() { return exitCode_; }
 
     BaseProcess::BaseProcess() { setupSignalHandling(); }
 

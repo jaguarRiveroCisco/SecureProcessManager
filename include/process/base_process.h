@@ -15,21 +15,19 @@ namespace process
     public:
 
         static std::atomic<bool> &continueFlag();
-        static int               &exitCode();
+        static std::atomic<int>  &exitCode();
         std::chrono::milliseconds::rep getElapsedMilliseconds() const;
 
     protected:
         virtual ~BaseProcess() = default;
         BaseProcess();
-
         void logLifetime() const;
-
-        std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
-                std::chrono::high_resolution_clock::now();
         void preWork() override;
         void postWork() override;
+
+        std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ = std::chrono::high_resolution_clock::now();
         static std::atomic<bool> continue_;
-        static int exitCode_;
+        static std::atomic<int>  exitCode_;
         std::string reason_ = "End of life";
     };
 
