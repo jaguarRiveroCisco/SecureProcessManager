@@ -39,6 +39,7 @@ namespace tools
 
         int         sleepDurationMs_  = 0;
         std::string sleepDurationStr_ = "0 milliseconds";
+        std::string units_            = " milliseconds";
     };
 } // namespace tools
 

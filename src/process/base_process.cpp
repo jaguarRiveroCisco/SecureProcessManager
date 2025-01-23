@@ -14,7 +14,7 @@ namespace process
     {
         reason_ += " | exit code: " + std::to_string(exitCode_);
         tools::LoggerManager::getInstance().logInfo(
-                "[PROCESS FINISHED] | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + " | " + reason_);
+                "[PROCESS FINISHED]  | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + " | " + reason_);
     }
 
     void BaseProcess::preWork()

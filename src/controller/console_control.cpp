@@ -147,7 +147,7 @@ namespace cli::driver
                 << "==========================================================\n"
                 << "Available commands:\n"
                 << "  context         - Display the current context\n"
-                << "  exit            - Signals the program to gracefully exit once the next child process completes\n"
+                << "  quit            - Signals the program to gracefully quit at the next loop\n"
                 << "  term all        - Terminate (SIGTERM) all processes and exit the program\n"
                 << "  term <pid>      - Terminate (SIGTERM) a specific process by PID\n"
                 << "  int all         - Interrupt (SIGINT) all processes and exit the program\n"
@@ -201,37 +201,37 @@ namespace cli::driver
         {
             printContext();
         }
-        else if (input == "exit")
+        else if (input == "quit")
         {
             process::ControllerBase::running(false);
-            printpid("[EXIT] Exiting program after next child process completes.", "");
+            printpid("[QUIT] Signalling the program to gracefully quit at the next loop.", "");
         }
         else if (input == "term all")
         {
-            printpid("[TERMINATE] Terminating all processes and exiting.", "");
+            printpid("[TERMINATE ALL] Terminating all processes and exiting.", "");
             process::Controller::terminateAll();
         }
         else if (input.rfind("term ", 0) == 0)
         {
             auto vals = splitString(input, ' ');
-            printpid("[TERMINATE] Terminating process with PID:", vals[1]);
+            printpid("[TERMINATE ONE] Terminating process with PID:", vals[1]);
             terminatePid(std::stoi(vals[1]));
         }
         else if (input == "int all")
         {
-            printpid("[INT] Interrupting all processes and exiting.", "");
+            printpid("[INTTERRUPT ALL] Interrupting all processes and exiting.", "");
             process::Controller::intAll();
         }
         else if (input.rfind("int ", 0) == 0)
         {
             auto vals = splitString(input, ' ');
 
-            printpid("[INT] Interrupting process with PID:", vals[1]);
+            printpid("[INTERRUPT ONE] Interrupting process with PID:", vals[1]);
             intPid( std::stoi(vals[1]) );
         }
         else if (input == "kill all")
         {
-            printpid("[KILL] Killing all processes and exiting.", "");
+            printpid("[KILL ALL] Killing all processes and exiting.", "");
             process::Controller::killAll();
         }
         else if (input == "monitor on")
@@ -246,7 +246,7 @@ namespace cli::driver
         else if (input.rfind("kill ", 0) == 0)
         {
             auto vals = splitString(input, ' ');
-            printpid("[KILL] Killing process with PID:", vals[1]);
+            printpid("[KILL ONE] Killing process with PID:", vals[1]);
             killPid(std::stoi(vals[1]));
         }
         else if (input == "display pids")

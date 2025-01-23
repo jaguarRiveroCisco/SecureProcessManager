@@ -2,6 +2,7 @@
 #include "logger_instance.h"
 #include "nap_time.h"
 #include "random_stuff.h"
+#include <iomanip>
 
 namespace tools
 {
@@ -10,13 +11,15 @@ namespace tools
         int val = 0;
         switch (tools::SleepTime::type)
         {
+            case tools::NapType::MIN:
+                val              = tools::randomMin();
+                sleepDurationMs_ = val * 60 * 1000;
+                units_           = " minutes";
+                break;
             case tools::NapType::SEC:
                 val               = tools::randomSec();
                 sleepDurationMs_  = val * 1000;
-                break;
-            case tools::NapType::MIN:
-                val               = tools::randomMin();
-                sleepDurationMs_  = val * 60 * 1000;
+                units_            = " seconds";
                 break;
             default:
                 val               = tools::randomMs();
@@ -58,7 +61,13 @@ namespace tools
 
     std::string TimeManager::timeToStr(long long elapsedMilliseconds) const
     {
-        return std::to_string(elapsedMilliseconds / 60000) + " minutes (" + std::to_string(elapsedMilliseconds / 1000) +
-               " seconds, " + std::to_string(elapsedMilliseconds) + " ms)";
+        long long minutes = elapsedMilliseconds / 60000;
+        double    seconds = (elapsedMilliseconds % 60000) / 1000.0;
+
+        std::ostringstream oss;
+        oss << minutes << ":" << std::setw(2) << std::setfill('0')
+            << std::fixed << std::setprecision(3) << seconds << units_;
+
+        return oss.str();
     }
 } // namespace tools
