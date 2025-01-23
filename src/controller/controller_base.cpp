@@ -44,7 +44,7 @@ namespace process
         {
             // Parent process
             tools::LoggerManager::getInstance()
-                    << "[PARENT PROCESS] created child process with PID: " << pid_;
+                    << "[PARENT PROCESS] | created child process with PID: " << pid_;
             tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
         }
     }

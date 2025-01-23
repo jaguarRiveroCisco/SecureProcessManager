@@ -13,17 +13,17 @@ namespace process
     {
         if (WIFEXITED(status))
         {
-            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] Child process " + std::to_string(pid_)
+            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Child process " + std::to_string(pid_)
                                                         + " exited normally with status " + std::to_string(WEXITSTATUS(status)) + ".");
         }
         else if (WIFSIGNALED(status))
         {
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Child process " + std::to_string(pid_)
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid_)
                                                            + " was terminated by signal " + std::to_string(WTERMSIG(status)) + ".");
         }
         else
         {
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Child process " + std::to_string(pid_) + " exited with an unknown status.");
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid_) + " exited with an unknown status.");
         }
     }
     
@@ -33,7 +33,7 @@ namespace process
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process " << pid_ << " is not running.";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] | Process " << pid_ << " is not running.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             return false;
         }
@@ -69,7 +69,7 @@ namespace process
     {
         if( monitoring() )
         {
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Monitoring thread already running.");
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Monitoring thread already running.");
             return;
         }
         // Parent process
@@ -81,7 +81,7 @@ namespace process
         }
         catch (const std::system_error &e)
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Thread creation failed: " << e.what();
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] | Thread creation failed: " << e.what();
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             exit(EXIT_FAILURE); // Ensure the child process exits
         }
@@ -92,7 +92,7 @@ namespace process
         auto threadId = std::this_thread::get_id();
         std::ostringstream oss;
         oss << threadId;
-        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] Monitoring thread started with ID: " + oss.str());
+        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] | Monitoring thread started with ID: " + oss.str());
         int  status   = -1;
         monitoring(true);
         while (monitoring())
@@ -121,5 +121,5 @@ namespace process
             }
         }
         monitoring(false);
-        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] Monitoring thread stopped with ID: " + oss.str());}
+        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] | Monitoring thread stopped with ID: " + oss.str());}
 } // namespace process
