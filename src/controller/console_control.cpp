@@ -8,7 +8,7 @@
 #include "nap_time.h"
 #include "process_handler.h"
 #include "simul_process.h"
-
+#include "console_logger.h"
 namespace cli::driver
 {
     void killPid(pid_t pid);
@@ -17,24 +17,25 @@ namespace cli::driver
     void doCommand(const std::string &input);
     void printContext(int numProcesses = -1, const std::string &processType = "");
     void printCommands();
+    static tools::ConsoleLogger cl;
 
     template<typename T> void printpid(const std::string &str, const T &x)
     {
-        tools::LoggerManager::consoleLogger() << str << " " << x;
-        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
+        cl << str << " " << x;
+        cl.flush(tools::LogLevel::INFO);
     }
 
     template<typename T> void printpidE(const std::string &str, const T &x)
     {
 
-        tools::LoggerManager::consoleLogger() << str << " " << x;
-        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::ERROR);
+        cl << str << " " << x;
+        cl.flush(tools::LogLevel::ERROR);
     }
 
     template<typename T> void printpidW(const std::string &str, const T &x)
     {
-        tools::LoggerManager::consoleLogger() << str << " " << x;
-        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::WARNING);
+        cl << str << " " << x;
+        cl.flush(tools::LogLevel::WARNING);
     }
 
     void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType)
@@ -323,15 +324,15 @@ namespace cli::driver
     int LoggerExample()
     {
         //
-        tools::LoggerManager::consoleLogger().log(tools::LogLevel::INFO, "This is an info message.");
-        tools::LoggerManager::consoleLogger().log(tools::LogLevel::WARNING, "This is a warning message.");
-        tools::LoggerManager::consoleLogger().log(tools::LogLevel::ERROR, "This is an error message.");
-        tools::LoggerManager::consoleLogger().logInfo("This is an info message.");
-        tools::LoggerManager::consoleLogger().logWarning("This is a warning message.");
-        tools::LoggerManager::consoleLogger().logError("This is an error message.");
-        tools::LoggerManager::consoleLogger() << "Starting a new log entry with operator<< ";
-        tools::LoggerManager::consoleLogger() << "and adding more details.";
-        tools::LoggerManager::consoleLogger().flush(tools::LogLevel::INFO);
+        cl.log(tools::LogLevel::INFO, "This is an info message.");
+        cl.log(tools::LogLevel::WARNING, "This is a warning message.");
+        cl.log(tools::LogLevel::ERROR, "This is an error message.");
+        cl.logInfo("This is an info message.");
+        cl.logWarning("This is a warning message.");
+        cl.logError("This is an error message.");
+        cl << "Starting a new log entry with operator<< ";
+        cl << "and adding more details.";
+        cl.flush(tools::LogLevel::INFO);
         //
         return 0;
     }

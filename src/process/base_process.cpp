@@ -20,7 +20,6 @@ namespace process
     {
         tools::LoggerManager::createLoggerType();
         Communicator::getInstance().sendCreationMessage();
-        tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Process work started");
     }
 
     void BaseProcess::postWork()
