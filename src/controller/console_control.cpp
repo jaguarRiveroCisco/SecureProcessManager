@@ -5,6 +5,7 @@
 #include <thread>
 #include <unistd.h>
 #include "logger_instance.h"
+#include "nap_time.h"
 #include "process_handler.h"
 #include "simul_process.h"
 

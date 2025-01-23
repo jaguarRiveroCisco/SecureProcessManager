@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include "communicator.h"
 #include "logger_instance.h"
+#include "nap_time.h"
+
 namespace process
 {
     void ProcessSimulator::setSleepDuration()

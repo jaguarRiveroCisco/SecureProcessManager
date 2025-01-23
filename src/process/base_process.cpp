@@ -1,9 +1,11 @@
 #include "base_process.h"
-#include <unistd.h>
-#include "logger_instance.h"
-#include "communicator.h"
-#include <thread>
 #include <random>
+#include <thread>
+#include <unistd.h>
+#include "communicator.h"
+#include "logger_instance.h"
+#include "nap_time.h"
+
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};

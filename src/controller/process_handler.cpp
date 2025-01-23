@@ -4,6 +4,7 @@
 #include "communicator.h"
 #include "console_control.h"
 #include "logger_instance.h"
+#include "nap_time.h"
 #include "network_process.h"
 #include "process.h"
 #include "simul_process.h"

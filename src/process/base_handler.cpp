@@ -4,6 +4,7 @@
 #include <thread>
 #include <unistd.h> // Include this header for _exit
 #include "logger_instance.h"
+#include "nap_time.h"
 
 namespace process
 {

@@ -57,8 +57,8 @@ namespace tools
         sem_t      *sem = sem_open(sem_name.c_str(), 0);
         if (sem == SEM_FAILED)
         {
-            strError = "sem_open: Failed to open semaphore: " + sem_name;
-            perror(strError.c_str());
+            //strError = "sem_open: Failed to open semaphore: " + sem_name;
+            //perror(strError.c_str());
             return;
         }
         if (sem_close(sem) == -1)
@@ -73,7 +73,7 @@ namespace tools
         }
         else
         {
-            std::cout << "Unlinked semaphore: " << sem_name << std::endl;
+            //std::cout << "Unlinked semaphore: " << sem_name << std::endl;
         }
     }
 }
