@@ -9,7 +9,7 @@
 #include "process_handler.h"
 #include "simul_process.h"
 #include "console_logger.h"
-#include "command_controller.h"
+#include "thread_controller.h"
 namespace cli::driver
 {
     void killPid(pid_t pid);
