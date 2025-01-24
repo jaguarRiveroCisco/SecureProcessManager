@@ -9,7 +9,7 @@
 #include "process_handler.h"
 #include "simul_process.h"
 #include "console_logger.h"
-#include "thread_controller.h"
+#include "cli_controller.h"
 namespace cli::driver
 {
     void killPid(pid_t pid);
@@ -167,12 +167,12 @@ namespace cli::driver
 
     void consoleLoop(bool run)
     {
-        static cli::driver::CLIController *cc{nullptr};
+         static std::unique_ptr<cli::driver::CLIController> cc{nullptr};
         if (run)
         {
             if(!cc)
             {
-                cc = new cli::driver::CLIController();
+                cc = std::make_unique<cli::driver::CLIController>();
                 cc->run(doCommand);
             }
         }
@@ -181,11 +181,9 @@ namespace cli::driver
             if(cc)
             {
                 cc->stop();
-                delete cc;
-                cc = nullptr;
+                cc.reset();
             }
         }
-
     }
 
     std::vector<std::string> splitString(const std::string &input, char delimiter)
