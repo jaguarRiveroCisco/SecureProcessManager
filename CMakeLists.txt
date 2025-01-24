@@ -44,6 +44,7 @@ src/tools/random_stuff.cpp
 src/tools/time_manager.cpp
 src/synchro/semaphore_guard.cpp
 src/synchro/synchro.cpp
+src/tools/thread_controller.cpp
 
 # Logger
 src/logger/logger.cpp

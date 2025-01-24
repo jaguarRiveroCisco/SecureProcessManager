@@ -15,21 +15,9 @@ namespace cli::driver
     public:
         virtual ~ThreadController() = default;
 
-        void run(std::function<void(const std::string &)> commandFunc)
-        {
-            this->commandFunc = std::move(commandFunc);
-            stopFlag          = false;
-            readerThread      = std::thread(&ThreadController::runThread, this);
-        }
+        void run(std::function<void(const std::string &)> commandFunc);
 
-        void stop()
-        {
-            stopFlag = true;
-            if (readerThread.joinable())
-            {
-                readerThread.join();
-            }
-        }
+        void stop();
 
     protected:
         virtual void runThread() = 0;
