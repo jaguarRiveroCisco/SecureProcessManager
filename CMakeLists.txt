@@ -36,6 +36,7 @@ src/networkprocess/network_process.cpp
 src/controller/process_handler.cpp
 src/controller/console_control.cpp
 src/controller/controller_base.cpp
+src/controller/cli_controller.cpp
 
 # Tools
 src/tools/timestamp.cpp
