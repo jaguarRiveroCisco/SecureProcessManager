@@ -10,14 +10,16 @@
 
 namespace cli::driver
 {
-    class CommandController 
+    class ThreadController 
     {
     public:
+        virtual ~ThreadController() = default;
+
         void run(std::function<void(const std::string &)> commandFunc)
         {
-            stopFlag          = false;
             this->commandFunc = std::move(commandFunc);
-            readerThread      = std::thread(&CommandController::consoleLoop, this);
+            stopFlag          = false;
+            readerThread      = std::thread(&ThreadController::runThread, this);
         }
 
         void stop()
@@ -29,12 +31,20 @@ namespace cli::driver
             }
         }
 
-    private:
-        std::thread                              readerThread;
-        std::atomic<bool>                        stopFlag;
+    protected:
+        virtual void runThread() = 0;
+
+        std::atomic<bool>                        stopFlag{false};
         std::function<void(const std::string &)> commandFunc;
 
-        void consoleLoop()
+    private:
+        std::thread readerThread;
+    };
+
+    class CLIController : public ThreadController 
+    {
+    protected:
+        void runThread() override
         {
             std::string input;
             while (!stopFlag)

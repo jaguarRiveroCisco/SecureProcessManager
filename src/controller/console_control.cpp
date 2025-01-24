@@ -167,12 +167,12 @@ namespace cli::driver
 
     void consoleLoop(bool run)
     {
-        static cli::driver::CommandController* cc {nullptr};
+        static cli::driver::CLIController *cc{nullptr};
         if (run)
         {
             if(!cc)
             {
-                cc = new cli::driver::CommandController();
+                cc = new cli::driver::CLIController();
                 cc->run(doCommand);
             }
         }
