@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+clear
 # Default process name
 process_name="ProcessController"
 
@@ -11,8 +11,6 @@ fi
 previous_output=""
 previous_line_count=0
 current_pid=$$
-# Variable to track if the say command was executed
-say_executed=false
 
 while true; do
   # Capture the output excluding the script and its process
@@ -30,17 +28,10 @@ while true; do
     echo "$current_output"
     echo "Total number of $process_name processes: $line_count"
 
-    if [[ "$line_count" -ne "$previous_line_count" ]]; then
-      say -r 300 "$line_count"
-      say_executed=true
-    fi
-
     previous_output="$current_output"
     previous_line_count="$line_count"
   fi
 
-  # Only sleep if say was not executed
-  if [[ "$say_executed" == false ]]; then
-    sleep 0.01  # Sleep for 100 milliseconds
-  fi
+  sleep 0.01  # Sleep for 100 milliseconds
+
 done
