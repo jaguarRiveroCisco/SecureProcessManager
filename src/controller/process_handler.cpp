@@ -71,7 +71,7 @@ namespace process
         setNumProcesses(numProcesses);
         createHandlers(numProcesses_);
         CreateMonitoringThreads();
-        std::thread readerThread(cli::driver::main);
+        std::thread readerThread(cli::driver::consoleLoop);
         processLifecycleLoop();
         readerThread.join(); // Ensure the reader thread is joined before exiting
     }

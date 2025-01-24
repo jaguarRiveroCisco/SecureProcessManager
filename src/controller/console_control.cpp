@@ -164,7 +164,7 @@ namespace cli::driver
                 << std::flush;
     }
 
-    void main()
+    void consoleLoop()
     {
         std::string input;
         while (process::ControllerBase::running())

@@ -3,7 +3,7 @@
 #include <string>
 namespace cli::driver
 {
-    void                      main();
+    void                      consoleLoop();
     void                      parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType);
     template<typename T> void printpid(const std::string &str, const T &x = T());
     int                       LoggerExample();
