@@ -9,6 +9,7 @@
 #include "process_handler.h"
 #include "simul_process.h"
 #include "console_logger.h"
+#include "command_controller.h"
 namespace cli::driver
 {
     void killPid(pid_t pid);
@@ -164,15 +165,27 @@ namespace cli::driver
                 << std::flush;
     }
 
-    void consoleLoop()
+    void consoleLoop(bool run)
     {
-        std::string input;
-        while (process::ControllerBase::running())
+        static cli::driver::CommandController* cc {nullptr};
+        if (run)
         {
-            std::getline(std::cin, input);
-            doCommand(input);
-            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
+            if(!cc)
+            {
+                cc = new cli::driver::CommandController();
+                cc->run(doCommand);
+            }
         }
+        else
+        {
+            if(cc)
+            {
+                cc->stop();
+                delete cc;
+                cc = nullptr;
+            }
+        }
+
     }
 
     std::vector<std::string> splitString(const std::string &input, char delimiter)
