@@ -232,7 +232,7 @@ namespace cli::driver
         }
         else if (input == "int all")
         {
-            printpid("[INTTERRUPT ALL] Interrupting all processes and exiting.", "");
+            printpid("[INTERRUPT ALL] Interrupting all processes and exiting.", "");
             process::Controller::intAll();
         }
         else if (input.rfind("int ", 0) == 0)

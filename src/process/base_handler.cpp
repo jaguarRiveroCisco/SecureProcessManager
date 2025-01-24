@@ -103,8 +103,6 @@ namespace process
             }
             else if (result == pid_)
             {
-                displayProcessStatus(status);
-                concurrency::Synchro::getInstance().pushPid(pid_);
                 break;
             }
             else
@@ -115,6 +113,8 @@ namespace process
             }
         }
         monitoring(false);
+        displayProcessStatus(status);
+        concurrency::Synchro::getInstance().pushPid(pid_);
     }
 
 } // namespace process
