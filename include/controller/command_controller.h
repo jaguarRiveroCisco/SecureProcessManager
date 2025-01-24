@@ -16,7 +16,7 @@ namespace cli::driver
         void run(std::function<void(const std::string &)> commandFunc)
         {
             stopFlag          = false;
-            this->commandFunc = commandFunc;
+            this->commandFunc = std::move(commandFunc);
             readerThread      = std::thread(&CommandController::consoleLoop, this);
         }
 
