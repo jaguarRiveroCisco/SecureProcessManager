@@ -9,6 +9,8 @@
 #include "process.h"
 #include "simul_process.h"
 #include "random_stuff.h"
+#include "system_controller.h"
+#include "system_process.h"
 
 namespace process
 {
@@ -26,6 +28,12 @@ namespace process
         else if (processType_ == "network")
         {
             handler->init(std::make_unique<NetworkProcess>());
+        }
+        else if (processType_ == "system")
+        {
+            handler.reset();
+            handler = std::make_unique<SystemController>();
+            handler->init(std::make_unique<SystemProcess>());
         }
         else
         {

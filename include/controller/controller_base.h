@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef CONTROLLER_BASE_H
+#define CONTROLLER_BASE_H
+
 #include "base_handler.h"
 #include "process_interface.h"
 
@@ -28,15 +33,17 @@ namespace process
 
     protected:
         static std::vector<std::unique_ptr<ControllerBase>> handlers_;
-        static void        setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
+        virtual void forkAndExecuteChildProcess();
+        static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
         static int         numProcesses_;
         static std::string processType_;
         static LoggingType loggingType_;
+        std::unique_ptr<IProcess> process_;
 
     private:
-        void                              forkAndExecuteChildProcess();
-        std::unique_ptr<IProcess>         process_;
         static std::atomic<bool> running_;
         static std::atomic<bool> respawn_;
     };
 } // namespace process
+
+#endif // CONTROLLER_BASE_H

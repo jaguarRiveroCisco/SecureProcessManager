@@ -12,8 +12,8 @@ include_directories(
     include/tools
     include/logger
     include/networkprocess
-        /opt/homebrew/Cellar/asio/1.30.2/include  # Add the ASIO include directory
-
+    include/systemprocess
+    /opt/homebrew/Cellar/asio/1.30.2/include  # Add the ASIO include directory
 )
 
 
@@ -32,11 +32,15 @@ src/process/base_process.cpp
 # Network sources
 src/networkprocess/network_process.cpp
 
+# System sources
+src/systemprocess/system_process.cpp
+
 # Controller sources
 src/controller/process_handler.cpp
 src/controller/console_control.cpp
 src/controller/controller_base.cpp
 src/controller/cli_controller.cpp
+src/controller/system_controller.cpp
 
 # Tools
 src/tools/timestamp.cpp

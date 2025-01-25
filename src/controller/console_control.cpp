@@ -58,7 +58,8 @@ namespace cli::driver
                 case 't':
                     // Set the process type from the argument
                     processType = optarg;
-                    if (processType != "real" && processType != "simul" && processType != "network")
+                    if (processType != "real" && processType != "simul" && processType != "network" &&
+                        processType != "system")
                     {
                         printpidW("Invalid process type defaulting to ", "simul");
                         processType = "simul";
@@ -104,7 +105,7 @@ namespace cli::driver
                     // Display usage information and exit
                     printpid(argv[0], "Usage:\n"
                                       "-n <number of processes>\n"
-                                      "-t <process type 'real' or 'simul' (default)>\n"
+                                      "-t <process type 'real', 'network', 'system' or 'simul' (default)>\n"
                                       "-s <respawn (0 or 1)>\n"
                                       "-l <logging type 'console' or 'file'>\n"
                                       "-T <nap time type 'MS', 'SEC', 'MIN'>\n"
