@@ -1,25 +1,41 @@
 #!/usr/bin/env bash
 
 clean() {
+  say "Cleaning..."
   rm -rf build > /dev/null 2>&1
 }
 
 conf() {
-  cmake -B build -S . > /dev/null 2>&1
+  say "Configuring..."
+  if ! cmake -B build -S . > /dev/null 2>&1; then
+    say "Error during configuration"
+    exit 1
+  fi
 }
 
 build() {
-  cmake --build build --parallel 3
-}
-clear
-rm logs/*.log > /dev/null 2>&1
-if [ "$1" == "clean" ]; then
-  clean
-elif [ "$1" == "conf" ]; then
-  conf
-else
-  if [ ! -d "build" ]; then
-    conf
+  say "Building..."
+  if ! cmake --build build --parallel 3; then
+    say "Error during building"
+    exit 1
   fi
-  build
-fi
+}
+
+# Clear terminal screen and remove old log files
+clear
+rm -f logs/*.log > /dev/null 2>&1
+
+case "$1" in
+  clean)
+    clean
+    ;;
+  conf)
+    conf
+    ;;
+  *)
+    [ ! -d "build" ] && conf
+    build
+    ;;
+esac
+
+say "Done"
