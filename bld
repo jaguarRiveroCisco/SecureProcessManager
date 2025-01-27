@@ -31,6 +31,12 @@ build() {
   fi
 }
 
+doall() {
+  clean
+  conf "unix"
+  build
+}
+
 # Clear terminal screen and remove old log files
 clear
 rm -f logs/*.log > /dev/null 2>&1
@@ -41,6 +47,12 @@ case "$1" in
     ;;
   conf)
     conf "$2"
+    ;;
+  build)
+    build
+    ;;
+  doall)
+    doall
     ;;
   *)
     [ ! -d "build" ] && conf "unix"
