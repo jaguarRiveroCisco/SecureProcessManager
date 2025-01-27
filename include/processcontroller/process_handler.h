@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PROCESS_HANDLER_H
-#define PROCESS_HANDLER_H
+#ifndef MAIN_CONTROLLER_H
+#define MAIN_CONTROLLER_H
 
 #include "process_controller.h"
 
@@ -22,4 +22,4 @@ namespace process
     };
 } // namespace process
 
-#endif // PROCESS_HANDLER_H
+#endif // MAIN_CONTROLLER_H
