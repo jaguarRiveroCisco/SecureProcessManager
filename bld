@@ -7,7 +7,7 @@ clean() {
 
 conf() {
   say "Configuring..."
-  if ! cmake -B build -S . > /dev/null 2>&1; then
+  if ! cmake -B build -S . ; then
     say "Error during configuration"
     exit 1
   fi

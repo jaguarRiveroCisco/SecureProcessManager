@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Include directories
 include_directories(
-    include/controller
+    include/consolecontroller
+    include/processcontroller
     include/process
     include/synchro
     include/tools
@@ -22,9 +23,6 @@ add_executable(ProcessController
 src/ProcessController.cpp 
 
 # Process sources
-src/process/messenger.cpp 
-src/process/base_handler.cpp
-src/process/communicator.cpp
 src/process/simul_process.cpp
 src/process/process.cpp
 src/process/base_process.cpp
@@ -35,20 +33,27 @@ src/networkprocess/network_process.cpp
 # System sources
 src/systemprocess/system_process.cpp
 
-# Controller sources
-src/controller/process_handler.cpp
-src/controller/console_control.cpp
-src/controller/controller_base.cpp
-src/controller/cli_controller.cpp
-src/controller/system_controller.cpp
+# ProcessController sources
+src/processcontroller/base_handler.cpp
+src/processcontroller/controller_base.cpp
+src/processcontroller/system_controller.cpp
+src/processcontroller/process_handler.cpp
+
+# Console Controller sources
+src/consolecontroller/console_control.cpp
+src/consolecontroller/cli_controller.cpp
 
 # Tools
 src/tools/timestamp.cpp
 src/tools/random_stuff.cpp
 src/tools/time_manager.cpp
+src/tools/thread_controller.cpp
+
+# synchronization
+src/synchro/communicator.cpp
+src/synchro/messenger.cpp
 src/synchro/semaphore_guard.cpp
 src/synchro/synchro.cpp
-src/tools/thread_controller.cpp
 
 # Logger
 src/logger/logger.cpp
