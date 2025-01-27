@@ -29,17 +29,13 @@ namespace process
         static std::string &processType() { return processType_; }
         static std::vector<std::unique_ptr<ProcessController>> &handlers() { return handlers_; }
 
-        void init(std::unique_ptr<IProcess> process);
-
         static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
         static int numProcesses() { return numProcesses_; }
     protected:
         static std::vector<std::unique_ptr<ProcessController>> handlers_;
-        virtual void forkAndExecuteChildProcess();
         static int         numProcesses_;
         static std::string processType_;
         static LoggingType loggingType_;
-        std::unique_ptr<IProcess> process_;
 
     private:
         static std::atomic<bool> running_;

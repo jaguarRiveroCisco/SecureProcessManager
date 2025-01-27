@@ -6,26 +6,26 @@
 #include "synchro.h"
 namespace process
 {
-    class ProcessMonitor 
-    {
+    class ProcessMonitor {
     public:
-
-        std::atomic<bool>        &monitoring();
-        pid_t                     getPid() const;
-        void                      createMonitorProcessThread();
+        std::atomic<bool> &monitoring();
+        pid_t              getPid() const;
+        void               createMonitorProcessThread();
+        virtual void       init(std::unique_ptr<IProcess> process);
+        virtual void       forkAndExecuteChildProcess();
 
     protected:
         ProcessMonitor()          = default;
         virtual ~ProcessMonitor() = default;
-        void  terminateProcess();
-        void  killProcess();
-        void  intProcess();
-        void  monitorProcessThread();
-        pid_t pid_{0};
+        void                      terminateProcess();
+        void                      killProcess();
+        void                      intProcess();
+        void                      monitorProcessThread();
+        pid_t                     pid_{0};
+        std::unique_ptr<IProcess> process_;
 
     private:
-        std::atomic<bool>        monitor_{false};
-
+        std::atomic<bool> monitor_{false};
     };
 
 } // namespace process

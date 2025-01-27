@@ -12,39 +12,7 @@ namespace process
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
 
-    void ProcessController::init(std::unique_ptr<IProcess> process)
-    {
-        process_ = std::move(process);
-        forkAndExecuteChildProcess();
-    }
-    
-    void ProcessController::forkAndExecuteChildProcess()
-    {
-        pid_ = fork();
-        if (pid_ == 0)
-        {
-            try
-            {
-                process_->work();
-            }
-            catch (const std::exception &e)
-            {
-                // Handle exceptions in child process
-                tools::LoggerManager::getInstance() << "[PARENT PROCESS] Exception in child process: " << e.what();
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
-                exit(EXIT_FAILURE); // Ensure child process exits
-            }
-        }
-        else if (pid_ < 0)
-        {
-            // Fork failed
-            perror("fork");
-            throw std::runtime_error("[PARENT PROCESS] Failed to fork process");
-        }
-        else
-        {
-        }
-    }
+
     
     // Implementation of the new method
     std::string ProcessController::loggingTypeToString()
