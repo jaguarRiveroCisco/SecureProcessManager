@@ -73,7 +73,7 @@ namespace process
 
     void ProcessController::killAll()
     {
-        running(false);
+        running() = false;
 
         for (auto &handler: handlers_)
         {
@@ -83,7 +83,7 @@ namespace process
 
     void ProcessController::terminateAll()
     {
-        running(false);
+        running() = false;
         for (auto &handler: handlers_)
         {
             handler->terminateProcess();
@@ -106,7 +106,7 @@ namespace process
 
     void ProcessController::intAll()
     {
-        running(false);
+        running() = false; 
         for (auto &handler: handlers_)
         {
             handler->intProcess();

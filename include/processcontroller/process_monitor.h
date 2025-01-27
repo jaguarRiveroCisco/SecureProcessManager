@@ -9,24 +9,23 @@ namespace process
     class ProcessMonitor 
     {
     public:
-        pid_t getPid() const;
-        static bool running();
-        static bool respawn();
-        static void running(bool);
-        static void respawn(bool);
-        std::atomic<bool>&  monitoring();
-        void        createMonitorProcessThread();
+        static std::atomic<bool> &running();
+        static std::atomic<bool> &respawn();
+        std::atomic<bool>        &monitoring();
+        pid_t                     getPid() const;
+        void                      createMonitorProcessThread();
 
     protected:
-        ProcessMonitor() = default;
+        ProcessMonitor()          = default;
         virtual ~ProcessMonitor() = default;
-        void    terminateProcess();
-        void    killProcess();
-        void    intProcess();
-        void    monitorProcessThread();
+        void  terminateProcess();
+        void  killProcess();
+        void  intProcess();
+        void  monitorProcessThread();
         pid_t pid_{0};
+
     private:
-        std::atomic<bool> monitor_ {false};
+        std::atomic<bool>        monitor_{false};
         static std::atomic<bool> running_;
         static std::atomic<bool> respawn_;
     };

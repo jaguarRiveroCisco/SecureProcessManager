@@ -54,18 +54,11 @@ namespace process
 
     void ProcessMonitor::intProcess() { sendSignal(SIGINT, pid_); }
 
-    std::atomic<bool>& ProcessMonitor::monitoring()
-    {
-        return monitor_;
-    }
+    std::atomic<bool>& ProcessMonitor::monitoring() { return monitor_; }
 
-    bool ProcessMonitor::running() { return running_; }
+    std::atomic<bool> &ProcessMonitor::running() { return running_; }
 
-    bool ProcessMonitor::respawn() { return respawn_; }
-
-    void ProcessMonitor::running(bool value) { running_ = value; }
-
-    void ProcessMonitor::respawn(bool value) { respawn_ = value; }
+    std::atomic<bool>& ProcessMonitor::respawn() { return respawn_; }
 
     void ProcessMonitor::createMonitorProcessThread()
     {

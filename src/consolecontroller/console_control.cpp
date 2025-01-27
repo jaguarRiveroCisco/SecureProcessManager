@@ -66,7 +66,7 @@ namespace cli::driver
                     }
                     break;
                 case 's':
-                    process::ProcessController::respawn(std::atoi(optarg) != 0);
+                    process::ProcessController::respawn() = std::atoi(optarg) != 0;
                     break;
                 case 'l':
                     // Set the logging type from the argument
@@ -215,7 +215,7 @@ namespace cli::driver
         }
         else if (input == "quit")
         {
-            process::ProcessController::running(false);
+            process::ProcessController::running() = false;
             printpid("[QUIT] Signalling the program to gracefully quit at the next loop.", "");
         }
         else if (input == "term all")
@@ -271,12 +271,12 @@ namespace cli::driver
         }
         else if (input == "respawn on")
         {
-            process::ProcessController::respawn(true);
+            process::ProcessController::respawn() = true;
             printpid("[RESPAWN] Respawn feature is now", "ON");
         }
         else if (input == "respawn off")
         {
-            process::ProcessController::respawn(false);
+            process::ProcessController::respawn() = false;
             printpid("[RESPAWN] Respawn feature is now", "OFF");
         }
         else
