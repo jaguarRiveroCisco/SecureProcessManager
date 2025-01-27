@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 
 clean() {
-  say "Cleaning..."
+  say "Cleaning up..."
   rm -rf build > /dev/null 2>&1
 }
 
 conf() {
   say "Configuring..."
-  if ! cmake -B build -S . ; then
-    say "Error during configuration"
+  local generator=$1
+  if [ "$generator" == "ninja" ]; then
+    say "Ninja mode on!"
+    cmake -B build -S . -G Ninja
+  else
+    say "Using Unix Makefiles..."
+    cmake -B build -S . -G "Unix Makefiles"
+  fi
+
+  if [ $? -ne 0 ]; then
+    say "Config failed! Exiting!"
     exit 1
   fi
 }
@@ -16,7 +25,8 @@ conf() {
 build() {
   say "Building..."
   if ! cmake --build build --parallel 3; then
-    say "Error during building"
+    say "Build error!"
+    say "Aborting build!"
     exit 1
   fi
 }
@@ -30,12 +40,12 @@ case "$1" in
     clean
     ;;
   conf)
-    conf
+    conf "$2"
     ;;
   *)
-    [ ! -d "build" ] && conf
+    [ ! -d "build" ] && conf "unix"
     build
     ;;
 esac
 
-say "Done"
+say "All done!"
