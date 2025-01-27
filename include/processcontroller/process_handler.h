@@ -1,5 +1,8 @@
+#pragma once
+
 #ifndef PROCESS_HANDLER_H
 #define PROCESS_HANDLER_H
+
 #include "process_controller.h"
 
 namespace process

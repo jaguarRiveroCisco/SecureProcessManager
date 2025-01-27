@@ -1,5 +1,8 @@
-#ifndef PROCESS_BASE_H
-#define PROCESS_BASE_H
+#pragma once
+
+#ifndef PROCESS_MONITOR_H
+#define PROCESS_MONITOR_H
+
 #include "synchro.h"
 namespace process
 {
@@ -31,4 +34,4 @@ namespace process
 
 } // namespace process
 
-#endif // PROCESS_BASE_H
+#endif // PROCESS_MONITOR_H

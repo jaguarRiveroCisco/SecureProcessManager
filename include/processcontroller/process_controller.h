@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef CONTROLLER_BASE_H
-#define CONTROLLER_BASE_H
+#ifndef PROCESS_CONTROLLER_H
+#define PROCESS_CONTROLLER_H
 
 #include "process_monitor.h"
 #include "process_interface.h"
@@ -42,4 +42,4 @@ namespace process
     };
 } // namespace process
 
-#endif // CONTROLLER_BASE_H
+#endif // PROCESS_CONTROLLER_H
