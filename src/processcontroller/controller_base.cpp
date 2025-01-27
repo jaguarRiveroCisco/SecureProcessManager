@@ -5,8 +5,7 @@ namespace process
 {
     int         ControllerBase::numProcesses_ = 4; // Default number of processes
     std::string ControllerBase::processType_  = "simul"; // Default process type
-    std::atomic<bool> ControllerBase::running_ = true;
-    std::atomic<bool> ControllerBase::respawn_ = true;
+
     std::vector<std::unique_ptr<ControllerBase>> ControllerBase::handlers_;
     // Initialize static members
     LoggingType ControllerBase::loggingType_ = LoggingType::Console;
@@ -45,14 +44,6 @@ namespace process
         }
     }
     
-    bool ControllerBase::running() { return running_ == true; }
-
-    bool ControllerBase::respawn() { return respawn_ == true; }
-
-    void ControllerBase::running(bool value) { running_ = value; }
-    
-    void ControllerBase::respawn(bool value) { respawn_ = value; }
-
     // Implementation of the new method
     std::string ControllerBase::loggingTypeToString()
     {

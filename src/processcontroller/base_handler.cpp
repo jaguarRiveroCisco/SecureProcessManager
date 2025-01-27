@@ -8,8 +8,10 @@
 
 namespace process
 {
+    std::atomic<bool> ProcessMonitor::running_ = true;
+    std::atomic<bool> ProcessMonitor::respawn_ = true;
 
-    void BaseHandler::displayProcessStatus(int &status)
+    void ProcessMonitor::displayProcessStatus(int &status)
     {
         if (WIFEXITED(status))
         {
@@ -25,9 +27,9 @@ namespace process
         }
     }
     
-    pid_t BaseHandler::getPid() const { return pid_; }
+    pid_t ProcessMonitor::getPid() const { return pid_; }
 
-    bool BaseHandler::isProcessRunning()
+    bool ProcessMonitor::isProcessRunning()
     {
         if (kill(pid_, 0) == -1 && errno == ESRCH)
         {
@@ -38,13 +40,13 @@ namespace process
         return true;
     }
 
-    void BaseHandler::terminateProcess() { sendSignal(SIGTERM); }
+    void ProcessMonitor::terminateProcess() { sendSignal(SIGTERM); }
 
-    void BaseHandler::killProcess() { sendSignal(SIGKILL); }
+    void ProcessMonitor::killProcess() { sendSignal(SIGKILL); }
 
-    void BaseHandler::intProcess() { sendSignal(SIGINT); }
+    void ProcessMonitor::intProcess() { sendSignal(SIGINT); }
 
-    void BaseHandler::sendSignal(int signal)
+    void ProcessMonitor::sendSignal(int signal)
     {
         if (kill(pid_, signal) == -1)
         {
@@ -52,18 +54,26 @@ namespace process
         }
     }
 
-
-    std::atomic<bool> BaseHandler::monitoring() 
+    bool ProcessMonitor::monitoring() const
     {
-        return monitor_ == true;
+        return monitor_;
     }
 
-    void BaseHandler::monitoring(bool value) 
+    void ProcessMonitor::monitoring(bool value) 
+    
     { 
         monitor_ = value;
     }
 
-    void BaseHandler::createMonitorProcessThread()
+    bool ProcessMonitor::running() { return running_; }
+
+    bool ProcessMonitor::respawn() { return respawn_; }
+
+    void ProcessMonitor::running(bool value) { running_ = value; }
+
+    void ProcessMonitor::respawn(bool value) { respawn_ = value; }
+
+    void ProcessMonitor::createMonitorProcessThread()
     {
         if( monitoring() )
         {
@@ -74,7 +84,7 @@ namespace process
         // Create a thread to check the state of the child process
         try
         {
-            std::thread checkThread(&BaseHandler::monitorProcessThread, this);
+            std::thread checkThread(&ProcessMonitor::monitorProcessThread, this);
             checkThread.detach();
         }
         catch (const std::system_error &e)
@@ -85,7 +95,7 @@ namespace process
         }
     }
 
-    void BaseHandler::monitorProcessThread()
+    void ProcessMonitor::monitorProcessThread()
     {
         int  status   = -1;
         monitoring(true);

@@ -10,13 +10,10 @@ namespace process
 {
     enum class LoggingType { Console, File };
 
-    class ControllerBase : public BaseHandler 
+    class ControllerBase : public ProcessMonitor 
     {
     public:
-        static bool running();
-        static bool respawn();
-        static void running(bool);
-        static void respawn(bool);
+
         static void terminateAll();
         static void terminateProcessByPid(pid_t pid);
         static void intProcessByPid(pid_t pid);
@@ -26,10 +23,10 @@ namespace process
         static void displayAllPids();
         static void pauseMonitoring();
         static void continueMonitoring();
-        void        init(std::unique_ptr<IProcess> process);
         static void setProcessType(const std::string &processType);
-
         static std::string  loggingTypeToString(); // New method
+
+               void init(std::unique_ptr<IProcess> process);
 
     protected:
         static std::vector<std::unique_ptr<ControllerBase>> handlers_;
@@ -41,8 +38,7 @@ namespace process
         std::unique_ptr<IProcess> process_;
 
     private:
-        static std::atomic<bool> running_;
-        static std::atomic<bool> respawn_;
+
     };
 } // namespace process
 
