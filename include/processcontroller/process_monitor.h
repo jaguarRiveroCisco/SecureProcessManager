@@ -14,8 +14,7 @@ namespace process
         static bool respawn();
         static void running(bool);
         static void respawn(bool);
-        bool        monitoring() const;
-        void        monitoring(bool);
+        std::atomic<bool>&  monitoring();
         void        createMonitorProcessThread();
 
     protected:

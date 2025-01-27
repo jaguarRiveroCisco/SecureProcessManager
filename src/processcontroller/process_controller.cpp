@@ -95,7 +95,7 @@ namespace process
         concurrency::Synchro::getInstance().pauseMonitoring(true);
         for(auto &handler: handlers_)
         {
-            handler->monitoring(false);
+            handler->monitoring() = false;
         }
     }
 

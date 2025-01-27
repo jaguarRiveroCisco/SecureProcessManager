@@ -54,15 +54,9 @@ namespace process
 
     void ProcessMonitor::intProcess() { sendSignal(SIGINT, pid_); }
 
-    bool ProcessMonitor::monitoring() const
+    std::atomic<bool>& ProcessMonitor::monitoring()
     {
         return monitor_;
-    }
-
-    void ProcessMonitor::monitoring(bool value) 
-    
-    { 
-        monitor_ = value;
     }
 
     bool ProcessMonitor::running() { return running_; }
@@ -98,7 +92,7 @@ namespace process
     void ProcessMonitor::monitorProcessThread()
     {
         int  status   = -1;
-        monitoring(true);
+        monitoring() = true;
         while (monitoring())
         {
             // Check if the process with PID = pid_ is running
@@ -113,6 +107,8 @@ namespace process
             }
             else if (result == pid_)
             {
+                displayProcessStatus(status, pid_);
+                concurrency::Synchro::getInstance().enqueueTerminatedPid(pid_);
                 break;
             }
             else
@@ -122,9 +118,8 @@ namespace process
                 break;
             }
         }
-        monitoring(false);
-        displayProcessStatus(status, pid_);
-        concurrency::Synchro::getInstance().enqueueTerminatedPid(pid_);
+        monitoring() = false;
+
     }
 
 } // namespace process
