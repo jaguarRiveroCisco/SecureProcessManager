@@ -9,8 +9,7 @@ namespace process
     class ProcessMonitor 
     {
     public:
-        static std::atomic<bool> &running();
-        static std::atomic<bool> &respawn();
+
         std::atomic<bool>        &monitoring();
         pid_t                     getPid() const;
         void                      createMonitorProcessThread();
@@ -26,8 +25,7 @@ namespace process
 
     private:
         std::atomic<bool>        monitor_{false};
-        static std::atomic<bool> running_;
-        static std::atomic<bool> respawn_;
+
     };
 
 } // namespace process

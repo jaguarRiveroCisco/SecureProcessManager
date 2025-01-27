@@ -8,8 +8,7 @@
 
 namespace process
 {
-    std::atomic<bool> ProcessMonitor::running_ = true;
-    std::atomic<bool> ProcessMonitor::respawn_ = true;
+
 
     void displayProcessStatus(int &status, pid_t pid)
     {
@@ -55,10 +54,6 @@ namespace process
     void ProcessMonitor::intProcess() { sendSignal(SIGINT, pid_); }
 
     std::atomic<bool>& ProcessMonitor::monitoring() { return monitor_; }
-
-    std::atomic<bool> &ProcessMonitor::running() { return running_; }
-
-    std::atomic<bool>& ProcessMonitor::respawn() { return respawn_; }
 
     void ProcessMonitor::createMonitorProcessThread()
     {

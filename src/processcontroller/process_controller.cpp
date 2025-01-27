@@ -5,6 +5,8 @@ namespace process
 {
     int         ProcessController::numProcesses_ = 4; // Default number of processes
     std::string ProcessController::processType_  = "simul"; // Default process type
+    std::atomic<bool> ProcessController::running_      = true;
+    std::atomic<bool> ProcessController::respawn_      = true;
 
     std::vector<std::unique_ptr<ProcessController>> ProcessController::handlers_;
     // Initialize static members
@@ -112,6 +114,10 @@ namespace process
             handler->intProcess();
         }
     }
+
+    std::atomic<bool> &ProcessController::running() { return running_; }
+
+    std::atomic<bool> &ProcessController::respawn() { return respawn_; }
 
     void ProcessController::killProcessByPid(pid_t pid)
     {

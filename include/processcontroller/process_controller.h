@@ -13,7 +13,8 @@ namespace process
     class ProcessController : public ProcessMonitor 
     {
     public:
-
+        static std::atomic<bool>                               &running();
+        static std::atomic<bool>                               &respawn();
         static void terminateAll();
         static void terminateProcessByPid(pid_t pid);
         static void intProcessByPid(pid_t pid);
@@ -41,7 +42,8 @@ namespace process
         std::unique_ptr<IProcess> process_;
 
     private:
-
+        static std::atomic<bool> running_;
+        static std::atomic<bool> respawn_;
     };
 } // namespace process
 
