@@ -34,7 +34,7 @@ src/networkprocess/network_process.cpp
 src/systemprocess/system_process.cpp
 
 # ProcessController sources
-src/processcontroller/base_handler.cpp
+src/processcontroller/process_monitor.cpp
 src/processcontroller/controller_base.cpp
 src/processcontroller/system_controller.cpp
 src/processcontroller/process_handler.cpp
