@@ -18,7 +18,7 @@ namespace process
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);
         static void createHandler();
-        static void removeHandler();
+        static bool removeHandler();
     };
 } // namespace process
 

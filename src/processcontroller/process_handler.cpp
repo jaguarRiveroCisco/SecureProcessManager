@@ -83,8 +83,7 @@ namespace process
         processLifecycleLoop();
         cli::driver::consoleLoop(false);
     }
-
-    void Controller::removeHandler()
+    bool Controller::removeHandler()
     {
         if (!handlers_.empty())
         {
@@ -101,6 +100,7 @@ namespace process
                     if (it != handlers_.end())
                     {
                         handlers_.erase(it, handlers_.end());
+                        return true; // Handler was removed
                     }
                     else
                     {
@@ -125,6 +125,7 @@ namespace process
             // Log a message if the handlers list is empty
             tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] No handlers to remove, the list is empty.");
         }
+        return false; // No handler was removed
     }
 
     void Controller::processLifecycleLoop()
@@ -142,8 +143,10 @@ namespace process
 
             while (!concurrency::Synchro::getInstance().isTerminatedPidQueueEmpty())
             {
-                removeHandler();
-                processedEvent = true;
+                if(removeHandler())
+                    processedEvent = true;
+                else
+                    break;
             }
 
             if (!processedEvent)
