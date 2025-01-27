@@ -14,7 +14,7 @@
 
 namespace process
 {
-    void Controller::createHandler()
+    void MainController::createHandler()
     {
         auto handler = std::make_unique<ProcessController>();
         if (processType_ == "real")
@@ -44,7 +44,7 @@ namespace process
         handlers_.push_back(std::move(handler));
     }
 
-    void Controller::createHandlers(int numHandlers)
+    void MainController::createHandlers(int numHandlers)
     {
         for (int i = 0; i < numHandlers; ++i)
         {
@@ -61,7 +61,7 @@ namespace process
         }
     }
 
-    void Controller::CreateMonitoringThreads()
+    void MainController::CreateMonitoringThreads()
     {
         if (concurrency::Synchro::getInstance().pauseMonitoring())
             return;
@@ -73,7 +73,7 @@ namespace process
         }
     }
 
-    void Controller::run(const std::string &processType, int numProcesses)
+    void MainController::run(const std::string &processType, int numProcesses)
     {
         setProcessType(processType);
         setNumProcesses(numProcesses);
@@ -83,7 +83,7 @@ namespace process
         processLifecycleLoop();
         cli::driver::consoleLoop(false);
     }
-    bool Controller::removeHandler()
+    bool MainController::removeHandler()
     {
         if (!handlers_.empty())
         {
@@ -128,7 +128,7 @@ namespace process
         return false; // No handler was removed
     }
 
-    void Controller::processLifecycleLoop()
+    void MainController::processLifecycleLoop()
     {
         while (running())
         {
@@ -167,7 +167,7 @@ namespace process
         }
     }
 
-    void Controller::restoreHandlerCount()
+    void MainController::restoreHandlerCount()
     {
         // Check if the number of handlers is less than numProcesses_
         if (running() && respawn() && (handlers_.size() < numProcesses_))

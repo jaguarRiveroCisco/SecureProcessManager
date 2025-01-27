@@ -30,7 +30,7 @@ auto main(int argc, char *argv[]) -> int
    
     tools::LoggerManager::createLoggerType();
 
-    process::Controller::run(processType, numProcesses);
+    process::MainController::run(processType, numProcesses);
 
     cli::driver::printpid("[PARENT PROCESS] Main process exiting", "");
 

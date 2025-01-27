@@ -221,7 +221,7 @@ namespace cli::driver
         else if (input == "term all")
         {
             printpid("[TERMINATE ALL] Terminating all processes and exiting.", "");
-            process::Controller::terminateAll();
+            process::MainController::terminateAll();
         }
         else if (input.rfind("term ", 0) == 0)
         {
@@ -232,7 +232,7 @@ namespace cli::driver
         else if (input == "int all")
         {
             printpid("[INTERRUPT ALL] Interrupting all processes and exiting.", "");
-            process::Controller::intAll();
+            process::MainController::intAll();
         }
         else if (input.rfind("int ", 0) == 0)
         {
@@ -244,12 +244,12 @@ namespace cli::driver
         else if (input == "kill all")
         {
             printpid("[KILL ALL] Killing all processes and exiting.", "");
-            process::Controller::killAll();
+            process::MainController::killAll();
         }
         else if (input == "monitor on")
         {
             process::ProcessController::continueMonitoring();
-            process::Controller::CreateMonitoringThreads();
+            process::MainController::CreateMonitoringThreads();
         }
         else if (input == "monitor off")
         {
@@ -263,7 +263,7 @@ namespace cli::driver
         }
         else if (input == "display pids")
         {
-            process::Controller::displayAllPids();
+            process::MainController::displayAllPids();
         }
         else if (input == "help")
         {
@@ -289,7 +289,7 @@ namespace cli::driver
     {
         try
         {
-            process::Controller::killProcessByPid(pid);
+            process::MainController::killProcessByPid(pid);
         }
         catch (const std::invalid_argument &)
         {
@@ -305,7 +305,7 @@ namespace cli::driver
     {
         try
         {
-            process::Controller::terminateProcessByPid(pid);
+            process::MainController::terminateProcessByPid(pid);
         }
         catch (const std::invalid_argument &)
         {
@@ -321,7 +321,7 @@ namespace cli::driver
     {
         try
         {
-            process::Controller::intProcessByPid(pid);
+            process::MainController::intProcessByPid(pid);
         }
         catch (const std::invalid_argument &)
         {
