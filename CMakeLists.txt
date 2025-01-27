@@ -37,7 +37,7 @@ src/systemprocess/system_process.cpp
 src/processcontroller/process_monitor.cpp
 src/processcontroller/process_controller.cpp
 src/processcontroller/system_controller.cpp
-src/processcontroller/process_handler.cpp
+src/processcontroller/main_controller.cpp
 
 # Console Controller sources
 src/consolecontroller/console_control.cpp

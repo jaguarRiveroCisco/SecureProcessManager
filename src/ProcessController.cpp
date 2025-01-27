@@ -3,7 +3,7 @@
 #include "console_control.h"
 #include "logger_instance.h"
 #include "nap_time.h"
-#include "process_handler.h"
+#include "main_controller.h"
 #include "semaphore_guard.h"
 
 void displayCompilationInfo(const char *appName)

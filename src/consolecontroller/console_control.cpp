@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include "logger_instance.h"
 #include "nap_time.h"
-#include "process_handler.h"
+#include "main_controller.h"
 #include "simul_process.h"
 #include "console_logger.h"
 #include "cli_controller.h"
