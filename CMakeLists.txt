@@ -35,7 +35,7 @@ src/systemprocess/system_process.cpp
 
 # ProcessController sources
 src/processcontroller/process_monitor.cpp
-src/processcontroller/controller_base.cpp
+src/processcontroller/process_controller.cpp
 src/processcontroller/system_controller.cpp
 src/processcontroller/process_handler.cpp
 

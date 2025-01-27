@@ -3,7 +3,7 @@
 #ifndef SYSTEM_CONTROLLER_H
 #define SYSTEM_CONTROLLER_H
 
-#include "controller_base.h"
+#include "process_controller.h"
 
 namespace process
 {
