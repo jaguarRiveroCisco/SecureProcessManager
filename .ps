@@ -14,7 +14,7 @@ current_pid=$$
 
 while true; do
   # Capture the output excluding the script and its process
-  current_output=$(ps -ax -o pid,stat,comm,args | grep "$process_name" | grep -v grep | grep -v "$current_pid" | grep -v "$0")
+  current_output=$(ps -ax -o ppid,pid,stat,comm,args | grep "$process_name" | grep -v grep | grep -v "$current_pid" | grep -v "$0")
   
   # Count the number of non-empty lines in current_output
   line_count=$(echo "$current_output" | grep -c '[^[:space:]]')
