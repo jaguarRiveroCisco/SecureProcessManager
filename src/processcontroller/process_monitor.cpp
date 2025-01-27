@@ -11,29 +11,29 @@ namespace process
     std::atomic<bool> ProcessMonitor::running_ = true;
     std::atomic<bool> ProcessMonitor::respawn_ = true;
 
-    void ProcessMonitor::displayProcessStatus(int &status)
+    void displayProcessStatus(int &status, pid_t pid)
     {
         if (WIFEXITED(status))
         {
         }
         else if (WIFSIGNALED(status))
         {
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid_)
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid)
                                                            + " was terminated by signal " + std::to_string(WTERMSIG(status)) + ".");
         }
         else
         {
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid_) + " exited with an unknown status.");
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid) + " exited with an unknown status.");
         }
     }
     
     pid_t ProcessMonitor::getPid() const { return pid_; }
 
-    bool ProcessMonitor::isProcessRunning()
+    bool isProcessRunning(pid_t pid)
     {
-        if (kill(pid_, 0) == -1 && errno == ESRCH)
+        if (kill(pid, 0) == -1 && errno == ESRCH)
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] | Process " << pid_ << " is not running.";
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] | Process " << pid << " is not running.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
             return false;
         }
@@ -102,7 +102,7 @@ namespace process
         while (monitoring())
         {
             // Check if the process with PID = pid_ is running
-            if (!isProcessRunning())
+            if (!isProcessRunning(pid_))
                 break;
 
             pid_t result = waitpid(pid_, &status, WNOHANG);
@@ -123,8 +123,8 @@ namespace process
             }
         }
         monitoring(false);
-        displayProcessStatus(status);
-        concurrency::Synchro::getInstance().pushPid(pid_);
+        displayProcessStatus(status, pid_);
+        concurrency::Synchro::getInstance().enqueueTerminatedPid(pid_);
     }
 
 } // namespace process

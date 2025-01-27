@@ -90,7 +90,7 @@ namespace process
         {
             try
             {
-                pid_t pid = concurrency::Synchro::getInstance().removeFrontPidQueue();
+                pid_t pid = concurrency::Synchro::getInstance().removeTerminatedProcessPid();
                 if (pid != -1)
                 {
                     // Find and remove the handler with the matching PID
@@ -140,8 +140,7 @@ namespace process
 
             bool processedEvent = false;
 
-            // Process all events if available
-            while (!concurrency::Synchro::getInstance().isPidQueueEmpty())
+            while (!concurrency::Synchro::getInstance().isTerminatedPidQueueEmpty())
             {
                 removeHandler();
                 processedEvent = true;

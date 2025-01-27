@@ -18,8 +18,6 @@ namespace process
     protected:
         ProcessMonitor() = default;
         virtual ~ProcessMonitor() = default;
-        void    displayProcessStatus(int &status);
-        bool    isProcessRunning();
         void    terminateProcess();
         void    killProcess();
         void    intProcess();
