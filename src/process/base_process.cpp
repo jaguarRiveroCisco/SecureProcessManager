@@ -30,6 +30,7 @@ namespace process
     }
 
     std::atomic<bool> &BaseProcess::continueFlag() { return continue_; }
+
     std::atomic<int>  &BaseProcess::exitCode() { return exitCode_; }
 
     void signalHandler(int signum)

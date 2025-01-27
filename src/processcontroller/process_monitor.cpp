@@ -8,8 +8,6 @@
 
 namespace process
 {
-
-
     void displayProcessStatus(int &status, pid_t pid)
     {
         if (WIFEXITED(status))

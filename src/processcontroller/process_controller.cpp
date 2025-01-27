@@ -11,8 +11,6 @@ namespace process
     std::vector<std::unique_ptr<ProcessMonitor>> ProcessController::handlers_;
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
-
-
     
     // Implementation of the new method
     std::string ProcessController::loggingTypeToString()
