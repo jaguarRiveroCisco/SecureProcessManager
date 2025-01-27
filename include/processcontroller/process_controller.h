@@ -25,13 +25,16 @@ namespace process
         static void continueMonitoring();
         static void setProcessType(const std::string &processType);
         static std::string  loggingTypeToString(); // New method
+        static std::string &processType() { return processType_; }
+        static std::vector<std::unique_ptr<ProcessController>> &handlers() { return handlers_; }
 
-               void init(std::unique_ptr<IProcess> process);
+        void init(std::unique_ptr<IProcess> process);
 
+        static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
+        static int numProcesses() { return numProcesses_; }
     protected:
         static std::vector<std::unique_ptr<ProcessController>> handlers_;
         virtual void forkAndExecuteChildProcess();
-        static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
         static int         numProcesses_;
         static std::string processType_;
         static LoggingType loggingType_;

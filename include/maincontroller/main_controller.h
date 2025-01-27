@@ -7,7 +7,7 @@
 
 namespace process
 {
-    class MainController final : public ProcessController 
+    class MainController final
     {
     public:
         static void run(const std::string &processType, int numProcesses);

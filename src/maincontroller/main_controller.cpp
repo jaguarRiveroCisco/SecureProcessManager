@@ -17,19 +17,19 @@ namespace process
     void MainController::createHandler()
     {
         auto handler = std::make_unique<ProcessController>();
-        if (processType_ == "real")
+        if (ProcessController::processType() == "real")
         {
             handler->init(std::make_unique<Process>());
         }
-        else if (processType_ == "simul")
+        else if (ProcessController::processType() == "simul")
         {
             handler->init(std::make_unique<ProcessSimulator>());
         }
-        else if (processType_ == "network")
+        else if (ProcessController::processType() == "network")
         {
             handler->init(std::make_unique<NetworkProcess>());
         }
-        else if (processType_ == "system")
+        else if (ProcessController::processType() == "system")
         {
             handler.reset();
             handler = std::make_unique<SystemController>();
@@ -41,7 +41,7 @@ namespace process
         }
 
         Communicator::getInstance().receiveCreationMessage();
-        handlers_.push_back(std::move(handler));
+        ProcessController::handlers().push_back(std::move(handler));
     }
 
     void MainController::createHandlers(int numHandlers)
@@ -66,7 +66,7 @@ namespace process
         if (concurrency::Synchro::getInstance().pauseMonitoring())
             return;
             
-        for (auto &handler: handlers_)
+        for (auto &handler: ProcessController::handlers())
         {
             if (!handler->monitoring())
                 handler->createMonitorProcessThread();
@@ -75,9 +75,9 @@ namespace process
 
     void MainController::run(const std::string &processType, int numProcesses)
     {
-        setProcessType(processType);
-        setNumProcesses(numProcesses);
-        createHandlers(numProcesses_);
+        ProcessController::setProcessType(processType);
+        ProcessController::setNumProcesses(numProcesses);
+        createHandlers(ProcessController::numProcesses());
         CreateMonitoringThreads();
         cli::driver::consoleLoop();
         processLifecycleLoop();
@@ -85,7 +85,7 @@ namespace process
     }
     bool MainController::removeHandler()
     {
-        if (!handlers_.empty())
+        if (!ProcessController::handlers().empty())
         {
             try
             {
@@ -94,12 +94,12 @@ namespace process
                 {
                     // Find and remove the handler with the matching PID
                     auto it = std::remove_if(
-                            handlers_.begin(), handlers_.end(),
+                            ProcessController::handlers().begin(), ProcessController::handlers().end(),
                             [pid](const std::unique_ptr<ProcessController> &handler) { return handler->getPid() == pid; });
 
-                    if (it != handlers_.end())
+                    if (it != ProcessController::handlers().end())
                     {
-                        handlers_.erase(it, handlers_.end());
+                        ProcessController::handlers().erase(it, ProcessController::handlers().end());
                         return true; // Handler was removed
                     }
                     else
@@ -130,7 +130,7 @@ namespace process
 
     void MainController::processLifecycleLoop()
     {
-        while (running())
+        while (ProcessController::running())
         {
             if (concurrency::Synchro::getInstance().pauseMonitoring())
             {
@@ -158,9 +158,9 @@ namespace process
 
             restoreHandlerCount();
 
-            if (handlers_.empty())
+            if (ProcessController::handlers().empty())
             {
-                running() = false;
+                ProcessController::running() = false;
                 tools::LoggerManager::getInstance() << "[PARENT PROCESS] | All handlers removed, exiting...";
                 tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
             }
@@ -170,9 +170,10 @@ namespace process
     void MainController::restoreHandlerCount()
     {
         // Check if the number of handlers is less than numProcesses_
-        if (running() && respawn() && (handlers_.size() < numProcesses_))
+        if (ProcessController::running() && ProcessController::respawn() &&
+            (ProcessController::handlers().size() < ProcessController::numProcesses()))
         {
-            int numHandlersToCreate = numProcesses_ - handlers_.size();
+            int numHandlersToCreate = ProcessController::numProcesses() - ProcessController::handlers().size();
             createHandlers(numHandlersToCreate);
             CreateMonitoringThreads();
         }
