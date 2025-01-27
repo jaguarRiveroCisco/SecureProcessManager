@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Include directories
 include_directories(
     include/consolecontroller
+    include/maincontroller
     include/processcontroller
     include/process
     include/synchro
@@ -37,11 +38,13 @@ src/systemprocess/system_process.cpp
 src/processcontroller/process_monitor.cpp
 src/processcontroller/process_controller.cpp
 src/processcontroller/system_controller.cpp
-src/processcontroller/main_controller.cpp
 
 # Console Controller sources
 src/consolecontroller/console_control.cpp
 src/consolecontroller/cli_controller.cpp
+
+# Main controller
+src/maincontroller/main_controller.cpp
 
 # Tools
 src/tools/timestamp.cpp
