@@ -16,7 +16,7 @@ namespace process
 {
     void MainController::createHandler()
     {
-        auto handler = std::make_unique<ProcessController>();
+        auto handler = std::make_unique<ProcessMonitor>();
         if (ProcessController::processType() == "real")
         {
             handler->init(std::make_unique<Process>());
@@ -31,8 +31,6 @@ namespace process
         }
         else if (ProcessController::processType() == "system")
         {
-            handler.reset();
-            handler = std::make_unique<SystemController>();
             handler->init(std::make_unique<SystemProcess>());
         }
         else
@@ -95,7 +93,7 @@ namespace process
                     // Find and remove the handler with the matching PID
                     auto it = std::remove_if(
                             ProcessController::handlers().begin(), ProcessController::handlers().end(),
-                            [pid](const std::unique_ptr<ProcessController> &handler) { return handler->getPid() == pid; });
+                            [pid](const std::unique_ptr<ProcessMonitor> &handler) { return handler->getPid() == pid; });
 
                     if (it != ProcessController::handlers().end())
                     {

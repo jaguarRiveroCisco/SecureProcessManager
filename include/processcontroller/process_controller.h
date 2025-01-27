@@ -10,7 +10,7 @@ namespace process
 {
     enum class LoggingType { Console, File };
 
-    class ProcessController : public ProcessMonitor 
+    class ProcessController 
     {
     public:
         static std::atomic<bool>                               &running();
@@ -27,12 +27,12 @@ namespace process
         static void setProcessType(const std::string &processType);
         static std::string  loggingTypeToString(); // New method
         static std::string &processType() { return processType_; }
-        static std::vector<std::unique_ptr<ProcessController>> &handlers() { return handlers_; }
+        static std::vector<std::unique_ptr<ProcessMonitor>> &handlers() { return handlers_; }
 
         static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
         static int numProcesses() { return numProcesses_; }
     protected:
-        static std::vector<std::unique_ptr<ProcessController>> handlers_;
+        static std::vector<std::unique_ptr<ProcessMonitor>> handlers_;
         static int         numProcesses_;
         static std::string processType_;
         static LoggingType loggingType_;

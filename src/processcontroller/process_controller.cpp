@@ -8,7 +8,7 @@ namespace process
     std::atomic<bool> ProcessController::running_      = true;
     std::atomic<bool> ProcessController::respawn_      = true;
 
-    std::vector<std::unique_ptr<ProcessController>> ProcessController::handlers_;
+    std::vector<std::unique_ptr<ProcessMonitor>> ProcessController::handlers_;
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
 
@@ -90,7 +90,7 @@ namespace process
     void ProcessController::killProcessByPid(pid_t pid)
     {
         auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessController> &handler) {
+                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessMonitor> &handler) {
                     return handler->getPid() == pid;
                 });
         if (it != handlers_.end())
@@ -106,8 +106,10 @@ namespace process
 
     void ProcessController::terminateProcessByPid(pid_t pid)
     {
-        auto it = std::find_if(handlers_.begin(), handlers_.end(),
-                               [pid](const std::unique_ptr<ProcessController> &handler) { return handler->getPid() == pid; });
+        auto it =
+                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessMonitor> &handler) {
+                    return handler->getPid() == pid;
+                });
         if (it != handlers_.end())
         {
             (*it)->terminateProcess();
@@ -121,8 +123,10 @@ namespace process
 
     void ProcessController::intProcessByPid(pid_t pid)
     {
-        auto it = std::find_if(handlers_.begin(), handlers_.end(),
-                               [pid](const std::unique_ptr<ProcessController> &handler) { return handler->getPid() == pid; });
+        auto it =
+                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessMonitor> &handler) {
+                    return handler->getPid() == pid;
+                });
         if (it != handlers_.end())
         {
             (*it)->intProcess();
