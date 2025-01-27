@@ -27,8 +27,6 @@ namespace process
         }
     }
     
-    pid_t ProcessMonitor::getPid() const { return pid_; }
-
     bool isProcessRunning(pid_t pid)
     {
         if (kill(pid, 0) == -1 && errno == ESRCH)
@@ -40,19 +38,21 @@ namespace process
         return true;
     }
 
-    void ProcessMonitor::terminateProcess() { sendSignal(SIGTERM); }
-
-    void ProcessMonitor::killProcess() { sendSignal(SIGKILL); }
-
-    void ProcessMonitor::intProcess() { sendSignal(SIGINT); }
-
-    void ProcessMonitor::sendSignal(int signal)
+    void sendSignal(int signal, pid_t pid)
     {
-        if (kill(pid_, signal) == -1)
+        if (kill(pid, signal) == -1)
         {
             perror("kill");
         }
     }
+
+    pid_t ProcessMonitor::getPid() const { return pid_; }
+    
+    void  ProcessMonitor::terminateProcess() { sendSignal(SIGTERM, pid_); }
+
+    void ProcessMonitor::killProcess() { sendSignal(SIGKILL, pid_); }
+
+    void ProcessMonitor::intProcess() { sendSignal(SIGINT, pid_); }
 
     bool ProcessMonitor::monitoring() const
     {

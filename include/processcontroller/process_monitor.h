@@ -21,7 +21,6 @@ namespace process
         void    terminateProcess();
         void    killProcess();
         void    intProcess();
-        void    sendSignal(int signal);
         void    monitorProcessThread();
         pid_t pid_{0};
     private:
