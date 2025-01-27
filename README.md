@@ -23,10 +23,10 @@ The Process Management Program is a C++ application designed to handle and monit
 ### Desired Behaviors
 
 1. **Intermediate Process Dies if Leaf Dies**:  
-   If a leaf process (child) dies, the intermediate process (parent) should recognize this and terminate itself or take appropriate action.
+  If a leaf process (child) dies, the intermediate process (parent) should recognize this and terminate itself or take appropriate action.
 
 2. **Kill Leaf Process Without Intermediate Dying**:  
-   It should be possible to terminate a leaf process without automatically causing the intermediate process to terminate.
+  It should be possible to terminate a leaf process without automatically causing the intermediate process to terminate.
 
 ### Implementation Considerations
 
@@ -67,14 +67,14 @@ Once the program is running, you can use the following commands to control proce
 - **`src/process_base.cpp`**: Contains base process functionalities.
 - **`src/process_helper.cpp`**: Provides helper functions for process management.
 - **`src/simul_process.cpp`**: Simulates process workloads.
-- **`src/process_handler.cpp`**: Handles the integration and management of processes.
+- **`src/main_controller.cpp`**: Handles the integration and management of processes.
 - **`src/process_interface.cpp`**: Defines the interface for process management.
 - **`src/process.cpp`**: Implements the core process functionalities.
 - **`include/messenger.h`**: Header file for the Messenger class.
 - **`include/process_base.h`**: Header file for the ProcessBase class.
 - **`include/process_helper.h`**: Header file for the ProcessHelper class.
 - **`include/simul_process.h`**: Header file for the SimulProcess class.
-- **`include/process_handler.h`**: Header file for the ProcessHandler class.
+- **`include/main_controller.h`**: Header file for the ProcessHandler class.
 - **`include/process_interface.h`**: Header file for the ProcessInterface class.
 - **`include/process.h`**: Header file for the Process class.
 - **`include/synchro.h`**: Header file for synchronization utilities.
@@ -87,13 +87,13 @@ To build the project, perform the following steps:
 1. **Install CMake**: Ensure CMake is installed on your system.
 2. **Navigate to Project Directory**: Open a terminal and go to the project root directory.
 3. **Configure the Project**:
-   ```bash
-   cmake -B build -S .
-   ```
+  ```bash
+  cmake -B build -S .
+  ```
 4. **Build the Project**:
-   ```bash
-   cmake --build build --parallel 3
-   ```
+  ```bash
+  cmake --build build --parallel 3
+  ```
 
 ## Running the Program
 
