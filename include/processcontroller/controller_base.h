@@ -10,7 +10,7 @@ namespace process
 {
     enum class LoggingType { Console, File };
 
-    class ControllerBase : public ProcessMonitor 
+    class ProcessController : public ProcessMonitor 
     {
     public:
 
@@ -29,7 +29,7 @@ namespace process
                void init(std::unique_ptr<IProcess> process);
 
     protected:
-        static std::vector<std::unique_ptr<ControllerBase>> handlers_;
+        static std::vector<std::unique_ptr<ProcessController>> handlers_;
         virtual void forkAndExecuteChildProcess();
         static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
         static int         numProcesses_;

@@ -3,20 +3,20 @@
 #include "logger_instance.h"
 namespace process
 {
-    int         ControllerBase::numProcesses_ = 4; // Default number of processes
-    std::string ControllerBase::processType_  = "simul"; // Default process type
+    int         ProcessController::numProcesses_ = 4; // Default number of processes
+    std::string ProcessController::processType_  = "simul"; // Default process type
 
-    std::vector<std::unique_ptr<ControllerBase>> ControllerBase::handlers_;
+    std::vector<std::unique_ptr<ProcessController>> ProcessController::handlers_;
     // Initialize static members
-    LoggingType ControllerBase::loggingType_ = LoggingType::Console;
+    LoggingType ProcessController::loggingType_ = LoggingType::Console;
 
-    void ControllerBase::init(std::unique_ptr<IProcess> process)
+    void ProcessController::init(std::unique_ptr<IProcess> process)
     {
         process_ = std::move(process);
         forkAndExecuteChildProcess();
     }
     
-    void ControllerBase::forkAndExecuteChildProcess()
+    void ProcessController::forkAndExecuteChildProcess()
     {
         pid_ = fork();
         if (pid_ == 0)
@@ -45,7 +45,7 @@ namespace process
     }
     
     // Implementation of the new method
-    std::string ControllerBase::loggingTypeToString()
+    std::string ProcessController::loggingTypeToString()
     {
         switch (loggingType_)
         {
@@ -58,9 +58,9 @@ namespace process
         }
     }
 
-    void ControllerBase::setProcessType(const std::string &processType) { processType_ = processType; }
+    void ProcessController::setProcessType(const std::string &processType) { processType_ = processType; }
 
-    void  ControllerBase::displayAllPids()
+    void  ProcessController::displayAllPids()
     {
         tools::LoggerManager::getInstance() << "[PARENT PROCESS] Current PIDs: ";
         for (const auto &handler: handlers_)
@@ -71,7 +71,7 @@ namespace process
         tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
-    void ControllerBase::killAll()
+    void ProcessController::killAll()
     {
         running(false);
 
@@ -81,7 +81,7 @@ namespace process
         }
     }
 
-    void ControllerBase::terminateAll()
+    void ProcessController::terminateAll()
     {
         running(false);
         for (auto &handler: handlers_)
@@ -90,7 +90,7 @@ namespace process
         }
     }
 
-    void ControllerBase::pauseMonitoring()
+    void ProcessController::pauseMonitoring()
     {
         concurrency::Synchro::getInstance().pauseMonitoring(true);
         for(auto &handler: handlers_)
@@ -99,12 +99,12 @@ namespace process
         }
     }
 
-    void ControllerBase::continueMonitoring()
+    void ProcessController::continueMonitoring()
     {
         concurrency::Synchro::getInstance().pauseMonitoring(false);
     }
 
-    void ControllerBase::intAll()
+    void ProcessController::intAll()
     {
         running(false);
         for (auto &handler: handlers_)
@@ -113,10 +113,10 @@ namespace process
         }
     }
 
-    void ControllerBase::killProcessByPid(pid_t pid)
+    void ProcessController::killProcessByPid(pid_t pid)
     {
         auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ControllerBase> &handler) {
+                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessController> &handler) {
                     return handler->getPid() == pid;
                 });
         if (it != handlers_.end())
@@ -130,10 +130,10 @@ namespace process
         }
     }
 
-    void ControllerBase::terminateProcessByPid(pid_t pid)
+    void ProcessController::terminateProcessByPid(pid_t pid)
     {
         auto it = std::find_if(handlers_.begin(), handlers_.end(),
-                               [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
+                               [pid](const std::unique_ptr<ProcessController> &handler) { return handler->getPid() == pid; });
         if (it != handlers_.end())
         {
             (*it)->terminateProcess();
@@ -145,10 +145,10 @@ namespace process
         }
     }
 
-    void ControllerBase::intProcessByPid(pid_t pid)
+    void ProcessController::intProcessByPid(pid_t pid)
     {
         auto it = std::find_if(handlers_.begin(), handlers_.end(),
-                               [pid](const std::unique_ptr<ControllerBase> &handler) { return handler->getPid() == pid; });
+                               [pid](const std::unique_ptr<ProcessController> &handler) { return handler->getPid() == pid; });
         if (it != handlers_.end())
         {
             (*it)->intProcess();

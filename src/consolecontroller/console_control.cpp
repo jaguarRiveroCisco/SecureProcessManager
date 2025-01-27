@@ -66,7 +66,7 @@ namespace cli::driver
                     }
                     break;
                 case 's':
-                    process::ControllerBase::respawn(std::atoi(optarg) != 0);
+                    process::ProcessController::respawn(std::atoi(optarg) != 0);
                     break;
                 case 'l':
                     // Set the logging type from the argument
@@ -134,8 +134,8 @@ namespace cli::driver
                   << " PID                 : " << getpid() << "\n"
                   << " Number of Processes : " << lastNumProcesses << "\n"
                   << " Process Type        : " << lastProcessType << "\n"
-                  << " Respawn             : " << (process::ControllerBase::respawn() ? "Enabled" : "Disabled") << "\n"
-                  << " Logging Type        : " << process::ControllerBase::loggingTypeToString() << "\n"
+                  << " Respawn             : " << (process::ProcessController::respawn() ? "Enabled" : "Disabled") << "\n"
+                  << " Logging Type        : " << process::ProcessController::loggingTypeToString() << "\n"
                   << " Nap Time Type       : " << tools::SleepTime::NapTypeToString() << "\n"
                   << "==========================================================\n\n"
                   << std::flush;
@@ -215,7 +215,7 @@ namespace cli::driver
         }
         else if (input == "quit")
         {
-            process::ControllerBase::running(false);
+            process::ProcessController::running(false);
             printpid("[QUIT] Signalling the program to gracefully quit at the next loop.", "");
         }
         else if (input == "term all")
@@ -248,12 +248,12 @@ namespace cli::driver
         }
         else if (input == "monitor on")
         {
-            process::ControllerBase::continueMonitoring();
+            process::ProcessController::continueMonitoring();
             process::Controller::CreateMonitoringThreads();
         }
         else if (input == "monitor off")
         {
-            process::ControllerBase::pauseMonitoring();
+            process::ProcessController::pauseMonitoring();
         }
         else if (input.rfind("kill ", 0) == 0)
         {
@@ -271,12 +271,12 @@ namespace cli::driver
         }
         else if (input == "respawn on")
         {
-            process::ControllerBase::respawn(true);
+            process::ProcessController::respawn(true);
             printpid("[RESPAWN] Respawn feature is now", "ON");
         }
         else if (input == "respawn off")
         {
-            process::ControllerBase::respawn(false);
+            process::ProcessController::respawn(false);
             printpid("[RESPAWN] Respawn feature is now", "OFF");
         }
         else

@@ -7,7 +7,7 @@
 
 namespace process
 {
-    class SystemController : public ControllerBase 
+    class SystemController : public ProcessController 
     {
     protected:
         void forkAndExecuteChildProcess() override;
