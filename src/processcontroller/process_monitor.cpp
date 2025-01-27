@@ -119,6 +119,7 @@ namespace process
             }
         }
         monitoring() = false;
+        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] | Monitoring for PID: " + std::to_string(pid_) + " has stopped.");
 
     }
 
