@@ -16,7 +16,7 @@ namespace process
         std::atomic<bool> &monitoring();
         pid_t              getPid() const;
         void               createMonitorProcessThread();
-        void               init(std::unique_ptr<IProcess> process);
+        void               collectAndLaunch(std::unique_ptr<IProcess> process);
         virtual void       launchChildProcess();
         void               terminateProcess();
         void               killProcess();

@@ -33,7 +33,7 @@ namespace process
     std::unique_ptr<ProcessMonitor> MainController::createHandler()
     {
         auto handler = std::make_unique<MonitorType>();
-        handler->init(std::make_unique<ProcessType>());
+        handler->collectAndLaunch(std::make_unique<ProcessType>());
         return handler;
     }
 

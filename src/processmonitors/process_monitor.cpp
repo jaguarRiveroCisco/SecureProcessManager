@@ -109,7 +109,7 @@ namespace process
 
     }
 
-    void ProcessMonitor::init(std::unique_ptr<IProcess> process)
+    void ProcessMonitor::collectAndLaunch(std::unique_ptr<IProcess> process)
     {
         process_ = std::move(process);
         launchChildProcess();
