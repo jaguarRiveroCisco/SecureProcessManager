@@ -3,7 +3,7 @@
 say_message() {
   local voice=$1
   shift
-  say -r 220 -v "$voice" "$@"
+  say -r 200 -v "$voice" "$@"
 }
 
 clean() {
@@ -29,16 +29,16 @@ conf() {
 }
 
 build() {
-  say_message "Majed" "Let's see if this builds..."
+  say_message "Anne" "Building..."
   if ! cmake --build build --parallel 3; then
-    say_message "Majed" "Nope! you messed up dude! fix it and try again!"
+    say_message "Anne" "you messed up dude!"
     exit 1
   fi
 }
 
 doall() {
   local generator=${1:-unix}
-  say_message "Ellen" "Ok, I see...you did something wrong and now mommy has to fix it, right? ok, let me try..."
+  say_message "Anne" "Ok, I see...you did something wrong and now mommy has to fix it, right? ok, let me try..."
   clean
   conf "$generator"
   build
@@ -67,11 +67,10 @@ case "$1" in
     ;;
 esac
 
-say_message "Karen" "Did it build?..."
 if [ $? -ne 0 ]; then
-  say_message "Jester" "Nope!, That was painful dude!" &
+  say_message "Jester" "you Broke it!" &
   exit 1
 else
-  say_message "Karen" "Yep!,...apparently it did!" &
+  say_message "Anne" "Yep!, it build" &
   exit 0
 fi
