@@ -20,7 +20,7 @@ namespace process
     void BaseProcess::preWork()
     {
         tools::LoggerManager::createLoggerType();
-        Communicator::getInstance().sendCreationMessage();
+        concurrency::Communicator::getInstance().sendCreationMessage();
     }
 
     void BaseProcess::postWork()

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "communicator.h"
 #include "logger_instance.h"
-namespace process
+namespace concurrency
 {
     void Communicator::sendCreationMessage(int sleepDuration, pid_t pid)
     {
@@ -19,4 +19,4 @@ namespace process
     }
 
     std::string Communicator::receiveCreationMessage() { return messenger_.receiveMessage(Message::CREATION_MSG); }
-} // namespace process
+} // namespace concurrency

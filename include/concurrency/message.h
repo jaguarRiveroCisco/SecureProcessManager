@@ -3,7 +3,7 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-namespace process
+namespace concurrency
 {
     struct Message
     {
@@ -11,5 +11,5 @@ namespace process
         long             msgType      = CREATION_MSG;
         char             msgText[100] {0};
     };
-} // namespace process
+} // namespace concurrency
 #endif // MESSAGE_H

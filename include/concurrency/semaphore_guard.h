@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-namespace tools
+namespace concurrency
 {
     class SemaphoreGuard 
     {
@@ -40,6 +40,6 @@ namespace tools
         ~locker() { sem_->unlock(); }
     };
 
-} // namespace tools
+} // namespace concurrency
 
 #endif // TOOLS_SEMAPHORE_GUARD_H

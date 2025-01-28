@@ -1,7 +1,7 @@
 #include "messenger.h"
 #include <sys/ipc.h>
 #include <sys/msg.h>
-namespace process
+namespace concurrency
 {
     Messenger::Messenger()
     {
@@ -71,4 +71,4 @@ namespace process
 
         return std::string(message.msgText);
     }
-} // namespace process
+} // namespace concurrency

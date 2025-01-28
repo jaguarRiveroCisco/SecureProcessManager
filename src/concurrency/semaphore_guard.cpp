@@ -1,6 +1,6 @@
 #include "semaphore_guard.h"
 
-namespace tools
+namespace concurrency
 {
     std::vector<std::string> SemaphoreGuard::sem_names;
 

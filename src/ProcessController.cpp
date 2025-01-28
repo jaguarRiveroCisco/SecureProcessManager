@@ -26,7 +26,7 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::parseArguments(argc, argv, numProcesses, processType);
 
-    tools::SemaphoreGuard::unlinkSemaphore("/console_logger");
+    concurrency::SemaphoreGuard::unlinkSemaphore("/console_logger");
    
     tools::LoggerManager::createLoggerType();
 
@@ -36,7 +36,7 @@ auto main(int argc, char *argv[]) -> int
 
     std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::MEDIUM));
 
-    tools::SemaphoreGuard::unlinkSemaphores();
+    concurrency::SemaphoreGuard::unlinkSemaphores();
 
     return 0;
 }

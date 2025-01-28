@@ -6,7 +6,7 @@
 #include <string>
 #include "message.h"
 
-namespace process
+namespace concurrency
 {
     class Messenger 
     {

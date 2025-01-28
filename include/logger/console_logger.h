@@ -12,14 +12,14 @@ namespace tools
     public:
         ConsoleLogger() 
         {
-            sem_ = std::make_unique<SemaphoreGuard>("/console_logger");
+            sem_ = std::make_unique<concurrency::SemaphoreGuard>("/console_logger");
         }
 
     protected:
         void outputLog(const std::string &message) override;
 
     private:
-        std::unique_ptr <SemaphoreGuard>      sem_;
+        std::unique_ptr <concurrency::SemaphoreGuard>      sem_;
         static std::unique_ptr<ConsoleLogger> instance;
 
 

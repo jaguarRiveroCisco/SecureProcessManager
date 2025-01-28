@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "messenger.h"
 
-namespace process
+namespace concurrency
 {
     class Communicator 
     {
@@ -27,6 +27,6 @@ namespace process
         Communicator(Communicator &&)                 = delete;
         Messenger messenger_;
     };
-} // namespace process
+} // namespace concurrency
 
 #endif // COMMUNICATOR_H

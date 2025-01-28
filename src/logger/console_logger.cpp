@@ -8,7 +8,7 @@ namespace tools
     std::unique_ptr<ConsoleLogger> ConsoleLogger::instance = nullptr;
     void ConsoleLogger::outputLog(const std::string &message) 
     {
-        locker lock(sem_.get());
+        concurrency::locker lock(sem_.get());
         std::cout << message << std::endl; 
     }
 

@@ -32,7 +32,7 @@ namespace process
         if (it != handlerFactoryMap_.end())
         {
             std::unique_ptr<ProcessMonitor> handler = it->second();
-            Communicator::getInstance().receiveCreationMessage();
+            concurrency::Communicator::getInstance().receiveCreationMessage();
             ProcessController::handlers().push_back(std::move(handler));
         }
         else
