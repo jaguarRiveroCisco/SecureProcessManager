@@ -1,37 +1,38 @@
 #!/usr/bin/env bash
 
 clean() {
-  say "Cleaning up..."
+  say "Let's clean up this damn mess..."
   rm -rf build > /dev/null 2>&1
 }
 
 conf() {
-  say "Configuring..."
+  say "Time to configure this damn beast..."
   local generator=$1
   if [ "$generator" == "ninja" ]; then
-    say "Ninja mode on!"
+    say "Hell yeah, Ninja mode!"
     cmake -B build -S . -G Ninja
   else
-    say "Using Unix Makefiles..."
+    say "Ugh, stuck with Unix Makefiles... just great!"
     cmake -B build -S . -G "Unix Makefiles"
   fi
 
   if [ $? -ne 0 ]; then
-    say "Config failed! Exiting!"
+    say "Configuration bombed out! We're screwed!"
     exit 1
   fi
 }
 
 build() {
-  say "Building..."
+  say "Let's see if this crap actually builds..."
   if ! cmake --build build --parallel 3; then
-    say "Build error!"
-    say "Aborting build!"
+    say "Build shit the bed!"
+    say "I'm outta here!"
     exit 1
   fi
 }
 
 doall() {
+  say "What a freaking disaster you've got here!"
   clean
   conf "unix"
   build
@@ -60,4 +61,4 @@ case "$1" in
     ;;
 esac
 
-say "All done!"
+say "All done, about damn time!"
