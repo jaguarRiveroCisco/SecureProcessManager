@@ -1,40 +1,40 @@
 #!/usr/bin/env bash
 
 clean() {
-  say "Let's clean up this damn mess..."
+  say "Let's clean up this mess..."
   rm -rf build > /dev/null 2>&1
 }
 
 conf() {
-  say "Time to configure this damn beast..."
-  local generator=$1
+  say "Time to configure this beast..."
+  local generator=${1:-unix}
   if [ "$generator" == "ninja" ]; then
-    say "Hell yeah, Ninja mode!"
+    say "Ninja mode! Yaiii!"
     cmake -B build -S . -G Ninja
   else
-    say "Ugh, stuck with Unix Makefiles... just great!"
+    say "Using Unix Makefiles...bleh!"  
     cmake -B build -S . -G "Unix Makefiles"
   fi
 
   if [ $? -ne 0 ]; then
-    say "Configuration bombed out! We're screwed!"
+    say "Configuration failed!"
     exit 1
   fi
 }
 
 build() {
-  say "Let's see if this crap actually builds..."
+  say "Let's see if this builds..."
   if ! cmake --build build --parallel 3; then
-    say "Build shit the bed!"
-    say "I'm outta here!"
+    say "Build failed!"
     exit 1
   fi
 }
 
 doall() {
-  say "What a freaking disaster you've got here!"
+  local generator=${1:-unix}
+  say  "you made a mess, uh? Let me do it for you..."
   clean
-  conf "unix"
+  conf "$generator"
   build
 }
 
@@ -53,7 +53,7 @@ case "$1" in
     build
     ;;
   doall)
-    doall
+    doall "$2"
     ;;
   *)
     [ ! -d "build" ] && conf "unix"
@@ -61,4 +61,11 @@ case "$1" in
     ;;
 esac
 
-say "All done, about damn time!"
+say "All done, finally!"
+if [ $? -ne 0 ]; then
+  say "That was painful dude!"
+  exit 1
+else
+  say "You're good to go!"
+  exit 0
+fi
