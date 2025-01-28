@@ -61,11 +61,11 @@ case "$1" in
     ;;
 esac
 
-say "Wow! it built!"
+say "Did it build?..."
 if [ $? -ne 0 ]; then
-  say "That was painful dude!"
+  say "Nope!, That was painful dude!"
   exit 1
 else
-  say "You're good to go!"
+  say "Yep!,...apparently it did!"
   exit 0
 fi
