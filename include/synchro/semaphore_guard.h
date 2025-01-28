@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef TOOLS_SEMAPHORE_GUARD_H
 #define TOOLS_SEMAPHORE_GUARD_H
 

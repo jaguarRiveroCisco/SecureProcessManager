@@ -3,7 +3,7 @@
 #ifndef SYSTEM_MONITOR_H
 #define SYSTEM_MONITOR_H
 
-#include "process_controller.h"
+#include "process_monitor.h"
 
 namespace process
 {

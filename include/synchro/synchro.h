@@ -1,10 +1,11 @@
+#pragma once
+
 #ifndef SYNCHRO_H
 #define SYNCHRO_H
 
 #include <condition_variable>
 #include <mutex>
 #include <queue>
-#include "base_process.h"
 
 namespace concurrency
 {

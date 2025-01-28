@@ -4,7 +4,6 @@
 #define PROCESS_CONTROLLER_H
 
 #include "process_monitor.h"
-#include "process_interface.h"
 
 namespace process
 {

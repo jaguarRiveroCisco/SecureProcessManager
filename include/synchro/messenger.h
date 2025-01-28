@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef MESSENGER_H
 #define MESSENGER_H
 

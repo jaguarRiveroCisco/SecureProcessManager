@@ -1,9 +1,8 @@
 #pragma once
-// network_process.h
-#pragma once
-#include <curl/curl.h>
-#include <iostream>
-#include <stdexcept>
+
+#ifndef NETWORK_PROCESS_H
+#define NETWORK_PROCESS_H
+
 #include "process_simulator.h"
 
 namespace process
@@ -17,3 +16,5 @@ namespace process
     };
 
 } // namespace process
+
+#endif // NETWORK_PROCESS_H

@@ -1,7 +1,6 @@
 #include "console_control.h"
 #include <atomic>
 #include <iostream>
-#include <string>
 #include <thread>
 #include <unistd.h>
 #include "cli_controller.h"

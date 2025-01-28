@@ -3,7 +3,9 @@
 #ifndef PROCESS_MONITOR_H
 #define PROCESS_MONITOR_H
 
+#include "base_process.h"
 #include "synchro.h"
+
 namespace process
 {
     class ProcessMonitor 

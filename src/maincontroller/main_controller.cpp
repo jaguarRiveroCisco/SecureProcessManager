@@ -81,6 +81,7 @@ namespace process
         processLifecycleLoop();
         cli::driver::consoleLoop(false);
     }
+    
     bool MainController::removeHandler()
     {
         if (!ProcessController::handlers().empty())

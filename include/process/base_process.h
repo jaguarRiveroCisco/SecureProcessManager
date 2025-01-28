@@ -2,7 +2,6 @@
 #define BASE_PROCESS_H
 
 #include "process_interface.h"
-#include <memory>
 #include <string>
 #include "time_manager.h"
 namespace process

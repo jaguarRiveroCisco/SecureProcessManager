@@ -1,5 +1,7 @@
-#ifndef PROCESS_HELPER_H
-#define PROCESS_HELPER_H
+#pragma once
+
+#ifndef COMMUNICATOR_H
+#define COMMUNICATOR_H
 #include <unistd.h>
 #include "messenger.h"
 
@@ -27,4 +29,4 @@ namespace process
     };
 } // namespace process
 
-#endif // PROCESS_HELPER_H
+#endif // COMMUNICATOR_H

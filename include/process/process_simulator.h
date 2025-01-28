@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SIMUL_PROCESS_H
 #define SIMUL_PROCESS_H
 #include "process.h"
