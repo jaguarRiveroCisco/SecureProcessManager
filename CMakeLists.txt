@@ -13,7 +13,7 @@ include_directories(
     include/process
     include/process/networkprocess
     include/process/systemprocess
-    include/synchro
+    include/concurrency
     include/tools
     include/logger
     include/networkprocess
@@ -58,10 +58,10 @@ src/tools/time_manager.cpp
 src/tools/thread_controller.cpp
 
 # synchronization
-src/synchro/communicator.cpp
-src/synchro/messenger.cpp
-src/synchro/semaphore_guard.cpp
-src/synchro/synchro.cpp
+src/concurrency/communicator.cpp
+src/concurrency/messenger.cpp
+src/concurrency/semaphore_guard.cpp
+src/concurrency/synchro.cpp
 
 # Logger
 src/logger/logger.cpp
