@@ -42,7 +42,7 @@ src/processcontroller/process_controller.cpp
 
 # Process Monitors
 src/processmonitors/process_monitor.cpp
-src/processmonitors/system_controller.cpp
+src/processmonitors/system_monitor.cpp
 
 # Console Controller sources
 src/consolecontroller/console_control.cpp

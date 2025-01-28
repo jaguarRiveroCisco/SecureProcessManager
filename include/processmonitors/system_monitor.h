@@ -1,17 +1,17 @@
 #pragma once
 
-#ifndef SYSTEM_CONTROLLER_H
-#define SYSTEM_CONTROLLER_H
+#ifndef SYSTEM_MONITOR_H
+#define SYSTEM_MONITOR_H
 
 #include "process_controller.h"
 
 namespace process
 {
-    class SystemController : public ProcessMonitor 
+    class SystemMonitor : public ProcessMonitor 
     {
     protected:
         void forkAndExecuteChildProcess() override;
     };
 }
 
-#endif // SYSTEM_CONTROLLER_H
+#endif // SYSTEM_MONITOR_H

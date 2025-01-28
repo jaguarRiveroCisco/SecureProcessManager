@@ -1,10 +1,10 @@
-#include "system_controller.h"
-#include "logger_instance.h"
+#include "system_monitor.h"
 #include <unistd.h>
+#include "logger_instance.h"
 
 namespace process
 {
-    void SystemController::forkAndExecuteChildProcess()
+    void SystemMonitor::forkAndExecuteChildProcess()
     {
         pid_ = fork();
         if (pid_ == 0)

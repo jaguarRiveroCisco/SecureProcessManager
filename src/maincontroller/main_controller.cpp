@@ -9,7 +9,7 @@
 #include "process.h"
 #include "process_simulator.h"
 #include "random_stuff.h"
-#include "system_controller.h"
+#include "system_monitor.h"
 #include "system_process.h"
 
 namespace process
