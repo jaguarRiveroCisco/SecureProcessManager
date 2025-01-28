@@ -10,7 +10,7 @@ namespace process
     class SystemMonitor : public ProcessMonitor 
     {
     protected:
-        void forkAndExecuteChildProcess() override;
+        void launchChildProcess() override;
     };
 }
 

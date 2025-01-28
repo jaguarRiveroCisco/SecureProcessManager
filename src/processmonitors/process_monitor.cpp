@@ -112,10 +112,10 @@ namespace process
     void ProcessMonitor::init(std::unique_ptr<IProcess> process)
     {
         process_ = std::move(process);
-        forkAndExecuteChildProcess();
+        launchChildProcess();
     }
 
-    void ProcessMonitor::forkAndExecuteChildProcess()
+    void ProcessMonitor::launchChildProcess()
     {
         pid_ = fork();
         if (pid_ == 0)

@@ -4,7 +4,7 @@
 
 namespace process
 {
-    void SystemMonitor::forkAndExecuteChildProcess()
+    void SystemMonitor::launchChildProcess()
     {
         pid_ = fork();
         if (pid_ == 0)

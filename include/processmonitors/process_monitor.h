@@ -17,7 +17,7 @@ namespace process
         pid_t              getPid() const;
         void               createMonitorProcessThread();
         void               init(std::unique_ptr<IProcess> process);
-        virtual void       forkAndExecuteChildProcess();
+        virtual void       launchChildProcess();
         void               terminateProcess();
         void               killProcess();
         void               intProcess();
