@@ -17,7 +17,7 @@ conf() {
   fi
 
   if [ $? -ne 0 ]; then
-    say "Configuration failed!"
+    say "Nope! you messed up dude! fix it and try again!"
     exit 1
   fi
 }
@@ -25,14 +25,14 @@ conf() {
 build() {
   say "Let's see if this builds..."
   if ! cmake --build build --parallel 3; then
-    say "Build failed!"
+    say "Nope! you messed up dude! fix it and try again!"
     exit 1
   fi
 }
 
 doall() {
   local generator=${1:-unix}
-  say  "you made a mess, uh? Let me do it for you..."
+  say  "Ok, I see...you did something wrong and now mommy has to fix it, right? ok, let me try..."
   clean
   conf "$generator"
   build
