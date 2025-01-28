@@ -16,30 +16,42 @@ namespace process
 {
     void MainController::createHandler()
     {
-        auto handler = std::make_unique<ProcessMonitor>();
-        if (ProcessController::processType() == "real")
+        std::unique_ptr<ProcessMonitor> handler = createHandlerByType(ProcessController::processType());
+        Communicator::getInstance().receiveCreationMessage();
+        ProcessController::handlers().push_back(std::move(handler));
+    }
+
+    std::unique_ptr<ProcessMonitor> MainController::createHandlerByType(const std::string &processType)
+    {
+        std::unique_ptr<ProcessMonitor> handler;
+
+        if (processType == "system")
         {
-            handler->init(std::make_unique<Process>());
-        }
-        else if (ProcessController::processType() == "simul")
-        {
-            handler->init(std::make_unique<ProcessSimulator>());
-        }
-        else if (ProcessController::processType() == "network")
-        {
-            handler->init(std::make_unique<NetworkProcess>());
-        }
-        else if (ProcessController::processType() == "system")
-        {
+            handler = std::make_unique<SystemMonitor>();
             handler->init(std::make_unique<SystemProcess>());
         }
         else
         {
-            throw std::runtime_error("Invalid process type");
+            handler = std::make_unique<ProcessMonitor>();
+            if (processType == "real")
+            {
+                handler->init(std::make_unique<Process>());
+            }
+            else if (processType == "simul")
+            {
+                handler->init(std::make_unique<ProcessSimulator>());
+            }
+            else if (processType == "network")
+            {
+                handler->init(std::make_unique<NetworkProcess>());
+            }
+            else
+            {
+                throw std::runtime_error("Invalid process type");
+            }
         }
 
-        Communicator::getInstance().receiveCreationMessage();
-        ProcessController::handlers().push_back(std::move(handler));
+        return handler;
     }
 
     void MainController::createHandlers(int numHandlers)

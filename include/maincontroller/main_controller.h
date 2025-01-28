@@ -19,6 +19,7 @@ namespace process
         static void createHandlers(int numHandlers);
         static void createHandler();
         static bool removeHandler();
+        static std::unique_ptr<ProcessMonitor> createHandlerByType(const std::string &processType);
     };
 } // namespace process
 
