@@ -1,38 +1,44 @@
 #!/usr/bin/env bash
 
+say_message() {
+  local voice=$1
+  shift
+  say -r 220 -v "$voice" "$@"
+}
+
 clean() {
-  say "Let's clean up this mess..."
+  say_message "Paulina" "Let's clean up this mess..."
   rm -rf build > /dev/null 2>&1
 }
 
 conf() {
-  say "Time to configure this beast..."
+  say_message "Majed" "Time to configure this beast..."
   local generator=${1:-unix}
   if [ "$generator" == "ninja" ]; then
-    say "Ninja mode! Yaiii!"
+    say_message "Majed" "Ninja mode! Yaiii!"
     cmake -B build -S . -G Ninja
   else
-    say "Using Unix Makefiles...bleh!"  
+    say_message "Majed" "Using Unix Makefiles...bleh!"
     cmake -B build -S . -G "Unix Makefiles"
   fi
 
   if [ $? -ne 0 ]; then
-    say "Nope! you messed up dude! fix it and try again!"
+    say_message "Majed" "Nope! you messed up dude! fix it and try again!"
     exit 1
   fi
 }
 
 build() {
-  say "Let's see if this builds..."
+  say_message "Majed" "Let's see if this builds..."
   if ! cmake --build build --parallel 3; then
-    say "Nope! you messed up dude! fix it and try again!"
+    say_message "Majed" "Nope! you messed up dude! fix it and try again!"
     exit 1
   fi
 }
 
 doall() {
   local generator=${1:-unix}
-  say  "Ok, I see...you did something wrong and now mommy has to fix it, right? ok, let me try..."
+  say_message "Ellen" "Ok, I see...you did something wrong and now mommy has to fix it, right? ok, let me try..."
   clean
   conf "$generator"
   build
@@ -61,11 +67,11 @@ case "$1" in
     ;;
 esac
 
-say "Did it build?..."
+say_message "Karen" "Did it build?..."
 if [ $? -ne 0 ]; then
-  say "Nope!, That was painful dude!"
+  say_message "Jester" "Nope!, That was painful dude!" &
   exit 1
 else
-  say "Yep!,...apparently it did!"
+  say_message "Karen" "Yep!,...apparently it did!" &
   exit 0
 fi
