@@ -11,6 +11,9 @@ namespace process
     public:
         ~SystemProcess() override = default;
         void work() override;
+
+    private:
+        bool spawnChildProcess(const std::vector<char *> &args);
     };
 }
 

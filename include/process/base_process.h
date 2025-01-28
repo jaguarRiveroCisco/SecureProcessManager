@@ -16,6 +16,12 @@ namespace process
         static std::atomic<bool> &continueFlag();
         static std::atomic<int>  &exitCode();
 
+    public:
+        void setPid(pid_t* pid) override { pidP_ = pid; }
+
+    protected:
+        pid_t* pidP_;
+
     protected:
         virtual ~BaseProcess() = default;
         BaseProcess();

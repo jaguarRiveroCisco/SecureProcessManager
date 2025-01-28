@@ -2,6 +2,8 @@
 
 #ifndef PROCESS_INTERFACE_H
 #define PROCESS_INTERFACE_H
+
+#include <sys/types.h>
 namespace process
 {
     class IProcess 
@@ -9,6 +11,9 @@ namespace process
     public:
         virtual ~IProcess() = default;
         virtual void work() = 0;
+        // Add a virtual setter for pid
+        virtual void setPid(pid_t* pid) = 0;
+
     protected:
         virtual void preWork() = 0;
         virtual void postWork() = 0;
