@@ -1,4 +1,4 @@
-#include "simul_process.h"
+#include "process_simulator.h"
 #include <chrono>
 #include <ctime>
 #include <thread>

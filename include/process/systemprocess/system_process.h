@@ -2,7 +2,7 @@
 
 #ifndef SYSTEM_PROCESS_H
 #define SYSTEM_PROCESS_H
-#include "simul_process.h"
+#include "process_simulator.h"
 namespace process
 {
 

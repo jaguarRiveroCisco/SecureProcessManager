@@ -26,7 +26,7 @@ add_executable(ProcessController
 src/ProcessController.cpp 
 
 # Process sources
-src/process/simul_process.cpp
+src/process/process_simulator.cpp
 src/process/process.cpp
 src/process/base_process.cpp
 

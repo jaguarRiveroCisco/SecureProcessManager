@@ -4,7 +4,7 @@
 #include <curl/curl.h>
 #include <iostream>
 #include <stdexcept>
-#include "simul_process.h"
+#include "process_simulator.h"
 
 namespace process
 {
