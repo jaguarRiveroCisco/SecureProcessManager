@@ -31,7 +31,7 @@ namespace process
         auto               it          = handlerFactoryMap_.find(processType);
         if (it != handlerFactoryMap_.end())
         {
-            std::unique_ptr<ProcessMonitor> handler = it->second();
+            std::unique_ptr<ProcessMonitor> handler = it->second(); // second() is the monitor function.
             concurrency::Communicator::getInstance().receiveCreationMessage();
             ProcessController::handlers().push_back(std::move(handler));
         }
