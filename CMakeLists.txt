@@ -9,6 +9,7 @@ include_directories(
     include/consolecontroller
     include/maincontroller
     include/processcontroller
+    include/processmonitors
     include/process
     include/process/networkprocess
     include/process/systemprocess
@@ -37,9 +38,11 @@ src/process/networkprocess/network_process.cpp
 src/process/systemprocess/system_process.cpp
 
 # ProcessController sources
-src/processcontroller/process_monitor.cpp
 src/processcontroller/process_controller.cpp
-src/processcontroller/system_controller.cpp
+
+# Process Monitors
+src/processmonitors/process_monitor.cpp
+src/processmonitors/system_controller.cpp
 
 # Console Controller sources
 src/consolecontroller/console_control.cpp
