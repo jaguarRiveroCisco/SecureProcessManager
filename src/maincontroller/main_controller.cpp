@@ -14,44 +14,31 @@
 
 namespace process
 {
-    void MainController::createHandler()
+    // Define the handler factory map
+    std::unordered_map<std::string, MainController::HandlerFactory> MainController::handlerFactoryMap_;
+    // Initialize the factory map
+    void MainController::initializeFactory()
     {
-        std::unique_ptr<ProcessMonitor> handler = createHandlerByType(ProcessController::processType());
-        Communicator::getInstance().receiveCreationMessage();
-        ProcessController::handlers().push_back(std::move(handler));
+        handlerFactoryMap_["real"]    = []() { return createHandler<ProcessMonitor, Process>(); };
+        handlerFactoryMap_["simul"]   = []() { return createHandler<ProcessMonitor, ProcessSimulator>(); };
+        handlerFactoryMap_["network"] = []() { return createHandler<ProcessMonitor, NetworkProcess>(); };
+        handlerFactoryMap_["system"]  = []() { return createHandler<SystemMonitor, SystemProcess>(); };
     }
 
-    std::unique_ptr<ProcessMonitor> MainController::createHandlerByType(const std::string &processType)
+    void MainController::createHandler()
     {
-        std::unique_ptr<ProcessMonitor> handler;
-
-        if (processType == "system")
+        const std::string &processType = ProcessController::processType();
+        auto               it          = handlerFactoryMap_.find(processType);
+        if (it != handlerFactoryMap_.end())
         {
-            handler = std::make_unique<SystemMonitor>();
-            handler->init(std::make_unique<SystemProcess>());
+            std::unique_ptr<ProcessMonitor> handler = it->second();
+            Communicator::getInstance().receiveCreationMessage();
+            ProcessController::handlers().push_back(std::move(handler));
         }
         else
         {
-            handler = std::make_unique<ProcessMonitor>();
-            if (processType == "real")
-            {
-                handler->init(std::make_unique<Process>());
-            }
-            else if (processType == "simul")
-            {
-                handler->init(std::make_unique<ProcessSimulator>());
-            }
-            else if (processType == "network")
-            {
-                handler->init(std::make_unique<NetworkProcess>());
-            }
-            else
-            {
-                throw std::runtime_error("Invalid process type");
-            }
+            throw std::runtime_error("Invalid process type");
         }
-
-        return handler;
     }
 
     void MainController::createHandlers(int numHandlers)
@@ -87,6 +74,7 @@ namespace process
     {
         ProcessController::setProcessType(processType);
         ProcessController::setNumProcesses(numProcesses);
+        initializeFactory();
         createHandlers(ProcessController::numProcesses());
         CreateMonitoringThreads();
         cli::driver::consoleLoop();
