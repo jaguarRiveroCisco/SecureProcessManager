@@ -61,7 +61,7 @@ case "$1" in
     ;;
 esac
 
-say "All done, finally!"
+say "Wow! it built!"
 if [ $? -ne 0 ]; then
   say "That was painful dude!"
   exit 1
