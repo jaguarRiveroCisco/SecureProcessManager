@@ -10,6 +10,8 @@ include_directories(
     include/maincontroller
     include/processcontroller
     include/process
+    include/process/networkprocess
+    include/process/systemprocess
     include/synchro
     include/tools
     include/logger
@@ -29,10 +31,10 @@ src/process/process.cpp
 src/process/base_process.cpp
 
 # Network sources
-src/networkprocess/network_process.cpp
+src/process/networkprocess/network_process.cpp
 
 # System sources
-src/systemprocess/system_process.cpp
+src/process/systemprocess/system_process.cpp
 
 # ProcessController sources
 src/processcontroller/process_monitor.cpp
