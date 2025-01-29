@@ -3,10 +3,10 @@
 #include "logger_instance.h"
 namespace concurrency
 {
-    void Communicator::sendCreationMessage(int sleepDuration, pid_t pid)
+    void Communicator::sendCreationMessage(const std::string& sleepDuration, pid_t pid)
     {
-        std::string messageText = ":) Child " + std::to_string(pid) +
-                                  " created. Sleep duration: " + std::to_string(sleepDuration) + " seconds";
+        std::string messageText = "Child " + std::to_string(pid) +
+                                  " created. Sleep duration: " + sleepDuration;
         try
         {
             messenger_.sendMessage(messageText, Message::CREATION_MSG);

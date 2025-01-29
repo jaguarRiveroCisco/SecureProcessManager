@@ -36,7 +36,6 @@ namespace process
     void ProcessSimulator::work()
     {
         preWork();
-        timeManager_.setSleepDuration();
         while (proceed())
         {
             tools::sleepRandomMs();

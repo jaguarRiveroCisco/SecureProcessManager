@@ -114,7 +114,6 @@ namespace process
     void NetworkProcess::work()
     {
         preWork();
-        timeManager_.setSleepDuration();
         while (proceed())
         {
             std::make_shared<network_process>(true);

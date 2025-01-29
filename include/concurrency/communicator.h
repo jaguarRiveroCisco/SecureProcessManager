@@ -13,7 +13,7 @@ namespace concurrency
         virtual ~Communicator() = default;
  
         virtual std::string receiveCreationMessage();
-        void                 sendCreationMessage(int sleepDuration = 0, pid_t pid = getpid());
+        void                 sendCreationMessage(const std::string&, pid_t pid);
         static Communicator &getInstance()
         {
             static Communicator instance;

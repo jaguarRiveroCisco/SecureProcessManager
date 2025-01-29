@@ -19,8 +19,9 @@ namespace process
 
     void BaseProcess::preWork()
     {
+        timeManager_.setSleepDuration();
         tools::LoggerManager::createLoggerType();
-        concurrency::Communicator::getInstance().sendCreationMessage();
+        concurrency::Communicator::getInstance().sendCreationMessage(timeManager_.getSleepDurationStr(), getpid());
     }
 
     void BaseProcess::postWork()

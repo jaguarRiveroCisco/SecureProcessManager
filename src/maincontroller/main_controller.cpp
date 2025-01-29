@@ -32,7 +32,8 @@ namespace process
         if (it != handlerFactoryMap_.end())
         {
             std::unique_ptr<ProcessMonitor> handler = it->second(); // second() is the monitor function.
-            concurrency::Communicator::getInstance().receiveCreationMessage();
+            auto creationMessage = concurrency::Communicator::getInstance().receiveCreationMessage();
+            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Received creation message: " + creationMessage);
             ProcessController::handlers().push_back(std::move(handler));
         }
         else
