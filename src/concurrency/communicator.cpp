@@ -1,6 +1,7 @@
 #include "communicator.h"
 #include <thread>
 #include "logger_instance.h"
+#include "process_controller.h"
 
 namespace concurrency
 {
@@ -23,7 +24,7 @@ namespace concurrency
         auto        start   = std::chrono::steady_clock::now();
         auto        timeout = std::chrono::seconds(5); // Set a timeout duration
 
-        while (true)
+        while (process::ProcessController::running())
         {
             try
             {
