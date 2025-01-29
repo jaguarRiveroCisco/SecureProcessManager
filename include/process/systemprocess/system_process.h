@@ -16,6 +16,20 @@ namespace process
     private:
         bool spawnChildProcess(const std::vector<char *> &args);
 
+        struct Arguments {
+            std::vector<char *> args;
+            Arguments() :
+                args{strdup("/Users/jrivero/dev/programs/testprogs/lenghty/lengthy_process"), strdup("30"), nullptr}
+            {
+            }
+            ~Arguments()
+            {
+                for (char *arg: args)
+                {
+                    free(arg);
+                }
+            }
+        };
         struct SpawnChild 
         {
             std::vector<char *>        environ = {nullptr};

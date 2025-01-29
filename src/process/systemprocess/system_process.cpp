@@ -10,21 +10,6 @@ namespace process
         return *pidP_ > 0;
     }
 
-    struct Arguments
-    {
-        std::vector<char *> args;
-
-        Arguments() : args{strdup("/Users/jrivero/dev/programs/testprogs/lenghty/lengthy_process"), strdup("30"), nullptr} {}
-
-        ~Arguments()
-        {
-            for (char *arg : args)
-            {
-                free(arg);
-            }
-        }
-    };
-
     void SystemProcess::work()
     {
         preWork();
