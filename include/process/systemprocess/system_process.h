@@ -3,6 +3,7 @@
 #ifndef SYSTEM_PROCESS_H
 #define SYSTEM_PROCESS_H
 #include "process_simulator.h"
+#include <spawn.h>
 namespace process
 {
 
@@ -14,6 +15,16 @@ namespace process
 
     private:
         bool spawnChildProcess(const std::vector<char *> &args);
+
+        struct SpawnChild 
+        {
+            std::vector<char *>        environ = {nullptr};
+            posix_spawn_file_actions_t actions;
+            posix_spawnattr_t          attrs;
+            SystemProcess             *parent_ {nullptr};
+            SpawnChild(SystemProcess *parent, const std::vector<char *> &args);
+            ~SpawnChild();
+        };
     };
 }
 
