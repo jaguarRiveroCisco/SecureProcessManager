@@ -33,7 +33,7 @@ namespace process
         {
             std::unique_ptr<ProcessMonitor> handler = it->second(); // second() is the monitor function.
             auto creationMessage = concurrency::Communicator::getInstance().receiveCreationMessage();
-            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | " + creationMessage);
+            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Creation message: " + creationMessage);
             ProcessController::handlers().push_back(std::move(handler));
         }
         else
