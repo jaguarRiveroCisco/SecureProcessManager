@@ -25,6 +25,10 @@ while true; do
     # Play a beep sound
     tput bel
 
+    if [[ "$line_count" -gt 0 ]]; then
+      # Print the header
+      echo "PPID   PID   STAT   COMMAND   ARGS"
+    fi
     echo "$current_output"
     echo "Total number of $process_name processes: $line_count"
 
