@@ -1,8 +1,8 @@
 #include "time_manager.h"
-#include "logger_instance.h"
 #include "nap_time.h"
 #include "random_stuff.h"
 #include <iomanip>
+#include <sstream>
 
 namespace tools
 {
@@ -30,10 +30,6 @@ namespace tools
         sleepDurationStr_ = timeToStr(sleepDurationMs_);
         endTime_     = startTime_ + std::chrono::milliseconds(sleepDurationMs_);
         maxLifeTime_ = std::chrono::milliseconds(sleepDurationMs_ + tools::NapTimeMs::LONG);
-
-        // Log the information
-        tools::LoggerManager::getInstance().logInfo("[PROCESS EXECUTING] | Simulated Process started. Duration: " +
-                                                    sleepDurationStr_);
     }
 
     std::chrono::milliseconds::rep TimeManager::getElapsedMilliseconds() const
