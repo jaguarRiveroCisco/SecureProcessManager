@@ -3,9 +3,9 @@
 #ifndef MESSENGER_H
 #define MESSENGER_H
 
+#include <pthread.h>
 #include <string>
 #include "message.h"
-
 namespace concurrency
 {
     class Messenger 
@@ -24,6 +24,7 @@ namespace concurrency
 
     private:
         int msgid_;
+        pthread_mutex_t mutex;
     };
 }
 

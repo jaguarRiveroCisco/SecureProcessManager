@@ -1,6 +1,7 @@
 #include "messenger.h"
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <thread>
 namespace concurrency
 {
     Messenger::Messenger()
@@ -30,6 +31,8 @@ namespace concurrency
         tools::LogOpt::getInstance().logInfo("Last message received time: " + std::to_string(buf.msg_rtime));
         tools::LogOpt::getInstance().logInfo("Last change time: " + std::to_string(buf.msg_ctime));
         */
+        // Initialize mutex and condition variable
+        pthread_mutex_init(&mutex, nullptr);
     }
 
     Messenger::~Messenger()
@@ -39,10 +42,13 @@ namespace concurrency
         {
             perror("msgctl");
         }
+        // Destroy mutex and condition variable
+        pthread_mutex_destroy(&mutex);
     }
 
     void Messenger::sendMessage(const std::string &text, int msgType)
     {
+        pthread_mutex_lock(&mutex);
         Message message;
         message.msgType = msgType;
         std::snprintf(message.msgText, sizeof(message.msgText), "%s", text.c_str());
@@ -50,25 +56,43 @@ namespace concurrency
         if (msgsnd(msgid_, &message, sizeof(message.msgText), 0) == -1)
         {
             perror("msgsnd");
+            pthread_mutex_unlock(&mutex);
             throw std::runtime_error("Failed to send message");
         }
-
-        // tools::LoggerManager::getInstance() << "[MESSAGE] Sent message of type " << msgType << " to queue with ID " << msgid_;
-        // tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
+        pthread_mutex_unlock(&mutex);
     }
 
     std::string Messenger::receiveMessage(int msgType)
     {
         Message message;
-        if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, 0) == -1)
+        auto start = std::chrono::steady_clock::now();
+        auto timeout = std::chrono::seconds(5); // Set a timeout duration
+        
+        while (true)
         {
-            perror("msgrcv");
-            throw std::runtime_error("Failed to receive message");
+            pthread_mutex_lock(&mutex);
+            if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, IPC_NOWAIT) != -1)
+            {
+                pthread_mutex_unlock(&mutex);
+                return std::string(message.msgText);
+            }
+            pthread_mutex_unlock(&mutex);
+        
+            if (errno != ENOMSG)
+            {
+                perror("msgrcv");
+                throw std::runtime_error("Failed to receive message");
+            }
+        
+            // Check for timeout
+            auto now = std::chrono::steady_clock::now();
+            if (now - start > timeout)
+            {
+                throw std::runtime_error("Timeout while waiting for message");
+            }
+        
+            // Sleep for a short duration before retrying
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
-
-        // tools::LoggerManager::getInstance() << "[MESSAGE] Received message of type " << msgType << " from queue with ID " << msgid_;
-        // tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-
-        return std::string(message.msgText);
     }
 } // namespace concurrency
