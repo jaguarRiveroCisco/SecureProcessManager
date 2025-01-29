@@ -7,23 +7,23 @@ say_message() {
 }
 
 clean() {
-  say_message "Paulina" "Let's clean up this mess..."
+  say_message "Anne" "Let's clean up this mess..."
   rm -rf build > /dev/null 2>&1
 }
 
 conf() {
-  say_message "Majed" "Time to configure this beast..."
+  say_message "Anne" "Time to configure this beast..."
   local generator=${1:-unix}
   if [ "$generator" == "ninja" ]; then
-    say_message "Majed" "Ninja mode! Yaiii!"
+    say_message "Anne" "Ninja mode! Yaiii!"
     cmake -B build -S . -G Ninja
   else
-    say_message "Majed" "Using Unix Makefiles...bleh!"
+    say_message "Anne" "Using Unix Makefiles...bleh!"
     cmake -B build -S . -G "Unix Makefiles"
   fi
 
   if [ $? -ne 0 ]; then
-    say_message "Majed" "Nope! you messed up dude! fix it and try again!"
+    say_message "Anne" "Nope! you messed up dude! fix it and try again!"
     exit 1
   fi
 }
@@ -68,9 +68,9 @@ case "$1" in
 esac
 
 if [ $? -ne 0 ]; then
-  say_message "Jester" "you Broke it!" &
+  say_message "Anne" "Build failed" &
   exit 1
 else
-  say_message "Anne" "Yep!, it build" &
+  say_message "Anne" "Build sucessful" &
   exit 0
 fi
