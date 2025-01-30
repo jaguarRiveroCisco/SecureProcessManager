@@ -5,11 +5,15 @@
 
 namespace concurrency
 {
+    static constexpr int MSG_SIZE = 100;
+
     struct Message
     {
-        static const int CREATION_MSG = 1;
+        enum { CREATION_MSG = 1, TERMINATION_MSG };
+
         long             msgType      = CREATION_MSG;
-        char             msgText[100] {0};
+        char             msgText[MSG_SIZE] {0};
     };
+
 } // namespace concurrency
 #endif // MESSAGE_H

@@ -32,17 +32,31 @@ namespace concurrency
         sendMessage(createMessage(sleepDuration, pid), Message::CREATION_MSG);
     }
 
-    std::string Communicator::receiveCreationMessage()
+    void Communicator::sendTerminationMessage(const std::string &sleepDuration, pid_t pid)
+    {
+        sendMessage(createMessage(sleepDuration, pid), Message::TERMINATION_MSG);
+    }
+
+    std::string Communicator::receiveProcessMessage(int type)
     {
         try
         {
-            return messenger_.receiveMessage(Message::CREATION_MSG);
+            return messenger_.receiveMessage(type);
         }
         catch (const std::runtime_error &e)
         {
-            tools::LoggerManager::getInstance().logException("Failed to receive creation message: " +
-                                                             std::string(e.what()));
+            tools::LoggerManager::getInstance().logException("Failed to receive process message: " + std::string(e.what()));
             return ""; // Return an empty string or handle as needed
         }
+    }
+
+    std::string Communicator::receiveCreationMessage()
+    {
+        return receiveProcessMessage(Message::CREATION_MSG);
+    }
+
+    std::string Communicator::receiveTerminationMessage()
+    {
+        return receiveProcessMessage(Message::TERMINATION_MSG);
     }
 } // namespace concurrency

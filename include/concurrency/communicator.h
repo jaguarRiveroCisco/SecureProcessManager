@@ -11,9 +11,11 @@ namespace concurrency
     {
     public:
         virtual ~Communicator() = default;
- 
-        virtual std::string receiveCreationMessage();
-        void                 sendCreationMessage(const std::string&, pid_t pid);
+
+        virtual std::string  receiveCreationMessage();
+        virtual std::string  receiveTerminationMessage();
+        void                 sendCreationMessage(const std::string &, pid_t);
+        void                 sendTerminationMessage(const std::string &, pid_t);
         static Communicator &getInstance()
         {
             static Communicator instance;
@@ -29,6 +31,7 @@ namespace concurrency
     private:
         void sendMessage(const std::string &text, int msgType);
         std::string receiveMessage(int msgType);
+        std::string receiveProcessMessage(int type);
     };
 } // namespace concurrency
 
