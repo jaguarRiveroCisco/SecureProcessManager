@@ -11,7 +11,6 @@ namespace process
     {
     public:
         static void run(const std::string &processType, int numProcesses);
-        static void CreateMonitoringThreads();
 
     private:
         static void processLifecycleLoop();
@@ -19,6 +18,9 @@ namespace process
         static void createHandlers(int numHandlers);
         static void createHandler();
         static bool removeHandler();
+        static void CreateMonitoringThreads();
+
+        static void createMonitorThread(const std::string &);
 
         using HandlerFactory = std::function<std::unique_ptr<ProcessMonitor>()>;
         static std::unordered_map<std::string, HandlerFactory> handlerFactoryMap_;

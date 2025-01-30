@@ -1,6 +1,7 @@
 #include "string_tools.h"
-#include <vector>
 #include <sstream>
+#include <vector>
+#include "logger_instance.h"
 
 namespace tools::string
 {
@@ -16,5 +17,25 @@ namespace tools::string
         }
 
         return tokens;
+    }
+
+    pid_t strToPid(const std::string &pidStr)
+    {
+        pid_t pid;
+        try
+        {
+            pid = std::stoi(pidStr);
+        }
+        catch (const std::invalid_argument &e)
+        {
+            tools::LoggerManager::getInstance().logError("[PARENT PROCESS] | Invalid PID in message: " + pidStr);
+            return -1;
+        }
+        catch (const std::out_of_range &e)
+        {
+            tools::LoggerManager::getInstance().logError("[PARENT PROCESS] | PID out of range in message: " + pidStr);
+            return -1;
+        }
+        return pid;
     }
 }

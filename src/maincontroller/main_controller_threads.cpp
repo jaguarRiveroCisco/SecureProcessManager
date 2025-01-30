@@ -16,6 +16,30 @@
 
 namespace process
 {
+    void MainController::createMonitorThread(const std::string& pidStr)
+    {
+        static std::mutex           CreateMonitoringThreadsMutex;
+        std::lock_guard<std::mutex> lock(CreateMonitoringThreadsMutex);
+
+        pid_t                       pid = tools::string::strToPid(pidStr);
+        if (pid == -1)
+        {
+            return;
+        }
+
+        auto it = std::find_if(
+                ProcessController::handlers().begin(), ProcessController::handlers().end(),
+                [pid](const std::unique_ptr<ProcessMonitor> &handler) { return handler->getPid() == pid; });
+
+        if (it != ProcessController::handlers().end() && !(*it)->monitoring())
+        {
+            (*it)->createMonitorProcessThread();
+        }
+        else
+        {
+            throw std::runtime_error("Handler not found for PID: " + std::to_string(pid));
+        }
+    }
     /// @brief This function is executed in its own thread.
     /// It listens for creation messages from the child processes and creates monitoring threads for them.
     /// The handlers are created in createHandler() function. Once the handler is created, the process
@@ -23,7 +47,6 @@ namespace process
     // the process.
     void MainController::CreateMonitoringThreads()
     {
-        static std::mutex CreateMonitoringThreadsMutex;
 
         while (ProcessController::running())
         {
@@ -48,40 +71,8 @@ namespace process
                                 "[PARENT PROCESS] | Unexpected format in creation message: " + creationMessage);
                         continue;
                     }
-
-                    pid_t pid;
-                    try
-                    {
-                        pid = std::stoi(vec[1]);
-                    }
-                    catch (const std::invalid_argument &e)
-                    {
-                        tools::LoggerManager::getInstance().logError("[PARENT PROCESS] | Invalid PID in message: " +
-                                                                     vec[1]);
-                        continue;
-                    }
-                    catch (const std::out_of_range &e)
-                    {
-                        tools::LoggerManager::getInstance().logError(
-                                "[PARENT PROCESS] | PID out of range in message: " + vec[1]);
-                        continue;
-                    }
-
-                    std::lock_guard<std::mutex> lock(CreateMonitoringThreadsMutex);
-                    auto                        it = std::find_if(
-                            ProcessController::handlers().begin(), ProcessController::handlers().end(),
-                            [pid](const std::unique_ptr<ProcessMonitor> &handler) { return handler->getPid() == pid; });
-
-                    if (it != ProcessController::handlers().end() && !(*it)->monitoring())
-                    {
-                        (*it)->createMonitorProcessThread();
-                    }
-                    else
-                    {
-                        tools::LoggerManager::getInstance().logWarning(
-                                "[PARENT PROCESS] | Handler not found for PID: " + std::to_string(pid));
-                    }
-                }
+                    createMonitorThread(vec[1]);
+                 }
             }
             catch (const std::exception &e)
             {

@@ -166,7 +166,6 @@ namespace process
         {
             int numHandlersToCreate = ProcessController::numProcesses() - ProcessController::handlers().size();
             createHandlers(numHandlersToCreate);
-            CreateMonitoringThreads();
         }
     }
 

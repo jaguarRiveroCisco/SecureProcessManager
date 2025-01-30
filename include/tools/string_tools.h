@@ -6,6 +6,7 @@
 namespace tools::string
 {
     std::vector<std::string> splitString(const std::string &input, char delimiter = ' ');
+    pid_t                    strToPid(const std::string &pidStr);   
 }
 
 #endif // STRING_TOOLS_H

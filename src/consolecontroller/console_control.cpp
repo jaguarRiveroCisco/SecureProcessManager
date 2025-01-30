@@ -234,7 +234,6 @@ namespace cli::driver
         else if (input == "monitor on")
         {
             process::ProcessController::continueMonitoring();
-            process::MainController::CreateMonitoringThreads();
         }
         else if (input == "monitor off")
         {
