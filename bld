@@ -15,15 +15,15 @@ conf() {
   say_message "Anne" "Configuring"
   local generator=${1:-unix}
   if [ "$generator" == "ninja" ]; then
-    say_message "Anne" "Ninja mode! YES!" &
+    say_message "Anne" "Ninja mode!" &
     cmake -B build -S . -G Ninja
   else
-    say_message "Anne" "Using Unix Makefiles...bleh!" &
+    say_message "Anne" "Using Unix Makefiles" &
     cmake -B build -S . -G "Unix Makefiles"
   fi
 
   if [ $? -ne 0 ]; then
-    say_message "Anne" "Nope! you messed up dude!"
+    say_message "Anne" "Configuration error!"
     exit 1
   fi
 }
@@ -31,14 +31,14 @@ conf() {
 build() {
   say_message "Anne" "Building..." &
   if ! cmake --build build --parallel 3; then
-    say_message "Anne" "you messed up dude!"
+    say_message "Anne" "Build failed!" &
     exit 1
   fi
 }
 
 doall() {
   local generator=${1:-unix}
-  say_message "Anne" "Doing it all?. I'll try my best!"
+  say_message "Anne" "Doing it all"
   clean
   conf "$generator"
   build
