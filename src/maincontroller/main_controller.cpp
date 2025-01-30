@@ -16,6 +16,7 @@
 
 namespace process
 {
+    std::mutex MainController::handlersMutex_;
     // Define the handler factory map
     std::unordered_map<std::string, MainController::HandlerFactory> MainController::handlerFactoryMap_;
     // Initialize the factory map
@@ -77,51 +78,6 @@ namespace process
         cli::driver::consoleLoop(false);
     }
     
-    bool MainController::removeHandler()
-    {
-        if (!ProcessController::handlers().empty())
-        {
-            try
-            {
-                pid_t pid = concurrency::Synchro::getInstance().removeTerminatedProcessPid();
-                if (pid != -1)
-                {
-                    // Find and remove the handler with the matching PID
-                    auto it = std::remove_if(
-                            ProcessController::handlers().begin(), ProcessController::handlers().end(),
-                            [pid](const std::unique_ptr<ProcessMonitor> &handler) { return handler->getPid() == pid; });
-
-                    if (it != ProcessController::handlers().end())
-                    {
-                        ProcessController::handlers().erase(it, ProcessController::handlers().end());
-                        return true; // Handler was removed
-                    }
-                    else
-                    {
-                        // Log a warning if no handler was found for the given PID
-                        tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Warning: No handler found for PID: " + std::to_string(pid));
-                    }
-                }
-                else
-                {
-                    // Log a warning if the PID is invalid
-                    tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] Warning: Invalid PID returned from queue");
-                }
-            }
-            catch (const std::exception &e)
-            {
-                // Handle any potential exceptions and log the error
-                tools::LoggerManager::getInstance().logException("[PARENT PROCESS] Error in removeHandler: " + std::string(e.what()));
-            }
-        }
-        else
-        {
-            // Log a message if the handlers list is empty
-            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] No handlers to remove, the list is empty.");
-        }
-        return false; // No handler was removed
-    }
-
     void MainController::processLifecycleLoop()
     {
         while (ProcessController::running())
@@ -133,23 +89,7 @@ namespace process
                 continue; // Check again if monitoring has been resumed
             }
 
-            bool processedEvent = false;
-
-            while (!concurrency::Synchro::getInstance().isTerminatedPidQueueEmpty())
-            {
-                if(removeHandler())
-                    processedEvent = true;
-                else
-                    break;
-            }
-
-            if (!processedEvent)
-            {
-                // Sleep briefly if no events were processed to prevent tight looping
-                std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
-                continue;
-            }
-
+            std::lock_guard<std::mutex> lock(handlersMutex_);
             restoreHandlerCount();
 
             if (ProcessController::handlers().empty())

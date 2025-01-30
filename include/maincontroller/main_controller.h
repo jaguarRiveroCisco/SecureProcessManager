@@ -17,7 +17,6 @@ namespace process
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);
         static void createHandler();
-        static bool removeHandler();
         static void CreateMonitoringThreads();
         static void createMonitorThread(const std::string &);
         static void MonitorProcessTermination();
@@ -29,6 +28,8 @@ namespace process
         static std::unique_ptr<ProcessMonitor> createHandler();
 
         static void initializeFactory();
+
+        static std::mutex handlersMutex_;
     };
     // Template function to create a handler
     template<typename MonitorType, typename ProcessType> 

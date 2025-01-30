@@ -61,7 +61,7 @@ namespace process
                         continue;
                     }
 
-                    tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Creation message: " +
+                    tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | [CREATION]: " +
                                                                 creationMessage);
                     auto vec = tools::string::splitString(creationMessage);
 
@@ -81,7 +81,7 @@ namespace process
             }
 
             // Optional sleep to reduce CPU usage in case of tight loop
-            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
+            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
         }
     }
 
@@ -100,7 +100,7 @@ namespace process
                         continue;
                     }
 
-                    tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Termination message: " +
+                    tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | [TERMINATION]: " +
                                                                 terminationMessage);
                     auto vec = tools::string::splitString(terminationMessage);
 
@@ -117,18 +117,30 @@ namespace process
                         continue;
                     }
 
-                    auto it = std::find_if(
-                            ProcessController::handlers().begin(), ProcessController::handlers().end(),
-                            [pid](const std::unique_ptr<ProcessMonitor> &handler) { return handler->getPid() == pid; });
+                    {
+                        std::lock_guard<std::mutex> lock(handlersMutex_);
+                        // Find and remove the handler with the matching PID
+                        auto it = std::remove_if(ProcessController::handlers().begin(),
+                                                 ProcessController::handlers().end(),
+                                                 [pid](const std::unique_ptr<ProcessMonitor> &handler) 
+                                                 {
+                                                     return handler->getPid() == pid;
+                                                 });
 
-                    if (it != ProcessController::handlers().end())
-                    {
-                        (*it)->monitoring() = false;
-                    }
-                    else
-                    {
-                        tools::LoggerManager::getInstance().logWarning(
-                                "[PARENT PROCESS] | Handler not found for PID: " + std::to_string(pid));
+                        if (it != ProcessController::handlers().end())
+                        {
+                            ProcessController::handlers().erase(it, ProcessController::handlers().end());
+                            tools::LoggerManager::getInstance().logInfo(
+                                    "[PARENT PROCESS] | Handler removed for PID: " + std::to_string(pid) +
+                                    " | Number of handlers remaining: " +
+                                    std::to_string(ProcessController::handlers().size()));
+                        }
+                        else
+                        {
+                            // Log a warning if no handler was found for the given PID
+                            tools::LoggerManager::getInstance().logWarning(
+                                    "[PARENT PROCESS] Warning: No handler found for PID: " + std::to_string(pid));
+                        }
                     }
                 }
             }
