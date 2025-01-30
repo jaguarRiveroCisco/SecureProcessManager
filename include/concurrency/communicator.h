@@ -26,6 +26,9 @@ namespace concurrency
         Communicator &operator=(const Communicator &) = delete;
         Communicator(Communicator &&)                 = delete;
         Messenger messenger_;
+    private:
+        void sendMessage(const std::string &text, int msgType);
+        std::string receiveMessage(int msgType);
     };
 } // namespace concurrency
 

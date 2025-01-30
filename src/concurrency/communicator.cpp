@@ -5,12 +5,16 @@
 
 namespace concurrency
 {
-    void Communicator::sendCreationMessage(const std::string &sleepDuration, pid_t pid)
+    std::string createMessage(const std::string &sleepDuration, pid_t pid) 
     {
-        std::string messageText = "Child " + std::to_string(pid) + " created. Sleep duration: " + sleepDuration;
+        return "PID: " + std::to_string(pid) + " | Sleep duration: " + sleepDuration;
+    }
+
+    void Communicator::sendMessage(const std::string &text, int msgType)
+    {
         try
         {
-            messenger_.sendMessage(messageText, Message::CREATION_MSG);
+            messenger_.sendMessage(text, msgType);
         }
         catch (const std::runtime_error &e)
         {
@@ -18,7 +22,7 @@ namespace concurrency
         }
     }
 
-    std::string Communicator::receiveCreationMessage()
+    std::string Communicator::receiveMessage(int msgType)
     {
         std::string message;
         auto        start   = std::chrono::steady_clock::now();
@@ -28,7 +32,7 @@ namespace concurrency
         {
             try
             {
-                message = messenger_.receiveMessage(Message::CREATION_MSG);
+                message = messenger_.receiveMessage(msgType);
                 if (!message.empty())
                 {
                     break;
@@ -52,5 +56,16 @@ namespace concurrency
         }
 
         return message;
+    }
+
+
+    void Communicator::sendCreationMessage(const std::string &sleepDuration, pid_t pid)
+    {
+        sendMessage(createMessage(sleepDuration, pid), Message::CREATION_MSG);
+    }
+
+    std::string Communicator::receiveCreationMessage() 
+    { 
+        return receiveMessage(Message::CREATION_MSG); 
     }
 } // namespace concurrency
