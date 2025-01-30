@@ -15,7 +15,7 @@ namespace tools
         std::mt19937       gen(rd());
 
         // Sleep for a random duration in milliseconds
-        std::uniform_int_distribution<> disMs(NapTimeMs::SMALL, NapTimeMs::LONG);
+        std::uniform_int_distribution<> disMs(NapTimeMs::VERYSMALL, NapTimeMs::LONG);
         return disMs(gen);
     }
     int randomSec()
