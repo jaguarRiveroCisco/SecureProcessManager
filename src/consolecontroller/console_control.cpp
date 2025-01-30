@@ -9,6 +9,7 @@
 #include "main_controller.h"
 #include "nap_time.h"
 #include "process_simulator.h"
+#include "string_tools.h"
 namespace cli::driver
 {
     void killPid(pid_t pid);
@@ -186,21 +187,6 @@ namespace cli::driver
         }
     }
 
-    std::vector<std::string> splitString(const std::string &input, char delimiter)
-    {
-        std::vector<std::string> tokens;
-        std::istringstream       stream(input);
-        std::string              token;
-
-        while (std::getline(stream, token, delimiter))
-        {
-            tokens.push_back(token);
-        }
-
-        return tokens;
-    }
-
-
     void doCommand(const std::string &input)
     {
         if (input.empty())
@@ -224,7 +210,7 @@ namespace cli::driver
         }
         else if (input.rfind("term ", 0) == 0)
         {
-            auto vals = splitString(input, ' ');
+            auto vals = tools::string::splitString(input);
             printpid("[TERMINATE ONE] Terminating process with PID:", vals[1]);
             terminatePid(std::stoi(vals[1]));
         }
@@ -235,7 +221,7 @@ namespace cli::driver
         }
         else if (input.rfind("int ", 0) == 0)
         {
-            auto vals = splitString(input, ' ');
+            auto vals = tools::string::splitString(input);
 
             printpid("[INTERRUPT ONE] Interrupting process with PID:", vals[1]);
             intPid( std::stoi(vals[1]) );
@@ -256,7 +242,7 @@ namespace cli::driver
         }
         else if (input.rfind("kill ", 0) == 0)
         {
-            auto vals = splitString(input, ' ');
+            auto vals = tools::string::splitString(input);
             printpid("[KILL ONE] Killing process with PID:", vals[1]);
             killPid(std::stoi(vals[1]));
         }

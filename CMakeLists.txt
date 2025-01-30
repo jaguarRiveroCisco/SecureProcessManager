@@ -56,6 +56,7 @@ src/tools/timestamp.cpp
 src/tools/random_stuff.cpp
 src/tools/time_manager.cpp
 src/tools/thread_controller.cpp
+src/tools/string_tools.cpp
 
 # synchronization
 src/concurrency/communicator.cpp
