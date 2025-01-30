@@ -77,9 +77,6 @@ namespace process
 
     void ProcessMonitor::monitorProcessThread()
     {
-        tools::LoggerManager::getInstance().logInfo(
-                "[MONITORING THREAD] | Monitoring for PID: " + std::to_string(pid_) + " has started.");
-
         int  status   = -1;
         monitoring() = true;
         while (monitoring())
@@ -107,8 +104,6 @@ namespace process
             }
         }
         monitoring() = false;
-        tools::LoggerManager::getInstance().logInfo("[MONITORING THREAD] | Monitoring for PID: " + std::to_string(pid_) + " has stopped.");
-
     }
 
     void ProcessMonitor::collectAndLaunch(std::unique_ptr<IProcess> process)

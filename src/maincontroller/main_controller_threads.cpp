@@ -130,10 +130,6 @@ namespace process
                         if (it != ProcessController::handlers().end())
                         {
                             ProcessController::handlers().erase(it, ProcessController::handlers().end());
-                            tools::LoggerManager::getInstance().logInfo(
-                                    "[PARENT PROCESS] | Handler removed for PID: " + std::to_string(pid) +
-                                    " | Number of handlers remaining: " +
-                                    std::to_string(ProcessController::handlers().size()));
                         }
                         else
                         {

@@ -27,8 +27,9 @@ namespace process
     void BaseProcess::postWork(pid_t pid)
     {
         logLifetime();
-        concurrency::Communicator::getInstance().sendTerminationMessage(timeManager_.getFormattedElapsedTimeStr(), pid);
-
+        if (getppid() != 1)
+            concurrency::Communicator::getInstance().sendTerminationMessage(timeManager_.getFormattedElapsedTimeStr(),
+                                                                            pid);
         _exit(exitCode_); // Ensure the child process exits immediately
     }
 
