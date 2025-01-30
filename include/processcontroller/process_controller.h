@@ -3,8 +3,8 @@
 #ifndef PROCESS_CONTROLLER_H
 #define PROCESS_CONTROLLER_H
 
+#include <shared_mutex>
 #include "process_monitor.h"
-
 namespace process
 {
     enum class LoggingType { Console, File };
@@ -26,7 +26,11 @@ namespace process
         static void setProcessType(const std::string &processType);
         static std::string  loggingTypeToString(); // New method
         static std::string &processType() { return processType_; }
-        static std::vector<std::unique_ptr<ProcessMonitor>> &handlers() { return handlers_; }
+        static std::vector<std::unique_ptr<ProcessMonitor>> &handlers() 
+        {
+            std::shared_lock<std::shared_mutex> lock(mutex_);
+            return handlers_; 
+        }
 
         static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
         static int numProcesses() { return numProcesses_; }
@@ -39,6 +43,7 @@ namespace process
     private:
         static std::atomic<bool> running_;
         static std::atomic<bool> respawn_;
+        static std::shared_mutex mutex_;
     };
 } // namespace process
 

@@ -9,6 +9,7 @@ namespace process
     std::atomic<bool> ProcessController::respawn_      = true;
 
     std::vector<std::unique_ptr<ProcessMonitor>> ProcessController::handlers_;
+    std::shared_mutex                            ProcessController::mutex_;
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
     
