@@ -113,14 +113,14 @@ namespace process
     
     void NetworkProcess::work()
     {
-        preWork();
+        preWork(getpid());
         while (proceed())
         {
             std::make_shared<network_process>(true);
             tools::sleepRandomSec(true);
             timeManager_.currentTime() = std::chrono::high_resolution_clock::now();
         }
-        postWork();
+        postWork(getpid());
     }
 
 } // namespace process

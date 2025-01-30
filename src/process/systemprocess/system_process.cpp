@@ -2,6 +2,7 @@
 #include <cstring>
 #include "logger_instance.h"
 #include "random_stuff.h"
+#include <unistd.h>
 namespace process
 {
     bool SystemProcess::spawnChildProcess(const std::vector<char *> &args)
@@ -12,7 +13,7 @@ namespace process
 
     void SystemProcess::work()
     {
-        preWork();
+        preWork(getpid());
         Arguments arguments;
         while (proceed())
         {
@@ -24,7 +25,7 @@ namespace process
             tools::sleepRandomMs(true);
             timeManager_.currentTime() = std::chrono::high_resolution_clock::now();
         }
-        postWork();
+        postWork(getpid());
     }
 
     SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<char *> &args) : parent_(parent)

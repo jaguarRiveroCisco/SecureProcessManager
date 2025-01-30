@@ -26,8 +26,8 @@ namespace process
         virtual ~BaseProcess() = default;
         BaseProcess();
         void logLifetime() const;
-        void preWork() override;
-        void postWork() override;
+        void preWork(pid_t pid) override;
+        void postWork(pid_t pid) override;
 
         tools::TimeManager timeManager_;
 

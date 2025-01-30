@@ -15,8 +15,8 @@ namespace process
         virtual void setPid(pid_t* pid) = 0;
 
     protected:
-        virtual void preWork() = 0;
-        virtual void postWork() = 0;
+        virtual void preWork(pid_t pid) = 0;
+        virtual void postWork(pid_t pid) = 0;
     };
 
 } // namespace process

@@ -17,14 +17,14 @@ namespace process
                 "[PROCESS FINISHED]  | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + " | " + reason_);
     }
 
-    void BaseProcess::preWork()
+    void BaseProcess::preWork(pid_t pid)
     {
         timeManager_.setSleepDuration();
         tools::LoggerManager::createLoggerType();
-        concurrency::Communicator::getInstance().sendCreationMessage(timeManager_.getSleepDurationStr(), getpid());
+        concurrency::Communicator::getInstance().sendCreationMessage(timeManager_.getSleepDurationStr(), pid);
     }
 
-    void BaseProcess::postWork()
+    void BaseProcess::postWork(pid_t pid)
     {
         logLifetime();
         _exit(exitCode_); // Ensure the child process exits immediately

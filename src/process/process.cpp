@@ -8,7 +8,7 @@ namespace process
 {
     void Process::work()
     {
-        preWork();  
+        preWork(getpid());  
 
         // Add real process work code here
         while (continue_)
@@ -21,7 +21,6 @@ namespace process
             }
             tools::sleepRandomMs();
         }
-        postWork();
-
+        postWork(getpid());
     }
 } // namespace process

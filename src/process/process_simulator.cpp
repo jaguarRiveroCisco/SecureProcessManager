@@ -35,12 +35,12 @@ namespace process
 
     void ProcessSimulator::work()
     {
-        preWork();
+        preWork(getpid());
         while (proceed())
         {
             tools::sleepRandomMs();
             timeManager_.currentTime() = std::chrono::high_resolution_clock::now();
         }
-        postWork();
+        postWork(getpid());
     }
 } // namespace process
