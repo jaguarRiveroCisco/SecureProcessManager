@@ -10,25 +10,6 @@ namespace concurrency
         return instance;
     }
 
-    void Synchro::enqueueTerminatedPid(pid_t pid) noexcept
-    {
-        std::lock_guard<std::mutex> lock(mtx_);
-        terminatedPidQueue_.push(pid);
-    }
-
-    // Get and pop the front element of the queue
-    pid_t Synchro::removeTerminatedProcessPid() noexcept
-    {
-        std::lock_guard<std::mutex> lock(mtx_);
-        if (!terminatedPidQueue_.empty())
-        {
-            pid_t frontElement = terminatedPidQueue_.front();
-            terminatedPidQueue_.pop();
-            return frontElement;
-        }
-        return -1; // Return -1 if the queue is empty
-    }
-
     void Synchro::pauseMonitoring(bool value) noexcept
     {
         {
@@ -49,10 +30,5 @@ namespace concurrency
 
     bool Synchro::pauseMonitoring() const noexcept { return pauseMonitoring_; }
 
-    // Check if the queue is empty
-    bool Synchro::isTerminatedPidQueueEmpty() const noexcept
-    {
-        std::lock_guard<std::mutex> lock(mtx_);
-        return terminatedPidQueue_.empty();
-    }
+ 
 } // namespace concurrency

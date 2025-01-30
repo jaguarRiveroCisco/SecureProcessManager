@@ -97,7 +97,6 @@ namespace process
             else if (result == pid_)
             {
                 displayProcessStatus(status, pid_);
-                concurrency::Synchro::getInstance().enqueueTerminatedPid(pid_);
                 break;
             }
             else
