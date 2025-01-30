@@ -19,8 +19,8 @@ namespace process
         static void createHandler();
         static bool removeHandler();
         static void CreateMonitoringThreads();
-
         static void createMonitorThread(const std::string &);
+        static void MonitorProcessTermination();
 
         using HandlerFactory = std::function<std::unique_ptr<ProcessMonitor>()>;
         static std::unordered_map<std::string, HandlerFactory> handlerFactoryMap_;

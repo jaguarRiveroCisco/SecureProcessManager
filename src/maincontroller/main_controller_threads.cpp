@@ -85,4 +85,61 @@ namespace process
         }
     }
 
+    void MainController::MonitorProcessTermination()
+    {
+        while(ProcessController::running())
+        {
+            try
+            {
+                if (!concurrency::Synchro::getInstance().pauseMonitoring())
+                {
+                    auto terminationMessage = concurrency::Communicator::getInstance().receiveTerminationMessage();
+
+                    if (terminationMessage.empty())
+                    {
+                        continue;
+                    }
+
+                    tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Termination message: " +
+                                                                terminationMessage);
+                    auto vec = tools::string::splitString(terminationMessage);
+
+                    if (vec.size() < 2)
+                    {
+                        tools::LoggerManager::getInstance().logWarning(
+                                "[PARENT PROCESS] | Unexpected format in termination message: " + terminationMessage);
+                        continue;
+                    }
+
+                    pid_t pid = tools::string::strToPid(vec[1]);
+                    if (pid == -1)
+                    {
+                        continue;
+                    }
+
+                    auto it = std::find_if(
+                            ProcessController::handlers().begin(), ProcessController::handlers().end(),
+                            [pid](const std::unique_ptr<ProcessMonitor> &handler) { return handler->getPid() == pid; });
+
+                    if (it != ProcessController::handlers().end())
+                    {
+                        (*it)->monitoring() = false;
+                    }
+                    else
+                    {
+                        tools::LoggerManager::getInstance().logWarning(
+                                "[PARENT PROCESS] | Handler not found for PID: " + std::to_string(pid));
+                    }
+                }
+            }
+            catch (const std::exception &e)
+            {
+                tools::LoggerManager::getInstance().logException("[PARENT PROCESS] | Exception occurred: " +
+                                                                 std::string(e.what()));
+            }
+
+            // Optional sleep to reduce CPU usage in case of tight loop
+            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
+        }
+    }
 } // namespace process

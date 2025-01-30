@@ -65,6 +65,9 @@ namespace process
     {
         std::thread monitoringThread(&MainController::CreateMonitoringThreads);
         monitoringThread.detach();
+        //std::thread terminationThread(&MainController::MonitorProcessTermination);
+        //terminationThread.detach();
+
         ProcessController::setProcessType(processType);
         ProcessController::setNumProcesses(numProcesses);
         initializeFactory();
