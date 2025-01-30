@@ -2,6 +2,8 @@
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <thread>
+#include "process_controller.h"
+
 namespace concurrency
 {
     Messenger::Messenger()
@@ -67,8 +69,8 @@ namespace concurrency
         Message message;
         auto start = std::chrono::steady_clock::now();
         auto timeout = std::chrono::seconds(5); // Set a timeout duration
-        
-        while (true)
+
+        while (process::ProcessController::running())
         {
             pthread_mutex_lock(&mutex);
             if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, IPC_NOWAIT) != -1)
@@ -88,11 +90,12 @@ namespace concurrency
             auto now = std::chrono::steady_clock::now();
             if (now - start > timeout)
             {
-                throw std::runtime_error("Timeout while waiting for message");
+                break;
             }
         
             // Sleep for a short duration before retrying
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
+        return message.msgText;
     }
 } // namespace concurrency

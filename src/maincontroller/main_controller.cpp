@@ -1,5 +1,6 @@
 
 #include "main_controller.h"
+#include <mutex>
 #include <thread>
 #include "communicator.h"
 #include "console_control.h"
@@ -9,6 +10,7 @@
 #include "process.h"
 #include "process_simulator.h"
 #include "random_stuff.h"
+#include "string_tools.h"
 #include "system_monitor.h"
 #include "system_process.h"
 
@@ -28,12 +30,12 @@ namespace process
     void MainController::createHandler()
     {
         const std::string &processType = ProcessController::processType();
-        auto               it          = handlerFactoryMap_.find(processType);
+        auto it          = handlerFactoryMap_.find(processType);
         if (it != handlerFactoryMap_.end())
         {
-            std::unique_ptr<ProcessMonitor> handler = it->second(); // second() is the monitor function.
-            auto creationMessage = concurrency::Communicator::getInstance().receiveCreationMessage();
-            tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Creation message: " + creationMessage);
+            // second() is the templatized function that creates the relevant handler. 
+            // See the header for the templatized function
+            std::unique_ptr<ProcessMonitor> handler = it->second(); 
             ProcessController::handlers().push_back(std::move(handler));
         }
         else
@@ -59,25 +61,14 @@ namespace process
         }
     }
 
-    void MainController::CreateMonitoringThreads()
-    {
-        if (concurrency::Synchro::getInstance().pauseMonitoring())
-            return;
-            
-        for (auto &handler: ProcessController::handlers())
-        {
-            if (!handler->monitoring())
-                handler->createMonitorProcessThread();
-        }
-    }
-
     void MainController::run(const std::string &processType, int numProcesses)
     {
+        std::thread monitoringThread(&MainController::CreateMonitoringThreads);
+        monitoringThread.detach();
         ProcessController::setProcessType(processType);
         ProcessController::setNumProcesses(numProcesses);
         initializeFactory();
         createHandlers(ProcessController::numProcesses());
-        CreateMonitoringThreads();
         cli::driver::consoleLoop();
         processLifecycleLoop();
         cli::driver::consoleLoop(false);

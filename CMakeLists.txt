@@ -50,6 +50,7 @@ src/consolecontroller/cli_controller.cpp
 
 # Main controller
 src/maincontroller/main_controller.cpp
+src/maincontroller/main_controller_threads.cpp
 
 # Tools
 src/tools/timestamp.cpp
