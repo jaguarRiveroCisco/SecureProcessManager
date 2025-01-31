@@ -8,6 +8,7 @@ namespace process
 {
     void Process::preWork(pid_t pid)
     {
+        timeManager_.setSleepDuration();
         tools::LoggerManager::createLoggerType();
         concurrency::Communicator::getInstance().sendCreationMessage("", pid);
     }
