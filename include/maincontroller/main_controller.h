@@ -7,6 +7,8 @@
 
 namespace process
 {
+    using HandlerFactory = std::function<ProcessMonitorPtr()>;
+    using FactoryMap     = std::unordered_map<std::string, HandlerFactory>;
     class MainController final
     {
     public:
@@ -21,11 +23,10 @@ namespace process
         static void createMonitorThread(const std::string &);
         static void MonitorProcessTermination();
 
-        using HandlerFactory = std::function<std::unique_ptr<ProcessMonitor>()>;
-        static std::unordered_map<std::string, HandlerFactory> handlerFactoryMap_;
+        static FactoryMap handlerFactoryMap_;
 
         template<typename MonitorType, typename ProcessType> 
-        static std::unique_ptr<ProcessMonitor> createHandler();
+        static ProcessMonitorPtr manufacture();
 
         static void initializeFactory();
 
@@ -33,7 +34,7 @@ namespace process
     };
     // Template function to create a handler
     template<typename MonitorType, typename ProcessType> 
-    std::unique_ptr<ProcessMonitor> MainController::createHandler()
+    ProcessMonitorPtr MainController::manufacture()
     {
         auto handler = std::make_unique<MonitorType>();
         handler->collectAndLaunch(std::make_unique<ProcessType>());

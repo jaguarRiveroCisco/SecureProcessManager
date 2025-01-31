@@ -18,26 +18,24 @@ namespace process
 {
     void MainController::createMonitorThread(const std::string& pidStr)
     {
-        static std::mutex           CreateMonitoringThreadsMutex;
-        std::lock_guard<std::mutex> lock(CreateMonitoringThreadsMutex);
+        static std::mutex CreateMonitoringThreadsMutex;
 
-        pid_t                       pid = tools::string::strToPid(pidStr);
+        std::lock_guard<std::mutex> lock(CreateMonitoringThreadsMutex);
+        pid_t pid = tools::string::strToPid(pidStr);
         if (pid == -1)
         {
             return;
         }
 
-        auto it = std::find_if(
-                ProcessController::handlers().begin(), ProcessController::handlers().end(),
-                [pid](const std::unique_ptr<ProcessMonitor> &handler) { return handler->getPid() == pid; });
+        auto it = ProcessController::findMonitor(pid);
 
-        if (it != ProcessController::handlers().end() && !(*it)->monitoring())
+        if(it &&  !it->monitoring())
         {
-            (*it)->createMonitorProcessThread();
+            it->createMonitorProcessThread();
         }
         else
         {
-            throw std::runtime_error("Handler not found for PID: " + std::to_string(pid));
+            tools::LoggerManager::getInstance().logWarning("[MONITOR THREAD] | Handler not found for PID: " + pidStr);
         }
     }
     /// @brief This function is executed in its own thread.
@@ -100,49 +98,33 @@ namespace process
                         continue;
                     }
 
-                    tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | [TERMINATION]: " +
-                                                                terminationMessage);
+                    tools::LoggerManager::getInstance().logInfo("[MONITOR PROCESS TERMINATION] | " + terminationMessage);
                     auto vec = tools::string::splitString(terminationMessage);
 
                     if (vec.size() < 2)
                     {
                         tools::LoggerManager::getInstance().logWarning(
-                                "[PARENT PROCESS] | Unexpected format in termination message: " + terminationMessage);
+                                "[MONITOR PROCESS TERMINATION] | Unexpected format in termination message: " +
+                                terminationMessage);
                         continue;
                     }
 
                     pid_t pid = tools::string::strToPid(vec[1]);
-                    if (pid == -1)
-                    {
-                        continue;
-                    }
-
+                    if (pid != -1)
                     {
                         std::lock_guard<std::mutex> lock(handlersMutex_);
-                        // Find and remove the handler with the matching PID
-                        auto it = std::remove_if(ProcessController::handlers().begin(),
-                                                 ProcessController::handlers().end(),
-                                                 [pid](const std::unique_ptr<ProcessMonitor> &handler) 
-                                                 {
-                                                     return handler->getPid() == pid;
-                                                 });
-
-                        if (it != ProcessController::handlers().end())
+                        auto res = ProcessController::removeMonitorProcess(pid);
+                        if (!res)
                         {
-                            ProcessController::handlers().erase(it, ProcessController::handlers().end());
-                        }
-                        else
-                        {
-                            // Log a warning if no handler was found for the given PID
                             tools::LoggerManager::getInstance().logWarning(
-                                    "[PARENT PROCESS] Warning: No handler found for PID: " + std::to_string(pid));
+                                    "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + vec[1]);
                         }
                     }
                 }
             }
             catch (const std::exception &e)
             {
-                tools::LoggerManager::getInstance().logException("[PARENT PROCESS] | Exception occurred: " +
+                tools::LoggerManager::getInstance().logException("[MONITOR PROCESS TERMINATION] | Exception occurred: " +
                                                                  std::string(e.what()));
             }
 

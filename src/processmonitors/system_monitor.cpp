@@ -6,7 +6,6 @@ namespace process
 {
     void SystemMonitor::launchChildProcess() 
     { 
-        process_->setPid(&pid_);
         process_->work(); 
     }
 }

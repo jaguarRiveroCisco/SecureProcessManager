@@ -18,14 +18,14 @@ namespace process
 {
     std::mutex MainController::handlersMutex_;
     // Define the handler factory map
-    std::unordered_map<std::string, MainController::HandlerFactory> MainController::handlerFactoryMap_;
+    FactoryMap MainController::handlerFactoryMap_;
     // Initialize the factory map
     void MainController::initializeFactory()
     {
-        handlerFactoryMap_["real"]    = []() { return createHandler<ProcessMonitor, Process>(); };
-        handlerFactoryMap_["simul"]   = []() { return createHandler<ProcessMonitor, ProcessSimulator>(); };
-        handlerFactoryMap_["network"] = []() { return createHandler<ProcessMonitor, NetworkProcess>(); };
-        handlerFactoryMap_["system"]  = []() { return createHandler<SystemMonitor, SystemProcess>(); };
+        handlerFactoryMap_["real"]    = []() { return manufacture<ProcessMonitor, Process>(); };
+        handlerFactoryMap_["simul"]   = []() { return manufacture<ProcessMonitor, ProcessSimulator>(); };
+        handlerFactoryMap_["network"] = []() { return manufacture<ProcessMonitor, NetworkProcess>(); };
+        handlerFactoryMap_["system"]  = []() { return manufacture<SystemMonitor, SystemProcess>(); };
     }
 
     void MainController::createHandler()
@@ -36,8 +36,10 @@ namespace process
         {
             // second() is the templatized function that creates the relevant handler. 
             // See the header for the templatized function
-            std::unique_ptr<ProcessMonitor> handler = it->second(); 
-            ProcessController::handlers().push_back(std::move(handler));
+            ProcessMonitorPtr handler = it->second();
+            tools::LoggerManager::getInstance().logInfo("[MANUFACTURE] | Handler manufactured for process type: " +
+                                                        processType + " | PID: " + std::to_string(handler->getPid()));
+            ProcessController::addMonitorProcess(handler->getPid(), std::move(handler));
         }
         else
         {

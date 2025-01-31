@@ -3,16 +3,17 @@
 #include "logger_instance.h"
 namespace process
 {
-    int         ProcessController::numProcesses_ = 4; // Default number of processes
-    std::string ProcessController::processType_  = "simul"; // Default process type
+    int               ProcessController::numProcesses_ = 4; // Default number of processes
+    std::string       ProcessController::processType_  = "simul"; // Default process type
     std::atomic<bool> ProcessController::running_      = true;
     std::atomic<bool> ProcessController::respawn_      = true;
 
-    std::vector<std::unique_ptr<ProcessMonitor>> ProcessController::handlers_;
-    std::shared_mutex                            ProcessController::mutex_;
+    ProcessMonitorMap ProcessController::handlers_;
+    std::shared_mutex ProcessController::mutex_;
+
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
-    
+
     // Implementation of the new method
     std::string ProcessController::loggingTypeToString()
     {
@@ -29,12 +30,12 @@ namespace process
 
     void ProcessController::setProcessType(const std::string &processType) { processType_ = processType; }
 
-    void  ProcessController::displayAllPids()
+    void ProcessController::displayAllPids()
     {
         tools::LoggerManager::getInstance() << "[PARENT PROCESS] Current PIDs: ";
         for (const auto &handler: handlers_)
         {
-            tools::LoggerManager::getInstance() << handler->getPid() << " | ";
+            tools::LoggerManager::getInstance() << handler.second->getPid() << " | ";
         }
         tools::LoggerManager::getInstance() << " Total number of processes: " << handlers_.size();
         tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
@@ -46,7 +47,7 @@ namespace process
 
         for (auto &handler: handlers_)
         {
-            handler->killProcess();
+            handler.second->killProcess();
         }
     }
 
@@ -55,7 +56,7 @@ namespace process
         running() = false;
         for (auto &handler: handlers_)
         {
-            handler->terminateProcess();
+            handler.second->terminateProcess();
         }
     }
 
@@ -71,10 +72,10 @@ namespace process
 
     void ProcessController::intAll()
     {
-        running() = false; 
+        running() = false;
         for (auto &handler: handlers_)
         {
-            handler->intProcess();
+            handler.second->intProcess();
         }
     }
 
@@ -84,13 +85,11 @@ namespace process
 
     void ProcessController::killProcessByPid(pid_t pid)
     {
-        auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessMonitor> &handler) {
-                    return handler->getPid() == pid;
-                });
-        if (it != handlers_.end())
+
+        auto element = findMonitor(pid);
+        if (element)
         {
-            (*it)->killProcess();
+            element->killProcess();
         }
         else
         {
@@ -101,35 +100,29 @@ namespace process
 
     void ProcessController::terminateProcessByPid(pid_t pid)
     {
-        auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessMonitor> &handler) {
-                    return handler->getPid() == pid;
-                });
-        if (it != handlers_.end())
+        auto element = findMonitor(pid);
+        if (element)
         {
-            (*it)->terminateProcess();
+            element->terminateProcess();
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process with PID: " << pid << " not found.";
+            tools::LoggerManager::getInstance() << "Process with PID: " << pid << " not found.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
 
     void ProcessController::intProcessByPid(pid_t pid)
     {
-        auto it =
-                std::find_if(handlers_.begin(), handlers_.end(), [pid](const std::unique_ptr<ProcessMonitor> &handler) {
-                    return handler->getPid() == pid;
-                });
-        if (it != handlers_.end())
+        auto element = findMonitor(pid);
+        if (element)
         {
-            (*it)->intProcess();
+            element->intProcess();
         }
         else
         {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Process with PID: " << pid << " not found.";
+            tools::LoggerManager::getInstance() << "Process with PID: " << pid << " not found.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
     }
-}
+} // namespace process
