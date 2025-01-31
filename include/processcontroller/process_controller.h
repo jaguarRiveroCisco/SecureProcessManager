@@ -73,7 +73,10 @@ namespace process
         static bool removeMonitorProcess(pid_t pid)
         {
             std::unique_lock<std::shared_mutex> lock(mutex_);
-            return handlers_.erase(pid) > 0;
+            auto it = handlers_.find(pid);
+            if (it != handlers_.end())
+                return handlers_.erase(pid) > 0;
+            return false;
         }
 
     protected:
