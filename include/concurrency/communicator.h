@@ -15,7 +15,7 @@ namespace concurrency
         virtual std::string  receiveCreationMessage();
         virtual std::string  receiveTerminationMessage();
         void                 sendCreationMessage(const std::string &, pid_t);
-        void                 sendTerminationMessage(const std::string &, pid_t);
+        void                 sendTerminationMessage(const std::string &, pid_t, int);
         static Communicator &getInstance()
         {
             static Communicator instance;

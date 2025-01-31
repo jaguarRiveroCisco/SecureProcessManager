@@ -4,13 +4,33 @@
 
 namespace concurrency
 {
-    std::string createMessage(const std::string &sleepDuration, pid_t pid) 
+    std::string createMessage(pid_t pid, const std::string &sleepDuration)
     {
-        if(sleepDuration.empty())
+        std::string message = "PID: " + std::to_string(pid);
+    
+        if (!sleepDuration.empty())
         {
-            return "PID: " + std::to_string(pid);
+            message += " | Sleep duration: " + sleepDuration;           
         }
-        return "PID: " + std::to_string(pid) + " | Sleep duration: " + sleepDuration;
+    
+        return message;
+    }
+
+    std::string createMessage(pid_t pid, const std::string &sleepDuration, int errorCode)
+    {
+        std::string message = "PID: " + std::to_string(pid);
+
+        if (sleepDuration.empty())
+        {
+            message += " | Error code: " + std::to_string(errorCode);
+        }
+        else
+        {
+            message += " | Sleep duration: " + sleepDuration;
+            message += " | Error code: " + std::to_string(errorCode);
+        }
+
+        return message;
     }
 
     void Communicator::sendMessage(const std::string &text, int msgType)
@@ -33,12 +53,12 @@ namespace concurrency
 
     void Communicator::sendCreationMessage(const std::string &sleepDuration, pid_t pid)
     {
-        sendMessage(createMessage(sleepDuration, pid), Message::CREATION_MSG);
+        sendMessage(createMessage(pid, sleepDuration), Message::CREATION_MSG);
     }
 
-    void Communicator::sendTerminationMessage(const std::string &sleepDuration, pid_t pid)
+    void Communicator::sendTerminationMessage(const std::string &sleepDuration, pid_t pid, int errorCode)
     {
-        sendMessage(createMessage(sleepDuration, pid), Message::TERMINATION_MSG);
+        sendMessage(createMessage(pid, sleepDuration, errorCode), Message::TERMINATION_MSG);
     }
 
     std::string Communicator::receiveProcessMessage(int type)

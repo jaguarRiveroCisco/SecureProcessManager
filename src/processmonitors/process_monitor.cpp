@@ -103,7 +103,7 @@ namespace process
                 auto res = displayProcessStatus(status, pid_);
                 if(res != STATUS_OK)
                 {
-                    concurrency::Communicator::getInstance().sendTerminationMessage("", pid_);
+                    concurrency::Communicator::getInstance().sendTerminationMessage("", pid_, status);
                 }
                 break;
             }
@@ -111,6 +111,7 @@ namespace process
             {
                 // Error occurred
                 perror("waitpid");
+                tools::LoggerManager::getInstance().logError("[MONITOR THREAD] | Error occurred while waiting for process " + std::to_string(pid_) + ".");
                 break;
             }
         }

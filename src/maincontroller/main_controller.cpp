@@ -37,8 +37,6 @@ namespace process
             // second() is the templatized function that creates the relevant handler. 
             // See the header for the templatized function
             ProcessMonitorPtr handler = it->second();
-            tools::LoggerManager::getInstance().logInfo("[MANUFACTURE] | Handler manufactured for process type: " +
-                                                        processType + " | PID: " + std::to_string(handler->getPid()));
             ProcessController::addMonitorProcess(handler->getPid(), std::move(handler));
         }
         else

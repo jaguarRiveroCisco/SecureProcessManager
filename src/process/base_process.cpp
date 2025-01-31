@@ -32,7 +32,7 @@ namespace process
         logLifetime();
         if (getppid() != 1)
             concurrency::Communicator::getInstance().sendTerminationMessage(timeManager_.getFormattedElapsedTimeStr(),
-                                                                            pid_);
+                                                                            pid_, exitCode_);
         _exit(exitCode_); // Ensure the child process exits immediately
     }
 
