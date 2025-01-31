@@ -6,12 +6,6 @@
 #include "random_stuff.h"
 namespace process
 {
-    void Process::preWork(pid_t pid)
-    {
-        timeManager_.setSleepDuration();
-        tools::LoggerManager::createLoggerType();
-        concurrency::Communicator::getInstance().sendCreationMessage("", pid);
-    }
     void Process::work()
     {
         preWork(getpid());  
@@ -22,11 +16,11 @@ namespace process
             /* code */
             if (getppid() == 1)
             {
-                reason_ = "Parent process has terminated. Exiting child process.";
+                reason_ = "Parent process has terminated.";
                 break;
             }
             tools::sleepRandomMs();
         }
-        postWork(getpid());
+        postWork();
     }
 } // namespace process

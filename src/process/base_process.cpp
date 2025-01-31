@@ -19,17 +19,20 @@ namespace process
 
     void BaseProcess::preWork(pid_t pid)
     {
+        pid_ = pid;
+        
         timeManager_.setSleepDuration();
         tools::LoggerManager::createLoggerType();
-        concurrency::Communicator::getInstance().sendCreationMessage(timeManager_.getSleepDurationStr(), pid);
+
+        concurrency::Communicator::getInstance().sendCreationMessage(timeManager_.getSleepDurationStr(), pid_);
     }
 
-    void BaseProcess::postWork(pid_t pid)
+    void BaseProcess::postWork()
     {
         logLifetime();
         if (getppid() != 1)
             concurrency::Communicator::getInstance().sendTerminationMessage(timeManager_.getFormattedElapsedTimeStr(),
-                                                                            pid);
+                                                                            pid_);
         _exit(exitCode_); // Ensure the child process exits immediately
     }
 

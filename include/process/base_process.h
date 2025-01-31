@@ -15,19 +15,16 @@ namespace process
     public:
         static std::atomic<bool> &continueFlag();
         static std::atomic<int>  &exitCode();
-
-    public:
-        void setPid(pid_t* pid) override { pidP_ = pid; }
-
     protected:
-        pid_t* pidP_;
+        pid_t pid_{0};
+
 
     protected:
         virtual ~BaseProcess() = default;
         BaseProcess();
         void logLifetime() const;
         void preWork(pid_t pid) override;
-        void postWork(pid_t pid) override;
+        void postWork() override;
 
         tools::TimeManager timeManager_;
 

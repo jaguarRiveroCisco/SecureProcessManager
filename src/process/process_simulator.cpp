@@ -41,6 +41,6 @@ namespace process
             tools::sleepRandomMs();
             timeManager_.currentTime() = std::chrono::high_resolution_clock::now();
         }
-        postWork(getpid());
+        postWork();
     }
 } // namespace process

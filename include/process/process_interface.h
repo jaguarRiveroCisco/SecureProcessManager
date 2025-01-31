@@ -11,12 +11,10 @@ namespace process
     public:
         virtual ~IProcess() = default;
         virtual void work() = 0;
-        // Add a virtual setter for pid
-        virtual void setPid(pid_t* pid) = 0;
 
     protected:
         virtual void preWork(pid_t pid) = 0;
-        virtual void postWork(pid_t pid) = 0;
+        virtual void postWork() = 0;
     };
 
 } // namespace process

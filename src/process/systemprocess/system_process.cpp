@@ -8,7 +8,7 @@ namespace process
     bool SystemProcess::spawnChildProcess(const std::vector<char *> &args)
     {
         SpawnChild spawnChild(this, args);
-        return *pidP_ > 0;
+        return true; // TODO
     }
 
     void SystemProcess::work()
@@ -25,7 +25,7 @@ namespace process
             tools::sleepRandomMs(true);
             timeManager_.currentTime() = std::chrono::high_resolution_clock::now();
         }
-        postWork(getpid());
+        postWork();
     }
 
     SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<char *> &args) : parent_(parent)
@@ -33,9 +33,9 @@ namespace process
         posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
         tools::LoggerManager::getInstance().logInfo("[SYSTEM PROCESS] SpawnChild. Parent process PID: " +
-                                                    std::to_string(*parent_->pidP_));
+                                                    std::to_string(parent_->pid_));
 
-        int status = posix_spawn(parent_->pidP_, args[0], &actions, &attrs, const_cast<char *const *>(args.data()),
+        int status = posix_spawn(&parent_->pid_, args[0], &actions, &attrs, const_cast<char *const *>(args.data()),
                                  &environ[0]);
         if (status != 0)
         {
