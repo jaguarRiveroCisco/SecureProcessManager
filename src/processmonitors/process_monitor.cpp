@@ -115,6 +115,7 @@ namespace process
             }
         }
         monitoring() = false;
+        tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Monitoring thread ending for process " + std::to_string(pid_) + ".");
     }
 
     void ProcessMonitor::collectAndLaunch(std::unique_ptr<IProcess> process)
