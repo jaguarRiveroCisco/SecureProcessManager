@@ -18,9 +18,6 @@ namespace process
 {
     void MainController::createMonitorThread(const std::string& pidStr)
     {
-        static std::mutex CreateMonitoringThreadsMutex;
-
-        std::lock_guard<std::mutex> lock(CreateMonitoringThreadsMutex);
         pid_t pid = tools::string::strToPid(pidStr);
         if (pid == -1)
         {
