@@ -62,10 +62,6 @@ namespace process
     void ProcessController::pauseMonitoring()
     {
         concurrency::Synchro::getInstance().pauseMonitoring(true);
-        for(auto &handler: handlers_)
-        {
-            handler->monitoring() = false;
-        }
     }
 
     void ProcessController::continueMonitoring()
