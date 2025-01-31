@@ -64,15 +64,14 @@ namespace process
 
     void MainController::run(const std::string &processType, int numProcesses)
     {
-        std::thread monitoringThread(&MainController::CreateMonitoringThreads);
-        monitoringThread.detach();
-        std::thread terminationThread(&MainController::MonitorProcessTermination);
-        terminationThread.detach();
-
         ProcessController::setProcessType(processType);
         ProcessController::setNumProcesses(numProcesses);
         initializeFactory();
         createHandlers(ProcessController::numProcesses());
+        std::thread monitoringThread(&MainController::CreateMonitoringThreads);
+        monitoringThread.detach();
+        std::thread terminationThread(&MainController::MonitorProcessTermination);
+        terminationThread.detach();
         cli::driver::consoleLoop();
         processLifecycleLoop();
         cli::driver::consoleLoop(false);
