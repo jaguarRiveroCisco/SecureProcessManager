@@ -6,6 +6,10 @@ namespace concurrency
 {
     std::string createMessage(const std::string &sleepDuration, pid_t pid) 
     {
+        if(sleepDuration.empty())
+        {
+            return "PID: " + std::to_string(pid);
+        }
         return "PID: " + std::to_string(pid) + " | Sleep duration: " + sleepDuration;
     }
 

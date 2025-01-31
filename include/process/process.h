@@ -12,6 +12,8 @@ namespace process
     public:
         virtual ~Process() = default;
         void work() override;
+    protected:
+        void preWork(pid_t pid) override;
     };
 } // namespace process
 

@@ -6,6 +6,11 @@
 #include "random_stuff.h"
 namespace process
 {
+    void Process::preWork(pid_t pid)
+    {
+        tools::LoggerManager::createLoggerType();
+        concurrency::Communicator::getInstance().sendCreationMessage("", pid);
+    }
     void Process::work()
     {
         preWork(getpid());  

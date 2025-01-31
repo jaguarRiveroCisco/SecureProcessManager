@@ -5,25 +5,32 @@
 #include <unistd.h> // Include this header for _exit
 #include "logger_instance.h"
 #include "nap_time.h"
-
+#include "communicator.h"
 namespace process
 {
-    void displayProcessStatus(int &status, pid_t pid)
+    enum Status { STATUS_OK, STATUS_SIGNAL, STATUS_UNKNOWN };
+
+    int displayProcessStatus(int status, pid_t pid)
     {
         if (WIFEXITED(status))
         {
+            return STATUS_OK;
         }
         else if (WIFSIGNALED(status))
         {
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid)
-                                                           + " was terminated by signal " + std::to_string(WTERMSIG(status)) + ".");
+            int signal = WTERMSIG(status);
+            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid) +
+                                                           " was terminated by signal " + std::to_string(signal) + ".");
+            return STATUS_SIGNAL;
         }
         else
         {
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid) + " exited with an unknown status.");
+            tools::LoggerManager::getInstance().logError("[PARENT PROCESS] | Child process " + std::to_string(pid) +
+                                                           " exited with an unknown status.");
+            return STATUS_UNKNOWN;
         }
     }
-    
+
     bool isProcessRunning(pid_t pid)
     {
         if (kill(pid, 0) == -1 && errno == ESRCH)
@@ -93,7 +100,11 @@ namespace process
             }
             else if (result == pid_)
             {
-                displayProcessStatus(status, pid_);
+                auto res = displayProcessStatus(status, pid_);
+                if(res != STATUS_OK)
+                {
+                    concurrency::Communicator::getInstance().sendTerminationMessage("", pid_);
+                }
                 break;
             }
             else
