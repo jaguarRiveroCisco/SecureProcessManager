@@ -46,14 +46,42 @@ namespace process
 
         auto it = ProcessController::findMonitor(pid);
 
-        if(it && it->monitoring())
+        if(it)
         {
-            it->monitoring() = false;
-            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
-            if (!ProcessController::removeMonitorProcess(pid))
+            if(it->monitoring())
+            {
+                it->monitoring() = false;
+                auto start       = std::chrono::steady_clock::now();
+                while (it->monitoring())
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
+                    auto now = std::chrono::steady_clock::now();
+                    if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() >
+                        tools::NapTimeMs::MEDIUM)
+                    {
+                        tools::LoggerManager::getInstance().logWarning("[MONITOR PROCESS TERMINATION] | Timeout while "
+                                                                       "waiting for monitoring to stop for PID: " +
+                                                                       pidStr);
+                        break;
+                    }
+                }
+            }
+            if(it->monitoring())
             {
                 tools::LoggerManager::getInstance().logWarning(
-                        "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
+                        "[MONITOR PROCESS TERMINATION] | Monitoring thread did not stop for PID: " + pidStr);
+                std::throw_with_nested(std::runtime_error(
+                        "[MONITOR PROCESS TERMINATION] | Monitoring thread did not stop for PID: " + pidStr));
+            }
+            else
+            {
+                tools::LoggerManager::getInstance().logInfo(
+                        "[MONITOR PROCESS TERMINATION] | Monitoring thread stopped for PID: " + pidStr);
+                //if (!ProcessController::removeMonitorProcess(pid))
+                //{
+                //    tools::LoggerManager::getInstance().logWarning(
+                //            "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
+                //}
             }
         }
         else
