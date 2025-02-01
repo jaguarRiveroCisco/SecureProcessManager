@@ -16,9 +16,10 @@
 
 namespace process
 {
-    std::mutex MainController::handlersMutex_;
     // Define the handler factory map
     FactoryMap MainController::handlerFactoryMap_;
+
+    std::atomic<int> MainController::counter_ = 0;
     // Initialize the factory map
     void MainController::initializeFactory()
     {
@@ -38,6 +39,9 @@ namespace process
             // See the header for the templatized function
             ProcessMonitorPtr handler = it->second();
             ProcessController::addMonitorProcess(handler->getPid(), std::move(handler));
+            ++counter_; 
+            tools::LoggerManager::getInstance().logInfo("[HANDLER CREATED] | Counter value: " +
+                                                        std::to_string(counter_));
         }
         else
         {
@@ -81,22 +85,11 @@ namespace process
     {
         while (ProcessController::running())
         {
-            if (concurrency::Synchro::getInstance().pauseMonitoring())
+            if (!concurrency::Synchro::getInstance().pauseMonitoring())
             {
-                // Sleep for a random short duration to simulate pause
-                tools::sleepRandomMs();
-                continue; // Check again if monitoring has been resumed
+                restoreHandlerCount();
             }
-
-            std::lock_guard<std::mutex> lock(handlersMutex_);
-            restoreHandlerCount();
-
-            if (ProcessController::handlers().empty())
-            {
-                ProcessController::running() = false;
-                tools::LoggerManager::getInstance() << "[PARENT PROCESS] | All handlers removed, exiting...";
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
-            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
         }
     }
 
@@ -104,9 +97,9 @@ namespace process
     {
         // Check if the number of handlers is less than numProcesses_
         if (ProcessController::running() && ProcessController::respawn() &&
-            (ProcessController::handlers().size() < ProcessController::numProcesses()))
+            (counter_.load() < ProcessController::numProcesses()))
         {
-            int numHandlersToCreate = ProcessController::numProcesses() - ProcessController::handlers().size();
+            int numHandlersToCreate = ProcessController::numProcesses() - counter_;
             createHandlers(numHandlersToCreate);
         }
     }

@@ -105,18 +105,22 @@ namespace process
                                 terminationMessage);
                         continue;
                     }
-
-                    pid_t pid = tools::string::strToPid(vec[1]);
-                    if (pid != -1)
-                    {
-                        std::lock_guard<std::mutex> lock(handlersMutex_);
-                        auto res = ProcessController::removeMonitorProcess(pid);
-                        if (!res)
-                        {
-                            tools::LoggerManager::getInstance().logWarning(
-                                    "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + vec[1]);
-                        }
-                    }
+                    --counter_;
+                    tools::LoggerManager::getInstance().logInfo("[MONITOR PROCESS TERMINATION] | Counter value: " + std::to_string(counter_));
+                    //pid_t pid = tools::string::strToPid(vec[1]);
+                    //if (pid != -1)
+                    //{
+                    //    if (!ProcessController::removeMonitorProcess(pid))
+                    //    {
+                    //        tools::LoggerManager::getInstance().logWarning(
+                    //                "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + vec[1]);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    tools::LoggerManager::getInstance().logWarning(
+                    //            "[MONITOR PROCESS TERMINATION] | Invalid PID in termination message: " + vec[1]);
+                    //}
                 }
             }
             catch (const std::exception &e)

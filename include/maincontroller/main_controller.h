@@ -30,7 +30,7 @@ namespace process
 
         static void initializeFactory();
 
-        static std::mutex handlersMutex_;
+        static std::atomic<int> counter_;
     };
     // Template function to create a handler
     template<typename MonitorType, typename ProcessType> 
