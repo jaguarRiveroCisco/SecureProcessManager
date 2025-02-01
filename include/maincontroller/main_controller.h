@@ -21,6 +21,7 @@ namespace process
         static void createHandler();
         static void CreateMonitoringThreads();
         static void createMonitorThread(const std::string &);
+        static void terminateMonitorThread(const std::string &);
         static void MonitorProcessTermination();
 
         static FactoryMap handlerFactoryMap_;
