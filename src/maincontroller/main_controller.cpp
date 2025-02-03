@@ -73,11 +73,13 @@ namespace process
         initializeFactory();
         createHandlers(ProcessController::numProcesses());
         std::thread monitoringThread(&MainController::CreateMonitoringThreads);
-        monitoringThread.detach();
         std::thread terminationThread(&MainController::MonitorProcessTermination);
-        terminationThread.detach();
         cli::driver::consoleLoop();
         processLifecycleLoop();
+        if (monitoringThread.joinable())
+            monitoringThread.join();
+        if (terminationThread.joinable())
+            terminationThread.join();
         cli::driver::consoleLoop(false);
     }
     
