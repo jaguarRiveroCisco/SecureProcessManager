@@ -10,7 +10,7 @@ namespace process
     {
     public:
         void work() override;
-        virtual ~ProcessSimulator() = default;
+        ~ProcessSimulator() override = default;
 
     protected:
         bool proceed();

@@ -20,7 +20,7 @@ namespace process
 
 
     protected:
-        virtual ~BaseProcess() = default;
+        ~BaseProcess() override = default;
         BaseProcess();
         void logLifetime() const;
         void preWork(pid_t pid) override;

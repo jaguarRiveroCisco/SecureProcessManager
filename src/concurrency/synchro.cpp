@@ -28,7 +28,11 @@ namespace concurrency
         }
     }
 
-    bool Synchro::pauseMonitoring() const noexcept { return pauseMonitoring_; }
+    bool Synchro::pauseMonitoring() const noexcept
+    {
+        std::lock_guard<std::mutex> lock(mtx_);
+        return pauseMonitoring_;
+    }
 
  
 } // namespace concurrency

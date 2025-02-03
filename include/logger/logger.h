@@ -11,12 +11,12 @@ namespace tools
     {
         friend struct LoggerManager;
     public:
-        void flush(LogLevel level);
-        void log(LogLevel level, const std::string &message);
-        void logInfo(const std::string &message);
-        void logWarning(const std::string &message);
-        void logError(const std::string &message);
-        void logException(const std::string &message);
+        void flush(LogLevel level) override;
+        void log(LogLevel level, const std::string &message) override;
+        void logInfo(const std::string &message) override;
+        void logWarning(const std::string &message) override;
+        void logError(const std::string &message) override;
+        void logException(const std::string &message) override;
 
         template <typename T>
         Logger &operator<<(const T &message)
@@ -24,17 +24,17 @@ namespace tools
             currentMessageStream << message;
             return *this;
         }
-        virtual ~Logger() = default;
-
+        ~Logger() override = default;
+        Logger(const Logger &)                            = delete;
+        Logger                 &operator=(const Logger &) = delete;
     protected:
         virtual void outputLog(const std::string &message) = 0; // Pure virtual function
         Logger() = default;
     private:
 
-        Logger(const Logger &)                            = delete;
-        Logger                 &operator=(const Logger &) = delete;
+
         std::ostringstream      currentMessageStream;
-        std::string logLevelToString(LogLevel level) const;
+        static std::string logLevelToString(LogLevel level);
     };
 } // namespace tools
 

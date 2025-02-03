@@ -6,13 +6,13 @@
 namespace tools
 {
 
-    void Logger::log(LogLevel level, const std::string &message)
+    void Logger::log(const LogLevel level, const std::string &message)
     {
         std::string logEntry = TimeStamp::get() + logLevelToString(level) + ": " + message;
         outputLog(logEntry);
     }
 
-    void Logger::flush(LogLevel level)
+    void Logger::flush(const LogLevel level)
     {
         std::string                 message = currentMessageStream.str();
         if (!message.empty())
@@ -37,7 +37,7 @@ namespace tools
     {
         log(LogLevel::EXCEPTION, message);
     }
-    std::string Logger::logLevelToString(LogLevel level) const
+    std::string Logger::logLevelToString(const LogLevel level)
     {
         switch (level)
         {

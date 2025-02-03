@@ -10,7 +10,7 @@ namespace process
     class Process : public BaseProcess 
     {
     public:
-        virtual ~Process() = default;
+        ~Process() override = default;
         void work() override;
     };
 } // namespace process

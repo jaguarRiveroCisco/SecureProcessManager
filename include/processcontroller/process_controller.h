@@ -46,7 +46,7 @@ namespace process
         static bool addMonitorProcess(pid_t pid, ProcessMonitorPtr processMonitor)
         {
             std::unique_lock<std::shared_mutex> lock(mutex_);
-            if (handlers_.find(pid) == handlers_.end())
+            if (!handlers_.contains(pid))
             {
                 // If the key does not exist, insert the new element
                 auto res = handlers_.emplace(pid, std::move(processMonitor));
@@ -62,8 +62,7 @@ namespace process
         static ProcessMonitor *findMonitor(pid_t pid)
         {
             std::shared_lock<std::shared_mutex> lock(mutex_);
-            auto it = handlers_.find(pid);
-            if (it != handlers_.end())
+            if (auto it = handlers_.find(pid); it != handlers_.end())
             {
                 return it->second.get(); // Return the raw pointer to the ProcessMonitor
             }
@@ -72,11 +71,10 @@ namespace process
 
         static bool removeMonitorProcess(pid_t pid)
         {
-            std::unique_lock<std::shared_mutex> lock(mutex_);
-            auto it = handlers_.find(pid);
-            if (it != handlers_.end())
-                return handlers_.erase(pid) > 0;
-            return false;
+            {
+                std::unique_lock<std::shared_mutex> lock(mutex_);
+                return std::erase_if(handlers_, [pid](const auto &pair) { return pair.first == pid; }) > 0;
+            }
         }
 
     protected:

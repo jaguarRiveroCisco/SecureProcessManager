@@ -3,7 +3,8 @@
 
 #include <memory> // For std::unique_ptr
 #include "logger.h"
-#include "semaphore_guard.h" // Ensure SemaphoreGuard is defined
+#include <semaphore.h>
+#include <iostream>
 namespace tools
 {
     class ConsoleLogger final : public Logger 
@@ -12,14 +13,28 @@ namespace tools
     public:
         ConsoleLogger() 
         {
-            sem_ = std::make_unique<concurrency::SemaphoreGuard>("/console_logger");
+            sem_ = sem_open("/console_logger_sem", O_CREAT, 0644, 1);
+            if (sem_ == SEM_FAILED)
+            {
+                std::cerr << "Failed to open semaphore" << std::endl;
+                std::exit(EXIT_FAILURE);
+            }
+        }
+        ~ConsoleLogger() override
+        {
+            // Close the named semaphore
+            if (sem_ != nullptr)
+            {
+                sem_close(sem_);
+                sem_unlink("/console_logger_sem"); // Unlink the semaphore
+            }
         }
 
     protected:
         void outputLog(const std::string &message) override;
 
     private:
-        std::unique_ptr <concurrency::SemaphoreGuard>      sem_;
+        static sem_t*      sem_;
         static std::unique_ptr<ConsoleLogger> instance;
 
 

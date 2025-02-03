@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(DynamicControlOfChildProcesses)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Include directories
 include_directories(
@@ -62,7 +62,6 @@ src/tools/string_tools.cpp
 # synchronization
 src/concurrency/communicator.cpp
 src/concurrency/messenger.cpp
-src/concurrency/semaphore_guard.cpp
 src/concurrency/synchro.cpp
 
 # Logger

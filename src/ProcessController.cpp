@@ -4,7 +4,6 @@
 #include "logger_instance.h"
 #include "nap_time.h"
 #include "main_controller.h"
-#include "semaphore_guard.h"
 
 void displayCompilationInfo(const char *appName)
 {
@@ -26,8 +25,6 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::parseArguments(argc, argv, numProcesses, processType);
 
-    concurrency::SemaphoreGuard::unlinkSemaphore("/console_logger");
-
     tools::LoggerManager::createLoggerType();
 
     process::MainController::run(processType, numProcesses);
@@ -35,8 +32,6 @@ auto main(int argc, char *argv[]) -> int
     cli::driver::printpid("[PARENT PROCESS] Main process exiting", "");
 
     std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
-
-    concurrency::SemaphoreGuard::unlinkSemaphores();
 
     return 0;
 }

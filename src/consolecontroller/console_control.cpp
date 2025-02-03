@@ -54,6 +54,8 @@ namespace cli::driver
                         printpidW("Number of processes must be greater than 0. Defaulting to ", 4);
                         numProcesses = 4;
                     }
+                    numProcesses = std::min(numProcesses, 20);
+
                     break;
                 case 't':
                     // Set the process type from the argument
@@ -104,7 +106,7 @@ namespace cli::driver
                 default:
                     // Display usage information and exit
                     printpid(argv[0], "Usage:\n"
-                                      "-n <number of processes>\n"
+                                      "-n <number of processes> (max 20)\n"
                                       "-t <process type 'real', 'network', 'system' or 'simul' (default)>\n"
                                       "-s <respawn (0 or 1)>\n"
                                       "-l <logging type 'console' or 'file'>\n"
