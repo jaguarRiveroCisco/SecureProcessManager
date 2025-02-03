@@ -14,13 +14,13 @@ namespace concurrency
         void            pauseMonitoring(bool) noexcept;
         bool            pauseMonitoring() const noexcept;
         static Synchro &getInstance();
+        Synchro(const Synchro &)                                   = delete;
+        Synchro                        &operator=(const Synchro &) = delete;
 
     private:
         Synchro()                                                  = default;
-        Synchro(const Synchro &)                                   = delete;
-        Synchro                        &operator=(const Synchro &) = delete;
         mutable std::mutex              mtx_;
-        std::atomic<bool>               pauseMonitoring_;
+        std::atomic<bool>               pauseMonitoring_{};
     };
 }
 

@@ -77,10 +77,21 @@ namespace process
             {
                 tools::LoggerManager::getInstance().logInfo(
                         "[MONITOR PROCESS TERMINATION] | Monitoring thread stopped for PID: " + pidStr);
-                if (!ProcessController::removeMonitorProcess(pid))
+                try
                 {
-                    tools::LoggerManager::getInstance().logWarning(
-                            "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
+                    if (!ProcessController::removeMonitorProcess(pid))
+                    {
+                        tools::LoggerManager::getInstance().logWarning(
+                                "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
+                    }
+                }
+                catch (const std::bad_alloc &e)
+                {
+                    tools::LoggerManager::getInstance().logException("[MONITOR PROCESS TERMINATION] | Bad allocation exception: " + std::string(e.what()));
+                }
+                catch (const std::exception &e)
+                {
+                    tools::LoggerManager::getInstance().logException("[MONITOR PROCESS TERMINATION] | Exception occurred: " + std::string(e.what()));
                 }
             }
         }
@@ -101,27 +112,24 @@ namespace process
         {
             try
             {
-                if (!concurrency::Synchro::getInstance().pauseMonitoring())
+                auto creationMessage = concurrency::Communicator::getInstance().receiveCreationMessage();
+
+                if (creationMessage.empty())
                 {
-                    auto creationMessage = concurrency::Communicator::getInstance().receiveCreationMessage();
+                    continue;
+                }
 
-                    if (creationMessage.empty())
-                    {
-                        continue;
-                    }
+                tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | [CREATION]: " +
+                                                            creationMessage);
+                auto vec = tools::string::splitString(creationMessage);
 
-                    tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | [CREATION]: " +
-                                                                creationMessage);
-                    auto vec = tools::string::splitString(creationMessage);
-
-                    if (vec.size() < 2)
-                    {
-                        tools::LoggerManager::getInstance().logWarning(
-                                "[PARENT PROCESS] | Unexpected format in creation message: " + creationMessage);
-                        continue;
-                    }
-                    createMonitorThread(vec[1]);
-                 }
+                if (vec.size() < 2)
+                {
+                    tools::LoggerManager::getInstance().logWarning(
+                            "[PARENT PROCESS] | Unexpected format in creation message: " + creationMessage);
+                    continue;
+                }
+                createMonitorThread(vec[1]);
             }
             catch (const std::exception &e)
             {
@@ -140,30 +148,26 @@ namespace process
         {
             try
             {
-                if (!concurrency::Synchro::getInstance().pauseMonitoring())
+                auto terminationMessage = concurrency::Communicator::getInstance().receiveTerminationMessage();
+
+                if (terminationMessage.empty())
                 {
-                    auto terminationMessage = concurrency::Communicator::getInstance().receiveTerminationMessage();
-
-                    if (terminationMessage.empty())
-                    {
-                        continue;
-                    }
-
-                    tools::LoggerManager::getInstance().logInfo("[MONITOR PROCESS TERMINATION] | " + terminationMessage);
-                    auto vec = tools::string::splitString(terminationMessage);
-
-                    if (vec.size() < 2)
-                    {
-                        tools::LoggerManager::getInstance().logWarning(
-                                "[MONITOR PROCESS TERMINATION] | Unexpected format in termination message: " +
-                                terminationMessage);
-                        continue;
-                    }
-                    --counter_;
-                    tools::LoggerManager::getInstance().logInfo("[MONITOR PROCESS TERMINATION] | Counter value: " + std::to_string(counter_));
-                    terminateMonitorThread(vec[1]);
-
+                    continue;
                 }
+
+                tools::LoggerManager::getInstance().logInfo("[MONITOR PROCESS TERMINATION] | " + terminationMessage);
+                auto vec = tools::string::splitString(terminationMessage);
+
+                if (vec.size() < 2)
+                {
+                    tools::LoggerManager::getInstance().logWarning(
+                            "[MONITOR PROCESS TERMINATION] | Unexpected format in termination message: " +
+                            terminationMessage);
+                    continue;
+                }
+                --counter_;
+                tools::LoggerManager::getInstance().logInfo("[MONITOR PROCESS TERMINATION] | Counter value: " + std::to_string(counter_));
+                terminateMonitorThread(vec[1]);
             }
             catch (const std::exception &e)
             {

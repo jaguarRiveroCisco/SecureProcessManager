@@ -86,8 +86,21 @@ namespace process
     {
         int  status   = -1;
         monitoring() = true;
+        bool monPrinted = false;
         while (monitoring())
         {
+            if (concurrency::Synchro::getInstance().pauseMonitoring())
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
+                if (!monPrinted)
+                {
+                    monPrinted = true;
+                    tools::LoggerManager::getInstance().logInfo("[MONITOR THREAD] | Not monitoring " + std::to_string(pid_));
+                }
+                continue;
+            }
+            monPrinted = false;
+
             // Check if the process with PID = pid_ is running
             if (!isProcessRunning(pid_))
                 break;
