@@ -18,9 +18,9 @@ namespace process
         void               createMonitorProcessThread();
         void               collectAndLaunch(std::unique_ptr<IProcess> process);
         virtual void       launchChildProcess();
-        void               terminateProcess();
-        void               killProcess();
-        void               intProcess();
+        void               terminateProcess() const;
+        void               killProcess() const;
+        void               intProcess() const;
         void               monitorProcessThread();
 
     protected:

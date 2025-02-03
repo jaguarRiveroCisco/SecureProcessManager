@@ -52,11 +52,11 @@ namespace process
 
     pid_t ProcessMonitor::getPid() const { return pid_; }
     
-    void  ProcessMonitor::terminateProcess() { sendSignal(SIGTERM, pid_); }
+    void  ProcessMonitor::terminateProcess() const { sendSignal(SIGTERM, pid_); }
 
-    void ProcessMonitor::killProcess() { sendSignal(SIGKILL, pid_); }
+    void ProcessMonitor::killProcess() const { sendSignal(SIGKILL, pid_); }
 
-    void ProcessMonitor::intProcess() { sendSignal(SIGINT, pid_); }
+    void ProcessMonitor::intProcess() const { sendSignal(SIGINT, pid_); }
 
     std::atomic<bool>& ProcessMonitor::monitoring() { return monitor_; }
 
