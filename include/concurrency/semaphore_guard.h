@@ -15,18 +15,18 @@ namespace concurrency
     class SemaphoreGuard 
     {
     public:
-        void lock();
-        void unlock();
+        void lock() const;
+        void unlock() const;
         // Separate function to unlink semaphore when appropriate
         static void        unlinkSemaphores();
         static void        unlinkSemaphore(const std::string &sem_name);
-        const std::string &getName() const { return sem_name; }
-        SemaphoreGuard(const std::string &name);
+        [[nodiscard]] const std::string &getName() const { return sem_name; }
+        explicit SemaphoreGuard(const std::string &name);
         ~SemaphoreGuard();
+        explicit SemaphoreGuard(const SemaphoreGuard &) = delete;
+        SemaphoreGuard &operator=(const SemaphoreGuard &) = delete;
 
     private:
-        SemaphoreGuard(const SemaphoreGuard &)            = delete;
-        SemaphoreGuard &operator=(const SemaphoreGuard &) = delete;
         std::string sem_name;
         sem_t      *sem;
         static std::vector<std::string> sem_names;
@@ -36,7 +36,7 @@ namespace concurrency
     {
         SemaphoreGuard *sem_;
 
-        locker(SemaphoreGuard *sem) : sem_(sem) { sem_->lock(); }
+        explicit locker(SemaphoreGuard *sem) : sem_(sem) { sem_->lock(); }
         ~locker() { sem_->unlock(); }
     };
 

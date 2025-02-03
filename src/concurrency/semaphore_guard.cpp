@@ -25,7 +25,7 @@ namespace concurrency
         // Unlinking should be managed separately to ensure safe removal
     }
 
-    void SemaphoreGuard::lock()
+    void SemaphoreGuard::lock() const
     {
         if (sem_wait(sem) == -1)
         {
@@ -34,7 +34,7 @@ namespace concurrency
         }
     }
 
-    void SemaphoreGuard::unlock()
+    void SemaphoreGuard::unlock() const
     {
         if (sem_post(sem) == -1)
         {

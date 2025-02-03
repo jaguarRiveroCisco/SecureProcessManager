@@ -54,7 +54,7 @@ namespace process
                 auto start       = std::chrono::steady_clock::now();
                 while (it->monitoring())
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
                     auto now = std::chrono::steady_clock::now();
                     if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() >
                         tools::NapTimeMs::MEDIUM)
@@ -77,11 +77,11 @@ namespace process
             {
                 tools::LoggerManager::getInstance().logInfo(
                         "[MONITOR PROCESS TERMINATION] | Monitoring thread stopped for PID: " + pidStr);
-                //if (!ProcessController::removeMonitorProcess(pid))
-                //{
-                //    tools::LoggerManager::getInstance().logWarning(
-                //            "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
-                //}
+                if (!ProcessController::removeMonitorProcess(pid))
+                {
+                    tools::LoggerManager::getInstance().logWarning(
+                            "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
+                }
             }
         }
         else
