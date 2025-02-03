@@ -37,7 +37,6 @@ namespace concurrency
         */
         // Initialize mutex and condition variable
         pthread_mutex_init(&mutex, nullptr);
-        sem_ = std::make_unique<concurrency::SemaphoreGuard>("/messenger_logger");
     }
 
     Messenger::~Messenger()
@@ -58,7 +57,6 @@ namespace concurrency
         message.msgType = msgType;
         std::snprintf(message.msgText, sizeof(message.msgText), "%s", text.c_str());
         {
-            locker lock(sem_.get());
             if (msgsnd(msgid_, &message, sizeof(message.msgText), 0) == -1)
             {
                 perror("msgsnd");
@@ -79,9 +77,6 @@ namespace concurrency
         while (process::ProcessController::running())
         {
             {
-                // Lock the semaphore to synchronize access across processes
-                locker lock(sem_.get());
-
                 pthread_mutex_lock(&mutex); // Lock the mutex to synchronize access within the process
                 if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, IPC_NOWAIT) != -1)
                 {

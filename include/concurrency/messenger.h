@@ -6,7 +6,6 @@
 #include <pthread.h>
 #include <string>
 #include "message.h"
-#include "semaphore_guard.h"
 namespace concurrency
 {
     class Messenger 
@@ -25,7 +24,6 @@ namespace concurrency
 
     private:
         int msgid_;
-        std::unique_ptr <concurrency::SemaphoreGuard>      sem_;
         pthread_mutex_t mutex;
     };
 }
