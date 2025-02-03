@@ -33,9 +33,9 @@ namespace process
     void ProcessController::displayAllPids()
     {
         tools::LoggerManager::getInstance() << "[PARENT PROCESS] Current PIDs: ";
-        for (const auto &handler: handlers_)
+        for (const auto &[pid, monThread]: handlers_)
         {
-            tools::LoggerManager::getInstance() << handler.second->getPid() << " | ";
+            tools::LoggerManager::getInstance() << monThread->getPid() << " | ";
         }
         tools::LoggerManager::getInstance() << " Total number of processes: " << handlers_.size();
         tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
@@ -45,18 +45,18 @@ namespace process
     {
         running() = false;
 
-        for (auto &handler: handlers_)
+        for (auto &[pid, monThread]: handlers_)
         {
-            handler.second->killProcess();
+            monThread->killProcess();
         }
     }
 
     void ProcessController::terminateAll()
     {
         running() = false;
-        for (auto &handler: handlers_)
+        for (auto &[pid, monThread]: handlers_)
         {
-            handler.second->terminateProcess();
+            monThread->terminateProcess();
         }
     }
 
@@ -73,9 +73,9 @@ namespace process
     void ProcessController::intAll()
     {
         running() = false;
-        for (auto &handler: handlers_)
+        for (auto &[pid, monThread]: handlers_)
         {
-            handler.second->intProcess();
+            monThread->intProcess();
         }
     }
 
@@ -86,8 +86,7 @@ namespace process
     void ProcessController::killProcessByPid(pid_t pid)
     {
 
-        auto element = findMonitor(pid);
-        if (element)
+        if (const auto element = findMonitor(pid))
         {
             element->killProcess();
         }
@@ -100,8 +99,7 @@ namespace process
 
     void ProcessController::terminateProcessByPid(pid_t pid)
     {
-        auto element = findMonitor(pid);
-        if (element)
+        if (const auto element = findMonitor(pid))
         {
             element->terminateProcess();
         }
@@ -114,8 +112,7 @@ namespace process
 
     void ProcessController::intProcessByPid(pid_t pid)
     {
-        auto element = findMonitor(pid);
-        if (element)
+        if (const auto element = findMonitor(pid))
         {
             element->intProcess();
         }
