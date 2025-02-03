@@ -1,4 +1,6 @@
 #include "messenger.h"
+
+#include <nap_time.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <thread>
@@ -19,7 +21,7 @@ namespace concurrency
         }
 
         // Determine whether a new queue was created or an existing one was opened
-        struct msqid_ds buf;
+        struct msqid_ds buf = {};
         if (msgctl(msgid_, IPC_STAT, &buf) == -1)
         {
             perror("msgctl");
@@ -35,6 +37,7 @@ namespace concurrency
         */
         // Initialize mutex and condition variable
         pthread_mutex_init(&mutex, nullptr);
+        sem_ = std::make_unique<concurrency::SemaphoreGuard>("/messenger_logger");
     }
 
     Messenger::~Messenger()
@@ -54,12 +57,14 @@ namespace concurrency
         Message message;
         message.msgType = msgType;
         std::snprintf(message.msgText, sizeof(message.msgText), "%s", text.c_str());
-
-        if (msgsnd(msgid_, &message, sizeof(message.msgText), 0) == -1)
         {
-            perror("msgsnd");
-            pthread_mutex_unlock(&mutex);
-            throw std::runtime_error("Failed to send message");
+            locker lock(sem_.get());
+            if (msgsnd(msgid_, &message, sizeof(message.msgText), 0) == -1)
+            {
+                perror("msgsnd");
+                pthread_mutex_unlock(&mutex);
+                throw std::runtime_error("Failed to send message");
+            }
         }
         pthread_mutex_unlock(&mutex);
     }
@@ -73,13 +78,19 @@ namespace concurrency
 
         while (process::ProcessController::running())
         {
-            pthread_mutex_lock(&mutex);
-            if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, IPC_NOWAIT) != -1)
             {
-                pthread_mutex_unlock(&mutex);
-                return std::string(message.msgText);
+                // Lock the semaphore to synchronize access across processes
+                locker lock(sem_.get());
+
+                pthread_mutex_lock(&mutex); // Lock the mutex to synchronize access within the process
+                if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, IPC_NOWAIT) != -1)
+                {
+                    pthread_mutex_unlock(&mutex); // Unlock the mutex
+                    return {message.msgText};
+                }
+                pthread_mutex_unlock(&mutex); // Unlock the mutex
             }
-            pthread_mutex_unlock(&mutex);
+
         
             if (errno != ENOMSG)
             {
@@ -95,7 +106,7 @@ namespace concurrency
             }
         
             // Sleep for a short duration before retrying
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
         }
         return message.msgText;
     }

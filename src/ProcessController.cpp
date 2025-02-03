@@ -27,6 +27,7 @@ auto main(int argc, char *argv[]) -> int
     cli::driver::parseArguments(argc, argv, numProcesses, processType);
 
     concurrency::SemaphoreGuard::unlinkSemaphore("/console_logger");
+    concurrency::SemaphoreGuard::unlinkSemaphore("/messenger_logger");
    
     tools::LoggerManager::createLoggerType();
 
