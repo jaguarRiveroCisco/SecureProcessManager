@@ -5,22 +5,13 @@
 #include <unistd.h>
 namespace process
 {
-    bool SystemProcess::spawnChildProcess(const std::vector<char *> &args)
-    {
-        SpawnChild spawnChild(this, args);
-        return true; // TODO
-    }
-
     void SystemProcess::work()
     {
         preWork(getpid());
         Arguments arguments;
         while (proceed())
         {
-            if (!spawnChildProcess(arguments.args))
-            {
-                tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Failed to spawn child process");
-            }
+            SpawnChild spawnChild(this, arguments.args);
 
             tools::sleepRandomMs(true);
             timeManager_.currentTime() = std::chrono::high_resolution_clock::now();

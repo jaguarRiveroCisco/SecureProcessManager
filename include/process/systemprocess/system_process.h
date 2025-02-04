@@ -14,8 +14,6 @@ namespace process
         void work() override;
 
     private:
-        bool spawnChildProcess(const std::vector<char *> &args);
-
         struct Arguments {
             std::vector<char *> args;
             Arguments() :
@@ -33,8 +31,8 @@ namespace process
         struct SpawnChild 
         {
             std::vector<char *>        environ = {nullptr};
-            posix_spawn_file_actions_t actions;
-            posix_spawnattr_t          attrs;
+            posix_spawn_file_actions_t actions{};
+            posix_spawnattr_t          attrs{};
             SystemProcess             *parent_ {nullptr};
             SpawnChild(SystemProcess *parent, const std::vector<char *> &args);
             ~SpawnChild();
