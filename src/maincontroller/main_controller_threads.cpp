@@ -77,23 +77,11 @@ namespace process
             {
                 tools::LoggerManager::getInstance().logInfo(
                         "[MONITOR PROCESS TERMINATION] | Monitoring thread stopped for PID: " + pidStr);
-                try
+                if (!ProcessRegistry::markProcessAsDeceased(pid))
                 {
-                    if (!ProcessRegistry::removeMonitorProcess(pid))
-                    {
-                        tools::LoggerManager::getInstance().logWarning(
-                                "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
-                    }
-                }
-                catch (const std::bad_alloc &e)
-                {
-                    tools::LoggerManager::getInstance().logException("[MONITOR PROCESS TERMINATION] | Bad allocation exception: " + std::string(e.what()));
-                }
-                catch (const std::exception &e)
-                {
-                    tools::LoggerManager::getInstance().logException("[MONITOR PROCESS TERMINATION] | Exception occurred: " + std::string(e.what()));
-                }
-            }
+                    tools::LoggerManager::getInstance().logWarning(
+                            "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);
+                }            }
         }
         else
         {

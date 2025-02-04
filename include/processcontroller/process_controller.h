@@ -24,7 +24,6 @@ namespace process
         static std::shared_mutex mutex_;
 
     public:
-        // Updated to return a const reference to handlers_
         static ProcessMonitorMap handlers()
         {
             std::shared_lock<std::shared_mutex> lock(mutex_);
@@ -66,7 +65,7 @@ namespace process
             return nullptr; // Return nullptr if not found
         }
 
-        static bool removeMonitorProcess(pid_t pid)
+        static bool markProcessAsDeceased(pid_t pid)
         {
             std::unique_lock<std::shared_mutex> lock(mutex_);
             if (handlers_.contains(pid))
