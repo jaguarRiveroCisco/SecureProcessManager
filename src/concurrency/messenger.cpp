@@ -72,7 +72,7 @@ namespace concurrency
         Message message;
         message.msgType = msgType;
         auto start = std::chrono::steady_clock::now();
-        auto timeout = std::chrono::seconds(5); // Set a timeout duration
+        auto timeout = std::chrono::seconds(1); // Set a timeout duration
 
         while (process::ProcessController::running())
         {

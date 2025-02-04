@@ -2,40 +2,47 @@
 #include <iostream>
 #include <semaphore.h>
 #include <memory>
-
+#include "process_controller.h"
 
 namespace tools
 {
 
-    class BufferedConsoleLogger {
+    class BufferedConsoleLogger
+    {
     public:
         static BufferedConsoleLogger& getInstance() {
             static BufferedConsoleLogger instance;
             return instance;
         }
 
-        void log(const std::string& message) {
+        void log(const std::string& message)
+        {
             buffer_.push_back(message);
-            if (buffer_.size() >= bufferLimit_) {
+            if (buffer_.size() >= bufferLimit_)
+            {
                 flush(); // Write out the buffer if it reaches the limit
             }
         }
 
         void flush() {
-            for (const auto& msg : buffer_) {
+            for (const auto& msg : buffer_)
+            int{
                 std::cout << msg << std::endl;
             }
             buffer_.clear();
         }
 
-        ~BufferedConsoleLogger() {
+        ~BufferedConsoleLogger()
+        {
             flush(); // Ensure all messages are written out on destruction
         }
 
     private:
-        BufferedConsoleLogger() : bufferLimit_(50) {} // Example buffer limit
+        BufferedConsoleLogger() : bufferLimit_(process::ProcessController::numProcesses() * 2)
+        {
+        }
         std::vector<std::string> buffer_;
-        const size_t bufferLimit_;
+        size_t bufferLimit_{};
     };
 
 
