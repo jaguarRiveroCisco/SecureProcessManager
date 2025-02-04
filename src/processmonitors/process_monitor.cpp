@@ -1,6 +1,7 @@
 #include "process_monitor.h"
 #include <chrono>
 #include <csignal>
+#include <process_controller.h>
 #include <thread>
 #include <unistd.h> // Include this header for _exit
 #include "logger_instance.h"
@@ -87,7 +88,7 @@ namespace process
         int  status   = -1;
         monitoring() = true;
         bool monPrinted = false;
-        while (monitoring())
+        while (ProcessController::running() && monitoring())
         {
             if (concurrency::Synchro::getInstance().pauseMonitoring())
             {
