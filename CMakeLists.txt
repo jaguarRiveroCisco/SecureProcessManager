@@ -70,8 +70,6 @@ add_executable(ProcessController
                src/logger/console_logger.cpp
                src/logger/file_logger.cpp
                src/logger/logger_instance.cpp
-               include/tools/process_status.h
                src/tools/process_status.cpp
                src/processcontroller/ProcessRegistry.cpp
-               include/processcontroller/ProcessRegistry.h
                )
