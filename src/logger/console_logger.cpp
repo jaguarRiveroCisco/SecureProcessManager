@@ -26,7 +26,7 @@ namespace tools
 
         void flush() {
             for (const auto& msg : buffer_)
-            int{
+            {
                 std::cout << msg << std::endl;
             }
             buffer_.clear();
