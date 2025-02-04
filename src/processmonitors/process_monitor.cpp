@@ -1,5 +1,4 @@
 #include "process_monitor.h"
-#include <chrono>
 #include <csignal>
 #include <process_controller.h>
 #include <thread>
@@ -7,57 +6,17 @@
 #include "logger_instance.h"
 #include "nap_time.h"
 #include "communicator.h"
+#include "process_status.h"
 namespace process
 {
-    enum Status { STATUS_OK, STATUS_SIGNAL, STATUS_UNKNOWN };
-
-    int displayProcessStatus(int status, pid_t pid)
-    {
-        if (WIFEXITED(status))
-        {
-            return STATUS_OK;
-        }
-        else if (WIFSIGNALED(status))
-        {
-            int signal = WTERMSIG(status);
-            tools::LoggerManager::getInstance().logWarning("[PARENT PROCESS] | Child process " + std::to_string(pid) +
-                                                           " was terminated by signal " + std::to_string(signal) + ".");
-            return STATUS_SIGNAL;
-        }
-        else
-        {
-            tools::LoggerManager::getInstance().logError("[PARENT PROCESS] | Child process " + std::to_string(pid) +
-                                                           " exited with an unknown status.");
-            return STATUS_UNKNOWN;
-        }
-    }
-
-    bool isProcessRunning(pid_t pid)
-    {
-        if (kill(pid, 0) == -1 && errno == ESRCH)
-        {
-            tools::LoggerManager::getInstance() << "[PARENT PROCESS] | Process " << pid << " is not running.";
-            tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
-            return false;
-        }
-        return true;
-    }
-
-    void sendSignal(int signal, pid_t pid)
-    {
-        if (kill(pid, signal) == -1)
-        {
-            perror("kill");
-        }
-    }
 
     pid_t ProcessMonitor::getPid() const { return pid_; }
     
-    void  ProcessMonitor::terminateProcess() const { sendSignal(SIGTERM, pid_); }
+    void  ProcessMonitor::terminateProcess() const { tools::sendSignal(SIGTERM, pid_); }
 
-    void ProcessMonitor::killProcess() const { sendSignal(SIGKILL, pid_); }
+    void ProcessMonitor::killProcess() const { tools::sendSignal(SIGKILL, pid_); }
 
-    void ProcessMonitor::intProcess() const { sendSignal(SIGINT, pid_); }
+    void ProcessMonitor::intProcess() const { tools::sendSignal(SIGINT, pid_); }
 
     std::atomic<bool>& ProcessMonitor::monitoring() { return monitor_; }
 
@@ -103,7 +62,7 @@ namespace process
             monPrinted = false;
 
             // Check if the process with PID = pid_ is running
-            if (!isProcessRunning(pid_))
+            if (!tools::isProcessRunning(pid_))
                 break;
 
             pid_t result = waitpid(pid_, &status, WNOHANG);
@@ -114,8 +73,7 @@ namespace process
             }
             else if (result == pid_)
             {
-                auto res = displayProcessStatus(status, pid_);
-                if(res != STATUS_OK)
+                if(auto res = tools::displayProcessStatus(status, pid_); res != tools::STATUS_OK)
                 {
                     concurrency::Communicator::getInstance().sendTerminationMessage("", pid_, status);
                 }

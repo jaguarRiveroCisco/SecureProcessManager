@@ -1,17 +1,14 @@
 #include "process_controller.h"
 #include <unistd.h> // Include this header for fork
 #include "logger_instance.h"
+#include "ProcessRegistry.h"
+
 namespace process
 {
     int               ProcessController::numProcesses_ = 4; // Default number of processes
     std::string       ProcessController::processType_  = "simul"; // Default process type
     std::atomic<bool> ProcessController::running_      = true;
     std::atomic<bool> ProcessController::respawn_      = true;
-
-    ProcessMonitorMap ProcessRegistry::handlers_;
-    DeceasedPidsSet   ProcessRegistry::deceasedProcesses_;
-    std::shared_mutex ProcessRegistry::mutex_;
-
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
 

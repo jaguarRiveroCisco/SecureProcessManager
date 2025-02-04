@@ -52,19 +52,41 @@ namespace concurrency
 
     void Messenger::sendMessage(const std::string &text, int msgType)
     {
-        pthread_mutex_lock(&mutex);
         Message message;
         message.msgType = msgType;
         std::snprintf(message.msgText, sizeof(message.msgText), "%s", text.c_str());
+
+        auto start = std::chrono::steady_clock::now();
+        auto timeout = std::chrono::seconds(5); // Set a timeout duration
+
+        while (process::ProcessController::running())
         {
-            if (msgsnd(msgid_, &message, sizeof(message.msgText), 0) == -1)
+            pthread_mutex_lock(&mutex); // Lock the mutex to synchronize access
+            if (msgsnd(msgid_, &message, sizeof(message.msgText), IPC_NOWAIT) != -1)
+            {
+                pthread_mutex_unlock(&mutex); // Unlock the mutex
+                return; // Message sent successfully
+            }
+            pthread_mutex_unlock(&mutex); // Unlock the mutex
+
+            if (errno != EAGAIN) // Check for non-recoverable errors
             {
                 perror("msgsnd");
-                pthread_mutex_unlock(&mutex);
                 throw std::runtime_error("Failed to send message");
             }
+
+            // Check for timeout
+            auto now = std::chrono::steady_clock::now();
+            if (now - start > timeout)
+            {
+                break;
+            }
+
+            // Sleep for a short duration before retrying
+            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
         }
-        pthread_mutex_unlock(&mutex);
+
+        throw std::runtime_error("Failed to send message within timeout period");
     }
 
     std::string Messenger::receiveMessage(int msgType)

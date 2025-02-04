@@ -22,51 +22,56 @@ include_directories(
 )
 
 
-add_executable(ProcessController 
-# Main source file
-src/ProcessController.cpp 
+add_executable(ProcessController
+               # Main source file
+               src/ProcessController.cpp
 
-# Process sources
-src/process/process_simulator.cpp
-src/process/process.cpp
-src/process/base_process.cpp
+               # Process sources
+               src/process/process_simulator.cpp
+               src/process/process.cpp
+               src/process/base_process.cpp
 
-# Network sources
-src/process/networkprocess/network_process.cpp
+               # Network sources
+               src/process/networkprocess/network_process.cpp
 
-# System sources
-src/process/systemprocess/system_process.cpp
+               # System sources
+               src/process/systemprocess/system_process.cpp
 
-# ProcessController sources
-src/processcontroller/process_controller.cpp
+               # ProcessController sources
+               src/processcontroller/process_controller.cpp
 
-# Process Monitors
-src/processmonitors/process_monitor.cpp
-src/processmonitors/system_monitor.cpp
+               # Process Monitors
+               src/processmonitors/process_monitor.cpp
+               src/processmonitors/system_monitor.cpp
 
-# Console Controller sources
-src/consolecontroller/console_control.cpp
-src/consolecontroller/cli_controller.cpp
+               # Console Controller sources
+               src/consolecontroller/console_control.cpp
+               src/consolecontroller/cli_controller.cpp
 
-# Main controller
-src/maincontroller/main_controller.cpp
-src/maincontroller/main_controller_threads.cpp
+               # Main controller
+               src/maincontroller/main_controller.cpp
+               src/maincontroller/main_controller_createthreads.cpp
+               src/maincontroller/main_controller_terminatethreads.cpp
 
-# Tools
-src/tools/timestamp.cpp
-src/tools/random_stuff.cpp
-src/tools/time_manager.cpp
-src/tools/thread_controller.cpp
-src/tools/string_tools.cpp
+               # Tools
+               src/tools/timestamp.cpp
+               src/tools/random_stuff.cpp
+               src/tools/time_manager.cpp
+               src/tools/thread_controller.cpp
+               src/tools/string_tools.cpp
 
-# synchronization
-src/concurrency/communicator.cpp
-src/concurrency/messenger.cpp
-src/concurrency/synchro.cpp
+               # synchronization
+               src/concurrency/communicator.cpp
+               src/concurrency/messenger.cpp
+               src/concurrency/synchro.cpp
 
-# Logger
-src/logger/logger.cpp
-src/logger/console_logger.cpp
-src/logger/file_logger.cpp
-src/logger/logger_instance.cpp
-)
+               # Logger
+               src/logger/logger.cpp
+               src/logger/console_logger.cpp
+               src/logger/file_logger.cpp
+               src/logger/logger_instance.cpp
+               include/tools/process_status.h
+               src/tools/process_status.cpp
+               src/processcontroller/ProcessRegistry.cpp
+               include/processcontroller/ProcessRegistry.h
+               )

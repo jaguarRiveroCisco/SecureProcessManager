@@ -12,12 +12,14 @@ namespace process
     public:
         ~SystemProcess() override = default;
         void work() override;
+    protected:
+        void postWork() override;
 
     private:
         struct Arguments {
             std::vector<char *> args;
             Arguments() :
-                args{strdup("/Users/jrivero/dev/programs/testprogs/lenghty/lengthy_process"), strdup("30"), nullptr}
+                args{strdup("/Users/jrivero/dev/programs/testprogs/lenghty/lengthy_process"), strdup("5"), nullptr}
             {
             }
             ~Arguments()

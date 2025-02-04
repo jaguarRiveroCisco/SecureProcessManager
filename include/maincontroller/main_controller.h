@@ -4,6 +4,7 @@
 #define MAIN_CONTROLLER_H
 
 #include "process_controller.h"
+#include "ProcessRegistry.h"
 
 namespace process
 {
