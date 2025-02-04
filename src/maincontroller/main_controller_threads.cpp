@@ -24,7 +24,7 @@ namespace process
             return;
         }
 
-        auto it = ProcessController::findMonitor(pid);
+        auto it = ProcessRegistry::findMonitor(pid);
 
         if(it &&  !it->monitoring())
         {
@@ -44,7 +44,7 @@ namespace process
             return;
         }
 
-        auto it = ProcessController::findMonitor(pid);
+        auto it = ProcessRegistry::findMonitor(pid);
 
         if(it)
         {
@@ -79,7 +79,7 @@ namespace process
                         "[MONITOR PROCESS TERMINATION] | Monitoring thread stopped for PID: " + pidStr);
                 try
                 {
-                    if (!ProcessController::removeMonitorProcess(pid))
+                    if (!ProcessRegistry::removeMonitorProcess(pid))
                     {
                         tools::LoggerManager::getInstance().logWarning(
                                 "[MONITOR PROCESS TERMINATION] | Handler not found for PID: " + pidStr);

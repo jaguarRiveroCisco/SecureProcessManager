@@ -8,8 +8,9 @@ namespace process
     std::atomic<bool> ProcessController::running_      = true;
     std::atomic<bool> ProcessController::respawn_      = true;
 
-    ProcessMonitorMap ProcessController::handlers_;
-    std::shared_mutex ProcessController::mutex_;
+    ProcessMonitorMap ProcessRegistry::handlers_;
+    DeceasedPidsSet   ProcessRegistry::deceasedProcesses_;
+    std::shared_mutex ProcessRegistry::mutex_;
 
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
@@ -33,11 +34,11 @@ namespace process
     void ProcessController::displayAllPids()
     {
         tools::LoggerManager::getInstance() << "[PARENT PROCESS] Current PIDs: ";
-        for (const auto &[pid, monThread]: handlers_)
+        for (const auto &[pid, monThread]: ProcessRegistry::handlers())
         {
             tools::LoggerManager::getInstance() << monThread->getPid() << " | ";
         }
-        tools::LoggerManager::getInstance() << " Total number of processes: " << handlers_.size();
+        tools::LoggerManager::getInstance() << " Total number of processes: " << ProcessRegistry::handlers().size();
         tools::LoggerManager::getInstance().flush(tools::LogLevel::INFO);
     }
 
@@ -45,7 +46,7 @@ namespace process
     {
         running() = false;
 
-        for (auto &[pid, monThread]: handlers_)
+        for (auto &[pid, monThread]: ProcessRegistry::handlers())
         {
             monThread->killProcess();
         }
@@ -54,7 +55,7 @@ namespace process
     void ProcessController::terminateAll()
     {
         running() = false;
-        for (auto &[pid, monThread]: handlers_)
+        for (auto &[pid, monThread]: ProcessRegistry::handlers())
         {
             monThread->terminateProcess();
         }
@@ -73,7 +74,7 @@ namespace process
     void ProcessController::intAll()
     {
         running() = false;
-        for (auto &[pid, monThread]: handlers_)
+        for (auto &[pid, monThread]: ProcessRegistry::handlers())
         {
             monThread->intProcess();
         }
@@ -86,7 +87,7 @@ namespace process
     void ProcessController::killProcessByPid(pid_t pid)
     {
 
-        if (const auto element = findMonitor(pid))
+        if (const auto element = ProcessRegistry::findMonitor(pid))
         {
             element->killProcess();
         }
@@ -99,7 +100,7 @@ namespace process
 
     void ProcessController::terminateProcessByPid(pid_t pid)
     {
-        if (const auto element = findMonitor(pid))
+        if (const auto element = ProcessRegistry::findMonitor(pid))
         {
             element->terminateProcess();
         }
@@ -112,7 +113,7 @@ namespace process
 
     void ProcessController::intProcessByPid(pid_t pid)
     {
-        if (const auto element = findMonitor(pid))
+        if (const auto element = ProcessRegistry::findMonitor(pid))
         {
             element->intProcess();
         }
