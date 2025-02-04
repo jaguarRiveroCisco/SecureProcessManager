@@ -4,6 +4,8 @@
 #define SYSTEM_PROCESS_H
 #include "process_simulator.h"
 #include <spawn.h>
+#include <condition_variable>
+
 namespace process
 {
 
@@ -14,9 +16,14 @@ namespace process
         void work() override;
     protected:
         void postWork() override;
+        pid_t getPid() const override;
 
     private:
-        struct Arguments {
+        mutable std::mutex pidMutex_;
+        mutable std::condition_variable pidCondition_;
+
+        struct Arguments
+        {
             std::vector<char *> args;
             Arguments() :
                 args{strdup("/Users/jrivero/dev/programs/testprogs/lenghty/lengthy_process"), strdup("5"), nullptr}

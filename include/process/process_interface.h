@@ -11,6 +11,7 @@ namespace process
     public:
         virtual ~IProcess() = default;
         virtual void work() = 0;
+        [[nodiscard]] virtual pid_t getPid() const = 0;
 
     protected:
         virtual void preWork(pid_t pid) = 0;

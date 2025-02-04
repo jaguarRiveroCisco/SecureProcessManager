@@ -10,7 +10,10 @@
 namespace process
 {
 
-    pid_t ProcessMonitor::getPid() const { return pid_; }
+    pid_t ProcessMonitor::getPid() const
+    {
+        return pid_;
+    }
     
     void  ProcessMonitor::terminateProcess() const { tools::sendSignal(SIGTERM, pid_); }
 

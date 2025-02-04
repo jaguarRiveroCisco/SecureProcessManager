@@ -15,6 +15,7 @@ namespace process
     public:
         static std::atomic<bool> &continueFlag();
         static std::atomic<int>  &exitCode();
+        pid_t getPid() const override { return pid_; }
     protected:
         pid_t pid_{0};
 

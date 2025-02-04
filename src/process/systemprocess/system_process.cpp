@@ -23,8 +23,15 @@ namespace process
                                                                             pid_, exitCode_);
     }
 
+    pid_t SystemProcess::getPid() const
+    {
+        std::unique_lock<std::mutex> lock(pidMutex_);
+        pidCondition_.wait(lock, [this]() { return pid_ != 0; });
+        return pid_;
+    }
 
-    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<char *> &args) : parent_(parent)
+
+SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<char *> &args) : parent_(parent)
     {
         posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
@@ -39,16 +46,29 @@ namespace process
         }
         else
         {
-            parent_->preWork(parent_->pid_);
+            {
+                std::lock_guard<std::mutex> lock(parent_->pidMutex_);
+                parent_->pid_ = parent_->pid_; // Notify that pid_ is set
+            }
+            parent_->pidCondition_.notify_one();
             if (const pid_t result = waitpid(parent_->pid_, &status, 0); result != parent_->pid_)
             {
                 tools::displayProcessStatus(status, parent_->pid_);
             }
+            else
+            {
+                if (WIFEXITED(status))
+                {
+                    exitCode_ = WEXITSTATUS(status);
+                }
+                else if (WIFSIGNALED(status))
+                {
+                    exitCode_ = WTERMSIG(status);
+                }
+            }
             parent_->postWork();
             std::this_thread::sleep_for(std::chrono::seconds(tools::NapTimeSec::MEDIUMS));
-
         }
-
     }
 
     SystemProcess::SpawnChild::~SpawnChild()
