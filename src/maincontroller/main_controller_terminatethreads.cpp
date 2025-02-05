@@ -50,8 +50,6 @@ namespace process
             }
             else
             {
-                tools::LoggerManager::getInstance().logInfo(
-                        "[TERMINATE MONITOR THREAD] | Monitoring thread stopped for PID: " + pidStr);
                 if (!ProcessRegistry::markProcessAsDeceased(pid))
                 {
                     tools::LoggerManager::getInstance().logWarning(
@@ -88,7 +86,6 @@ namespace process
                     continue;
                 }
                 --counter_;
-                tools::LoggerManager::getInstance().logInfo("[MONITOR PROCESS TERMINATION] | Counter value: " + std::to_string(counter_));
                 terminateMonitorThread(vec[1]);
             }
             catch (const std::exception &e)

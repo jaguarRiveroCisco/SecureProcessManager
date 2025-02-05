@@ -49,10 +49,9 @@ namespace process
             // second() is the templatized function that creates the relevant handler.
             // See the header for the templatized function
             ProcessMonitorPtr handler = it->second();
-            ProcessRegistry::addMonitorProcess(handler->getPid(), std::move(handler));
             ++counter_;
-            tools::LoggerManager::getInstance().logInfo("[HANDLER CREATED] | Counter value: " +
-                                                        std::to_string(counter_));
+            tools::LoggerManager::getInstance().logInfo("[HANDLER CREATED] | PID: " + std::to_string(handler->getPid()));
+            ProcessRegistry::addMonitorProcess(handler->getPid(), std::move(handler));
         }
         else
         {
@@ -60,7 +59,7 @@ namespace process
         }
     }
 
-    void MainController::createHandlers(int numHandlers)
+    void MainController::createHandlers(const int numHandlers)
     {
         for (int i = 0; i < numHandlers; ++i)
         {
