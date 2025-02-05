@@ -35,8 +35,6 @@ SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<c
     {
         posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
-        tools::LoggerManager::getInstance().logInfo("[SYSTEM PROCESS] SpawnChild. Parent process PID: " +
-                                                    std::to_string(parent_->pid_));
 
         int status = posix_spawn(&parent_->pid_, args[0], &actions, &attrs, const_cast<char *const *>(args.data()),
                                  &environ[0]);

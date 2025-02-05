@@ -5,9 +5,12 @@
 #include <sys/msg.h>
 #include <thread>
 #include "process_controller.h"
+#include "message.h"
 
 namespace concurrency
 {
+
+    static constexpr size_t TIMEOUT_SECS = 5;
     Messenger::Messenger()
     {
         // Generate a unique key for the message queue
@@ -35,8 +38,6 @@ namespace concurrency
         tools::LogOpt::getInstance().logInfo("Last message received time: " + std::to_string(buf.msg_rtime));
         tools::LogOpt::getInstance().logInfo("Last change time: " + std::to_string(buf.msg_ctime));
         */
-        // Initialize mutex and condition variable
-        pthread_mutex_init(&mutex, nullptr);
     }
 
     Messenger::~Messenger()
@@ -46,8 +47,6 @@ namespace concurrency
         {
             perror("msgctl");
         }
-        // Destroy mutex and condition variable
-        pthread_mutex_destroy(&mutex);
     }
 
     void Messenger::sendMessage(const std::string &text, int msgType)
@@ -57,24 +56,20 @@ namespace concurrency
         std::snprintf(message.msgText, sizeof(message.msgText), "%s", text.c_str());
 
         auto start = std::chrono::steady_clock::now();
-        auto timeout = std::chrono::seconds(5); // Set a timeout duration
+        auto timeout = std::chrono::seconds(TIMEOUT_SECS); // Set a timeout duration
 
         while (process::ProcessController::running())
         {
-            pthread_mutex_lock(&mutex); // Lock the mutex to synchronize access
+            std::lock_guard<std::mutex> lock(mutex); // Lock the mutex to synchronize access
             if (msgsnd(msgid_, &message, sizeof(message.msgText), IPC_NOWAIT) != -1)
             {
-                pthread_mutex_unlock(&mutex); // Unlock the mutex
                 return; // Message sent successfully
             }
-            pthread_mutex_unlock(&mutex); // Unlock the mutex
-
             if (errno != EAGAIN) // Check for non-recoverable errors
             {
                 perror("msgsnd");
                 throw std::runtime_error("Failed to send message");
             }
-
             // Check for timeout
             auto now = std::chrono::steady_clock::now();
             if (now - start > timeout)
@@ -94,21 +89,18 @@ namespace concurrency
         Message message;
         message.msgType = msgType;
         auto start = std::chrono::steady_clock::now();
-        auto timeout = std::chrono::seconds(1); // Set a timeout duration
+        auto timeout = std::chrono::seconds(TIMEOUT_SECS); // Set a timeout duration
 
         while (process::ProcessController::running())
         {
             {
-                pthread_mutex_lock(&mutex); // Lock the mutex to synchronize access within the process
+                std::lock_guard<std::mutex> lock(mutex); // Lock the mutex to synchronize access within the process
                 if (msgrcv(msgid_, &message, sizeof(message.msgText), msgType, IPC_NOWAIT) != -1)
                 {
-                    pthread_mutex_unlock(&mutex); // Unlock the mutex
                     return {message.msgText};
                 }
-                pthread_mutex_unlock(&mutex); // Unlock the mutex
             }
 
-        
             if (errno != ENOMSG)
             {
                 perror("msgrcv");

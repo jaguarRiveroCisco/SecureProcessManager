@@ -27,7 +27,7 @@ namespace process
             std::vector<char *> args;
             Arguments() :
                 args{strdup("/Users/jrivero/dev/programs/testprogs/lenghty/lengthy_process")
-                    , strdup("-s"), strdup("5")
+                    , strdup("-s"), strdup("10")
                     , strdup("-v"), strdup("0")
                     , nullptr}
             {

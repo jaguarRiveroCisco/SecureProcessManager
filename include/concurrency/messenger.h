@@ -3,9 +3,9 @@
 #ifndef MESSENGER_H
 #define MESSENGER_H
 
-#include <pthread.h>
+#include <thread>
 #include <string>
-#include "message.h"
+
 namespace concurrency
 {
     class Messenger 
@@ -23,8 +23,8 @@ namespace concurrency
         void operator=(Messenger const &) = delete;
 
     private:
-        int msgid_;
-        pthread_mutex_t mutex{};
+        int msgid_{};
+        std::mutex mutex{};
     };
 }
 

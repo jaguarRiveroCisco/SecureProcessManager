@@ -1,6 +1,7 @@
 #include "communicator.h"
 #include <thread>
 #include "logger_instance.h"
+#include "message.h"
 
 namespace concurrency
 {
