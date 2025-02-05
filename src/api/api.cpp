@@ -45,11 +45,11 @@ namespace api
     {
         process::ProcessController::terminateAll();
     }
+
     void killAll()
     {
         process::ProcessController::killAll();
     }
-
 
     void killPid(const pid_t pid)
     {
@@ -68,6 +68,7 @@ namespace api
             cl.flush(tools::LogLevel::ERROR);
         }
     }
+
     void terminatePid(const pid_t pid)
     {
         try
@@ -85,6 +86,7 @@ namespace api
             cl.flush(tools::LogLevel::ERROR);
         }
     }
+
     void intPid(const pid_t pid)
     {
         try
