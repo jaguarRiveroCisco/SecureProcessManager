@@ -7,10 +7,14 @@
 
 #include <iostream>
 #include <string>
+#include "nap_time.h"
 
 namespace api
 {
-    void execute(int &numProcesses, std::string &processType);
+    void execute(const int &numProcesses, const std::string &processType);
+    void respawn(bool);
+    void loggerType(const std::string &);
+    void SleepType(tools::NapType);
 }
 
 #endif //API_H

@@ -1,13 +1,9 @@
 #include "console_control.h"
-#include <iostream>
-#include <thread>
 #include <unistd.h>
 #include "console_logger.h"
 #include "logger_instance.h"
-#include "main_controller.h"
-#include "nap_time.h"
-#include "string_tools.h"
 #include "console_loop.h"
+#include "api.h"
 
 namespace cli::driver
 {
@@ -24,7 +20,7 @@ namespace cli::driver
             {
                 case 'n':
                     // Set the number of processes from the argument
-                    numProcesses = std::atoi(optarg);
+                    numProcesses = std::strtol(optarg, nullptr, 10);
                     if (numProcesses <= 0)
                     {
                         cl << "Number of processes must be greater than 0. Defaulting to 4.";
@@ -45,40 +41,40 @@ namespace cli::driver
                     }
                     break;
                 case 's':
-                    process::ProcessController::respawn() = std::atoi(optarg) != 0;
+                    api::respawn(std::strtol(optarg, nullptr, 10) != 0);
                     break;
                 case 'l':
                     // Set the logging type from the argument
                     if (std::string(optarg) == "file")
                     {
-                        tools::LoggerManager::loggerType() = "file";
+                        api::loggerType("file");
                     }
                     else
                     {
                         cl << "Invalid logging type defaulting to " << "console";
                         cl.flush(tools::LogLevel::WARNING);
-                        tools::LoggerManager::loggerType() = "console";
+                        api::loggerType("console");
                     }
                     break;
                 case 'T':
                     // Set the nap time type from the argument
                     if (std::string(optarg) == "MS")
                     {
-                        tools::SleepTime::type = tools::NapType::MS;
+                        api::SleepType(tools::NapType::MS);
                     }
                     else if (std::string(optarg) == "SEC")
                     {
-                        tools::SleepTime::type = tools::NapType::SEC;
+                        api::SleepType(tools::NapType::SEC);
                     }
                     else if (std::string(optarg) == "MIN")
                     {
-                        tools::SleepTime::type = tools::NapType::MIN;
+                        api::SleepType(tools::NapType::MIN);
                     }
                     else
                     {
                         cl << "Invalid nap time type defaulting to " << "MS";
                         cl.flush(tools::LogLevel::WARNING);
-                        tools::SleepTime::type = tools::NapType::MS;
+                        api::SleepType(tools::NapType::MS);
                     }
                     break;
                 case 'h':
