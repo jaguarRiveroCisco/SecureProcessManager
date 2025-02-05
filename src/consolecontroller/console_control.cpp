@@ -1,6 +1,5 @@
 #include "console_control.h"
 #include <unistd.h>
-#include "console_logger.h"
 #include "logger_instance.h"
 #include "console_loop.h"
 #include "api.h"
@@ -8,10 +7,9 @@
 namespace cli::driver
 {
 
-    static tools::ConsoleLogger cl;
     static constexpr int MAX_PROCESSES = 20;
 
-    void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType)
+    void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, tools::ConsoleLogger& cl)
     {
         int opt;
         while ((opt = getopt(argc, argv, "n:t:s:l:T:h")) != -1) // Removed colon after 'h'

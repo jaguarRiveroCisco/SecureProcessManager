@@ -20,9 +20,12 @@ auto main(int argc, char *argv[]) -> int
 
     int         numProcesses = 4;
     std::string processType  = "simul";
-    cli::driver::parseArguments(argc, argv, numProcesses, processType);
+    static tools::ConsoleLogger cl;
+
+    cli::driver::parseArguments(argc, argv, numProcesses, processType, cl);
     api::execute(numProcesses, processType);
-    std::cout << "[PARENT PROCESS] Main process exiting" << std::endl;
+    cl << "[PARENT PROCESS] Main process exiting";
+    cl.flush(tools::LogLevel::INFO);
     std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
 
     return 0;
