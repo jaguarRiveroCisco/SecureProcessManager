@@ -49,7 +49,7 @@ namespace concurrency
         }
     }
 
-    void Messenger::sendMessage(const std::string &text, int msgType)
+    void Messenger::sendMessage(const std::string &text, const int msgType)
     {
         Message message;
         message.msgType = msgType;
@@ -71,8 +71,7 @@ namespace concurrency
                 throw std::runtime_error("Failed to send message");
             }
             // Check for timeout
-            auto now = std::chrono::steady_clock::now();
-            if (now - start > timeout)
+            if (auto now = std::chrono::steady_clock::now(); now - start > timeout)
             {
                 break;
             }
@@ -84,7 +83,7 @@ namespace concurrency
         throw std::runtime_error("Failed to send message within timeout period");
     }
 
-    std::string Messenger::receiveMessage(int msgType)
+    std::string Messenger::receiveMessage(const int msgType)
     {
         Message message;
         message.msgType = msgType;
@@ -108,8 +107,7 @@ namespace concurrency
             }
         
             // Check for timeout
-            auto now = std::chrono::steady_clock::now();
-            if (now - start > timeout)
+            if (auto now = std::chrono::steady_clock::now(); now - start > timeout)
             {
                 break;
             }

@@ -31,12 +31,19 @@ namespace process
 
     void MainController::restoreHandlerCount()
     {
-        // Check if the number of handlers is less than numProcesses_
-        if (ProcessController::running() && ProcessController::respawn() &&
-            (counter_.load() < ProcessController::numProcesses()))
+        while (ProcessController::running())
         {
-            int numHandlersToCreate = ProcessController::numProcesses() - counter_;
-            createHandlers(numHandlersToCreate);
+            if (!concurrency::Synchro::getInstance().pauseMonitoring())
+            {
+                // Check if the number of handlers is less than numProcesses_
+                if (ProcessController::running() && ProcessController::respawn() &&
+                    (counter_.load() < ProcessController::numProcesses()))
+                {
+                    int numHandlersToCreate = ProcessController::numProcesses() - counter_;
+                    createHandlers(numHandlersToCreate);
+                }
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
         }
     }
 

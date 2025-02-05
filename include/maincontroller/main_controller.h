@@ -14,9 +14,10 @@ namespace process
     {
     public:
         static void run(const std::string &processType, int numProcesses);
-
-    private:
         static void processLifecycleLoop();
+        static void startControlLoop();
+        static void endControlLoop();
+    private:
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);
         static void createHandler();
@@ -24,6 +25,9 @@ namespace process
         static void createMonitorThread(const std::string &);
         static void terminateMonitorThread(const std::string &);
         static void MonitorProcessTermination();
+        static void startThreads();
+        static void joinThreads();
+
 
         static FactoryMap handlerFactoryMap_;
 

@@ -13,6 +13,9 @@ namespace api
     {
         tools::LoggerManager::createLoggerType();
         process::MainController::run(processType, numProcesses);
+        process::MainController::startControlLoop();
+        process::MainController::processLifecycleLoop();
+        process::MainController::endControlLoop();
     }
 
     void respawn(const bool val)
