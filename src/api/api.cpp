@@ -8,6 +8,7 @@
 #include "process_controller.h"
 #include "main_controller.h"
 #include "console_logger.h"
+#include "console_loop.h"
 namespace api
 {
     static tools::ConsoleLogger cl;
@@ -16,9 +17,9 @@ namespace api
     {
         tools::LoggerManager::createLoggerType();
         process::MainController::initializeController(processType, numProcesses);
-        process::MainController::startControlLoop();
+        cli::driver::consoleLoop();;
         process::MainController::processLifecycleLoop();
-        process::MainController::endControlLoop();
+        cli::driver::consoleLoop(false);;
     }
 
     void respawn(const bool val)

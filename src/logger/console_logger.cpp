@@ -38,7 +38,7 @@ namespace tools
         }
 
     private:
-        BufferedConsoleLogger() : bufferLimit_(process::ProcessController::numProcesses() * 2)
+        BufferedConsoleLogger() : bufferLimit_(process::ProcessController::numProcesses())
         {
         }
         std::vector<std::string> buffer_;

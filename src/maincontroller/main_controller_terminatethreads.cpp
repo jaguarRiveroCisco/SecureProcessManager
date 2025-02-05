@@ -97,7 +97,7 @@ namespace process
             // Optional sleep to reduce CPU usage in case of tight loop
             std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::SMALL));
         }
-        tools::LoggerManager::getInstance().logInfo("Ending MonitorProcessTermination thread");
+        tools::LoggerManager::getInstance().logInfo("[PARENT PROCESS] | Ending MonitorProcessTermination thread");
 
     }
 } // namespace process

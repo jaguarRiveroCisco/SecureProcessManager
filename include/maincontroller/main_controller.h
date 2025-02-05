@@ -15,8 +15,6 @@ namespace process
     public:
         static void initializeController(const std::string &processType, int numProcesses);
         static void processLifecycleLoop();
-        static void startControlLoop();
-        static void endControlLoop();
         static void stop();
     private:
         static void restoreHandlerCount();

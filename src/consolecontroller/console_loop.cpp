@@ -17,10 +17,6 @@ namespace cli::driver
 {
     static tools::ConsoleLogger cl;
 
-
-
-
-
     void printContext(int numProcesses, const std::string &processType)
     {
         // Static variables to store the latest values

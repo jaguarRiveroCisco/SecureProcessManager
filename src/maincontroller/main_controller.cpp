@@ -40,11 +40,6 @@ namespace process {
             restoreHandlerCountThread.join();
     }
 
-    void MainController::startControlLoop()
-    {
-        cli::driver::consoleLoop();
-    }
-
     void MainController::stop()
     {
         ProcessController::running() = false;
@@ -53,10 +48,6 @@ namespace process {
             processRunning = false;
         }
         cv.notify_all();
-    }
-    void MainController::endControlLoop()
-    {
-        cli::driver::consoleLoop(false);
     }
 
     void MainController::processLifecycleLoop()
