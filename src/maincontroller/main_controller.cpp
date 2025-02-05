@@ -9,7 +9,7 @@ namespace process {
     std::thread terminationThread;
     std::thread restoreHandlerCountThread;
 
-    void MainController::run(const std::string &processType, int numProcesses)
+    void MainController::initializeController(const std::string &processType, int numProcesses)
     {
         ProcessController::setProcessType(processType);
         ProcessController::setNumProcesses(numProcesses);

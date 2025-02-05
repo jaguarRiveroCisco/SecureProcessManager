@@ -13,7 +13,7 @@ namespace process
     class MainController final
     {
     public:
-        static void run(const std::string &processType, int numProcesses);
+        static void initializeController(const std::string &processType, int numProcesses);
         static void processLifecycleLoop();
         static void startControlLoop();
         static void endControlLoop();
