@@ -8,7 +8,6 @@
 #include "logger_instance.h"
 #include "main_controller.h"
 #include "nap_time.h"
-#include "process_simulator.h"
 #include "string_tools.h"
 namespace cli::driver
 {
