@@ -7,8 +7,11 @@
 #include "nap_time.h"
 #include "process_controller.h"
 #include "main_controller.h"
+#include "console_logger.h"
 namespace api
 {
+    static tools::ConsoleLogger cl;
+
     void execute(const int &numProcesses, const std::string &processType)
     {
         tools::LoggerManager::createLoggerType();
@@ -33,4 +36,77 @@ namespace api
         tools::SleepTime::type = type;
     }
 
-} // namespace api
+    void stop()
+    {
+        process::MainController::stop();
+    }
+
+    void terminateAll()
+    {
+        process::ProcessController::terminateAll();
+    }
+    void killAll()
+    {
+        process::ProcessController::killAll();
+    }
+
+
+    void killPid(const pid_t pid)
+    {
+        try
+        {
+            process::ProcessController::killProcessByPid(pid);
+        }
+        catch (const std::invalid_argument &)
+        {
+            cl << "Invalid PID format.";
+            cl.flush(tools::LogLevel::ERROR);
+        }
+        catch (const std::out_of_range &)
+        {
+            cl << "PID out of range.";
+            cl.flush(tools::LogLevel::ERROR);
+        }
+    }
+    void terminatePid(const pid_t pid)
+    {
+        try
+        {
+            process::ProcessController::terminateProcessByPid(pid);
+        }
+        catch (const std::invalid_argument &)
+        {
+            cl << "Invalid PID format.";
+            cl.flush(tools::LogLevel::ERROR);
+        }
+        catch (const std::out_of_range &)
+        {
+            cl << "PID out of range.";
+            cl.flush(tools::LogLevel::ERROR);
+        }
+    }
+    void intPid(const pid_t pid)
+    {
+        try
+        {
+            process::ProcessController::intProcessByPid(pid);
+        }
+        catch (const std::invalid_argument &)
+        {
+            cl << "Invalid PID format.";
+            cl.flush(tools::LogLevel::ERROR);
+        }
+        catch (const std::out_of_range &)
+        {
+            cl << "PID out of range.";
+            cl.flush(tools::LogLevel::ERROR);
+        }
+    }
+
+    void displayAllPids()
+    {
+        process::ProcessController::displayAllPids();
+    }
+
+}
+

@@ -17,6 +17,7 @@ namespace process
         static void processLifecycleLoop();
         static void startControlLoop();
         static void endControlLoop();
+        static void stop();
     private:
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);

@@ -15,6 +15,13 @@ namespace api
     void respawn(bool);
     void loggerType(const std::string &);
     void SleepType(tools::NapType);
+    void stop();
+    void terminateAll();
+    void killAll();
+    void killPid(pid_t pid);
+    void terminatePid(pid_t pid);
+    void intPid(pid_t pid);
+    void displayAllPids();
 }
 
 #endif //API_H

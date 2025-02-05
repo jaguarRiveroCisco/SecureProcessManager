@@ -1,5 +1,7 @@
 #include "main_controller.h"
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 #include "nap_time.h"
 #include "console_loop.h"
 
@@ -8,6 +10,10 @@ namespace process {
     std::thread monitoringThread;
     std::thread terminationThread;
     std::thread restoreHandlerCountThread;
+
+    std::mutex mtx;
+    std::condition_variable cv;
+    bool processRunning = true;
 
     void MainController::initializeController(const std::string &processType, int numProcesses)
     {
@@ -39,6 +45,15 @@ namespace process {
         cli::driver::consoleLoop();
     }
 
+    void MainController::stop()
+    {
+        ProcessController::running() = false;
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            processRunning = false;
+        }
+        cv.notify_all();
+    }
     void MainController::endControlLoop()
     {
         cli::driver::consoleLoop(false);
@@ -47,9 +62,9 @@ namespace process {
     void MainController::processLifecycleLoop()
     {
         startThreads();
-        while (ProcessController::running())
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
+            std::unique_lock<std::mutex> lock(mtx);
+            cv.wait(lock, []{ return  !processRunning; });
         }
         joinThreads();
     }

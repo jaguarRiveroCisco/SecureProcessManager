@@ -45,6 +45,7 @@ namespace process
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
         }
+        tools::LoggerManager::getInstance().logInfo("Ending restoreHandlerCount thread");
     }
 
     void MainController::createHandler()
@@ -142,5 +143,7 @@ namespace process
             // Optional sleep to reduce CPU usage in case of tight loop
             std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::VERYSMALL));
         }
+        tools::LoggerManager::getInstance().logInfo("Ending CreateMonitoringThreads thread");
+
     }
 } // namespace process
