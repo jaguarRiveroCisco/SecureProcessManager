@@ -1,8 +1,8 @@
 
 #include "main_controller.h"
 #include <thread>
-#include "console_control.h"
 #include "nap_time.h"
+#include "console_loop.h"
 
 namespace process
 {

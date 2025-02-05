@@ -18,6 +18,7 @@ include_directories(
     include/logger
     include/networkprocess
     include/systemprocess
+    include/api
     /opt/homebrew/Cellar/asio/1.30.2/include  # Add the ASIO include directory
 )
 
@@ -47,6 +48,8 @@ add_executable(ProcessController
                # Console Controller sources
                src/consolecontroller/console_control.cpp
                src/consolecontroller/cli_controller.cpp
+               src/consolecontroller/console_loop.cpp
+
 
                # Main controller
                src/maincontroller/main_controller.cpp
@@ -72,4 +75,7 @@ add_executable(ProcessController
                src/logger/logger_instance.cpp
                src/tools/process_status.cpp
                src/processcontroller/ProcessRegistry.cpp
+
+               # API
+               src/api/api.cpp
                )
