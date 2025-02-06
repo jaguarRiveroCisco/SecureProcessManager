@@ -30,9 +30,9 @@ auto main(int argc, char *argv[]) -> int
 
     api::execute(numProcesses, processType);
 
-    cl.logInfo("[PARENT PROCESS] Main process exiting");
-
     std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
+
+    cl.logInfo("[EXITING] Main process exiting");
 
     return 0;
 }
