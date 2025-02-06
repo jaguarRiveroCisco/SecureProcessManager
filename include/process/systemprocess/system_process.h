@@ -9,7 +9,13 @@
 namespace process
 {
 
-    class SystemProcess : public ProcessSimulator 
+    struct Arguments
+    {
+        std::vector<std::string> args;
+        Arguments();
+        ~Arguments() = default;
+    };
+    class SystemProcess final : public ProcessSimulator
     {
     public:
         ~SystemProcess() override = default;
@@ -22,31 +28,14 @@ namespace process
         mutable std::mutex pidMutex_;
         mutable std::condition_variable pidCondition_;
 
-        struct Arguments
-        {
-            std::vector<char *> args;
-            Arguments() :
-                args{strdup("/Users/jrivero/dev/programs/testprogs/lenghty/lengthy_process")
-                    , strdup("-s"), strdup("10")
-                    , strdup("-v"), strdup("0")
-                    , nullptr}
-            {
-            }
-            ~Arguments()
-            {
-                for (char *arg: args)
-                {
-                    free(arg);
-                }
-            }
-        };
+
         struct SpawnChild 
         {
             std::vector<char *>        environ = {nullptr};
             posix_spawn_file_actions_t actions{};
             posix_spawnattr_t          attrs{};
             SystemProcess             *parent_ {nullptr};
-            SpawnChild(SystemProcess *parent, const std::vector<char *> &args);
+            SpawnChild(SystemProcess *parent, const std::vector<std::string> &args);
             ~SpawnChild();
         };
     };

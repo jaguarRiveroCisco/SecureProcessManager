@@ -39,15 +39,29 @@ namespace config
         std::string line;
         while (std::getline(file, line))
         {
+            if (line.empty() || line[0] == '#')
+            {
+                continue;
+            }
             std::istringstream iss(line);
-            std::string        value;
-            if (std::string key; std::getline(iss, value, '=') && std::getline(iss, key))
+            std::string        key;
+            if (std::string value; std::getline(iss, key, '=') && std::getline(iss, value))
             {
                 configMap[key] = value;
             }
         }
 
         file.close();
+
+        consecutiveParameters_.resize(configMap.size() * 2);
+        for (const auto& [key, value] : configMap)
+        {
+            if (key != "process_file")
+            {
+                consecutiveParameters_.push_back("-" + key);
+                consecutiveParameters_.push_back(value);
+            }
+        }
     }
 
     void ConfigReader::printMap() const

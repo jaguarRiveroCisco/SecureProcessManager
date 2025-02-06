@@ -4,12 +4,13 @@
 #include "process_status.h"
 #include <thread>
 #include "nap_time.h"
+#include "process_controller.h"
 namespace process
 {
     void SystemProcess::work()
     {
-        std::thread workerThread([this]() {
-            Arguments arguments;
+        std::thread workerThread([&]() {
+        Arguments arguments;
             SpawnChild spawnChild(this, arguments.args);
         });
         workerThread.detach();
@@ -31,13 +32,26 @@ namespace process
     }
 
 
-SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<char *> &args) : parent_(parent)
+SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
     {
         posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
 
-        int status = posix_spawn(&parent_->pid_, args[0], &actions, &attrs, const_cast<char *const *>(args.data()),
-                                 &environ[0]);
+        // Create a vector of C-style strings (char*)
+        std::vector<char*> c_args;
+        for (const auto& arg : args)
+        {
+            if (!arg.empty())
+            {
+                c_args.push_back(const_cast<char*>(arg.c_str()));
+            }
+        }
+        c_args.push_back(nullptr); // Null-terminate the array
+
+
+        // Pass the C-style array to posix_spawn
+        int status = posix_spawn(&parent_->pid_, c_args[0], &actions, &attrs, c_args.data(), &environ[0]);
+
         if (status != 0)
         {
             tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Failed to execute command");
@@ -74,4 +88,16 @@ SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<c
         posix_spawn_file_actions_destroy(&actions);
         posix_spawnattr_destroy(&attrs);
     }
+
+    Arguments::Arguments()
+    {
+        const auto file = ProcessController::configReader().getValue("process_file");
+        args.push_back(file);
+        auto params = ProcessController::configReader().getConsecutiveParameters();
+        for (const auto& param : params)
+        {
+            args.push_back(param);
+        }
+    }
+
 } // namespace process

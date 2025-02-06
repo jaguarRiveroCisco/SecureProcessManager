@@ -32,6 +32,7 @@ namespace process
         static std::string loggingTypeToString(); // New method
         static std::string &processType() { return processType_; }
         static void readConfigFile(const std::string &configFilePath);
+        static config::ConfigReader &configReader() { return *configReader_; }
 
 
     protected:

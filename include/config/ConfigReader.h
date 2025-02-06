@@ -7,6 +7,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 namespace config
 {
@@ -16,11 +17,13 @@ namespace config
         explicit ConfigReader(const std::string& filePath);
         const std::string& getValue(const std::string& key) const;
         void printMap() const;
+        [[nodiscard]] std::vector<std::string> getConsecutiveParameters() const { return consecutiveParameters_; }
 
     private:
         void parseConfigFile(const std::string& filePath);
 
         std::unordered_map<std::string, std::string> configMap;
+        std::vector<std::string> consecutiveParameters_;
     };
 }
 
