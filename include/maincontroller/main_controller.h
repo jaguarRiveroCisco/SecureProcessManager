@@ -5,7 +5,7 @@
 
 #include "process_controller.h"
 #include "ProcessRegistry.h"
-
+#include "ConfigReader.h"
 namespace process
 {
     using HandlerFactory = std::function<ProcessMonitorPtr()>;
@@ -16,6 +16,7 @@ namespace process
         static void initializeController(const std::string &processType, int numProcesses);
         static void processLifecycleLoop();
         static void stop();
+        static void readConfigFile(const std::string &configFilePath);
     private:
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);
@@ -36,6 +37,8 @@ namespace process
         static void initializeFactory();
 
         static std::atomic<int> counter_;
+
+        static std::unique_ptr<config::ConfigReader> configReader_;
     };
     // Template function to create a handler
     template<typename MonitorType, typename ProcessType> 

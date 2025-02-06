@@ -9,10 +9,10 @@ namespace cli::driver
 
     static constexpr int MAX_PROCESSES = 20;
 
-    void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, tools::ConsoleLogger& cl)
+void parseArguments(int argc, char *argv[], int &numProcesses, std::string &processType, tools::ConsoleLogger& cl)
     {
         int opt;
-        while ((opt = getopt(argc, argv, "n:t:s:l:T:h")) != -1) // Removed colon after 'h'
+        while ((opt = getopt(argc, argv, "n:t:s:l:T:c:h")) != -1) // Added 'c' for config file path
         {
             switch (opt)
             {
@@ -75,20 +75,25 @@ namespace cli::driver
                         api::SleepType(tools::NapType::MS);
                     }
                     break;
-                case 'h':
-                default:
-                    // Display usage information and exit
-                    cl  << argv[0]
-                        << "\n"
-                        << "Usage:\n"
-                        << "-n <number of processes> (max " << MAX_PROCESSES << ")\n"
-                        << "-t <process type 'real', 'network', 'system' or 'simul' (default)>\n"
-                        << "-s <respawn (0 or 1)>\n"
-                        << "-l <logging type 'console' or 'file'>\n"
-                        << "-T <nap time type 'MS', 'SEC', 'MIN'>\n"
-                        << "-h help";
-                    cl.flush(tools::LogLevel::INFO);
-                    std::exit(EXIT_SUCCESS);
+                        case 'c':
+                        // Set the configuration file path from the argument
+                        api::readConfigFile(optarg);
+                        break;
+                    case 'h':
+                    default:
+                        // Display usage information and exit
+                        cl  << argv[0]
+                            << "\n"
+                            << "Usage:\n"
+                            << "-n <number of processes> (max " << MAX_PROCESSES << ")\n"
+                            << "-t <process type 'real', 'network', 'system' or 'simul' (default)>\n"
+                            << "-s <respawn (0 or 1)>\n"
+                            << "-l <logging type 'console' or 'file'>\n"
+                            << "-T <nap time type 'MS', 'SEC', 'MIN'>\n"
+                            << "-c <configuration file path>\n"
+                            << "-h help";
+                        cl.flush(tools::LogLevel::INFO);
+                        std::exit(EXIT_SUCCESS);
             }
         }
     }

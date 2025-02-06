@@ -9,6 +9,7 @@
 #include "main_controller.h"
 #include "console_logger.h"
 #include "console_loop.h"
+
 namespace api
 {
     static tools::ConsoleLogger cl;
@@ -109,6 +110,11 @@ namespace api
     void displayAllPids()
     {
         process::ProcessController::displayAllPids();
+    }
+
+    void readConfigFile(const std::string &configFilePath)
+    {
+        process::MainController::readConfigFile(configFilePath);
     }
 
 }

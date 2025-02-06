@@ -22,6 +22,7 @@ namespace api
     void terminatePid(pid_t pid);
     void intPid(pid_t pid);
     void displayAllPids();
+    void readConfigFile(const std::string &configFilePath);
 }
 
 #endif //API_H

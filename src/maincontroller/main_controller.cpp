@@ -1,11 +1,10 @@
 #include "main_controller.h"
 #include <thread>
-#include <mutex>
 #include <condition_variable>
-#include "nap_time.h"
-#include "console_loop.h"
+#include "ConfigReader.h"
 
-namespace process {
+namespace process
+{
 
     std::thread monitoringThread;
     std::thread terminationThread;
@@ -13,7 +12,9 @@ namespace process {
 
     std::mutex mtx;
     std::condition_variable cv;
-    bool processRunning = true;
+    std::atomic<bool> processRunning = true;
+
+    std::unique_ptr<config::ConfigReader> MainController::configReader_ {nullptr};
 
     void MainController::initializeController(const std::string &processType, int numProcesses)
     {
@@ -38,6 +39,12 @@ namespace process {
             terminationThread.join();
         if (restoreHandlerCountThread.joinable())
             restoreHandlerCountThread.join();
+    }
+
+    void MainController::readConfigFile(const std::string &configFilePath)
+    {
+        configReader_ = std::make_unique<config::ConfigReader>(configFilePath);
+        configReader_->printMap();
     }
 
     void MainController::stop()
