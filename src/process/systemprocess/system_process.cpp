@@ -10,7 +10,7 @@ namespace process
     void SystemProcess::work()
     {
         std::thread workerThread([&]() {
-        Arguments arguments;
+            const Arguments arguments;
             SpawnChild spawnChild(this, arguments.args);
         });
         workerThread.detach();
@@ -54,7 +54,18 @@ SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<s
 
         if (status != 0)
         {
-            tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Failed to execute command");
+            if (status == ENOMEM)
+            {
+                tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Insufficient memory to execute command");
+            }
+            else if (status == EINVAL)
+            {
+                tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Invalid arguments provided to posix_spawn");
+            }
+            else
+            {
+                tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Failed to execute command");
+            }
         }
         else
         {
