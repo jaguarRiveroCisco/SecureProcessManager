@@ -4,6 +4,7 @@
 #include "process_status.h"
 #include "process_controller.h"
 #include "string_tools.h"
+#include "nap_time.h"
 namespace process
 {
     void SystemProcess::work()
@@ -23,10 +24,15 @@ namespace process
                                                                             pid_, exitCode_);
     }
 
+    auto timeout = std::chrono::milliseconds(tools::NapTimeMs::MEDIUM); // Adjust the duration as needed
     pid_t SystemProcess::getPid() const
     {
         std::unique_lock<std::mutex> lock(pidMutex_);
-        pidCondition_.wait(lock, [this]() { return pid_ != 0; });
+        if (!pidCondition_.wait_for(lock, timeout, [this]() { return pid_ != 0; }))
+        {
+            tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Timeout waiting for pid to be set");
+            throw std::runtime_error("[SYSTEM PROCESS] Timeout waiting for pid to be set");
+        }
         return pid_;
     }
 
@@ -47,10 +53,9 @@ namespace process
         else
         {
             {
-                std::lock_guard<std::mutex> lock(parent_->pidMutex_);
-                parent_->pid_ = parent_->pid_; // Notify that pid_ is set
+                std::unique_lock<std::mutex> lock(parent_->pidMutex_);
+                parent_->pidCondition_.notify_one();
             }
-            parent_->pidCondition_.notify_one();
             //parent_->preWork(parent_->pid_);
 
             if (const pid_t pid = waitpid(parent_->pid_, &status, 0); pid != parent_->pid_)
