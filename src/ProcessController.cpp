@@ -23,9 +23,15 @@ auto main(int argc, char *argv[]) -> int
     static tools::ConsoleLogger cl;
 
     cli::driver::parseArguments(argc, argv, numProcesses, processType, cl);
+
+    cli::driver::printContext(numProcesses, processType);
+
+    cli::driver::printCommands(); // Call to printHelp
+
     api::execute(numProcesses, processType);
-    cl << "[PARENT PROCESS] Main process exiting";
-    cl.flush(tools::LogLevel::INFO);
+
+    cl.logInfo("[PARENT PROCESS] Main process exiting");
+
     std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
 
     return 0;

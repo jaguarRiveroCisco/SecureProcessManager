@@ -40,9 +40,10 @@ namespace tools
     private:
         BufferedConsoleLogger() : bufferLimit_(process::ProcessController::numProcesses())
         {
+            buffer_.reserve(bufferLimit_);
         }
         std::vector<std::string> buffer_;
-        size_t bufferLimit_{};
+        size_t bufferLimit_{1};
     };
 
 

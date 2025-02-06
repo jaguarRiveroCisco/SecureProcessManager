@@ -5,66 +5,15 @@
 #include "console_control.h"
 #include <iostream>
 #include <thread>
-#include <unistd.h>
 #include "cli_controller.h"
 #include "console_logger.h"
 #include "logger_instance.h"
 #include "main_controller.h"
 #include "string_tools.h"
-#include "nap_time.h"
 #include "api.h"
 namespace cli::driver
 {
     static tools::ConsoleLogger cl;
-
-    void printContext(int numProcesses, const std::string &processType)
-    {
-        // Static variables to store the latest values
-        static int         lastNumProcesses = 0;
-        static std::string lastProcessType  = "unknown";
-
-        // Update static variables only if new values are provided
-        if (numProcesses != -1)
-            lastNumProcesses = numProcesses;
-        if (!processType.empty())
-            lastProcessType = processType;
-
-        // Print the stored context
-        std::cout << "\n========================= Context =========================\n"
-                  << " PID                 : " << getpid() << "\n"
-                  << " Number of Processes : " << lastNumProcesses << "\n"
-                  << " Process Type        : " << lastProcessType << "\n"
-                  << " Respawn             : " << (process::ProcessController::respawn() ? "Enabled" : "Disabled") << "\n"
-                  << " Logging Type        : " << process::ProcessController::loggingTypeToString() << "\n"
-                  << " Nap Time Type       : " << tools::SleepTime::NapTypeToString() << "\n"
-                  << "==========================================================\n\n"
-                  << std::flush;
-    }
-
-    void printCommands()
-    {
-        std::cout
-                << "\n==========================================================\n"
-                << "Process Commands Help Menu (" << "PID: " << getpid() << ")\n"
-                << "==========================================================\n"
-                << "Available commands:\n"
-                << "  context         - Display the current context\n"
-                << "  quit            - Signals the program to gracefully quit at the next loop\n"
-                << "  term all        - Terminate (SIGTERM) all processes and exit the program\n"
-                << "  term <pid>      - Terminate (SIGTERM) a specific process by PID\n"
-                << "  int all         - Interrupt (SIGINT) all processes and exit the program\n"
-                << "  int <pid>       - Interrupt (SIGINT) a specific process by PID\n"
-                << "  kill all        - Kill all (SIGKILL) processes and exit the program\n"
-                << "  kill <pid>      - Kill a (SIGKILL) specific process by PID\n"
-                << "  display pids    - Display all current PIDs\n"
-                << "  respawn on      - Turn on respawn\n"
-                << "  respawn off     - Turn off respawn\n"
-                << "  monitor on      - Turn on monitoring: spawn monitoring threads\n"
-                << "  monitor off     - Turn off monitoring: end monitoring threads\n"
-                << "  help            - Display this help message\n\n"
-                << "==========================================================\n\n"
-                << std::flush;
-    }
 
     void doCommand(const std::string &input)
     {

@@ -8,8 +8,7 @@
 namespace cli::driver
 {
     void                      consoleLoop(bool run = true);
-    void printContext(int numProcesses = -1, const std::string &processType = "");
-    void printCommands();
+
 }
 
 #endif //CONSOLE_LOOP_H
