@@ -7,11 +7,12 @@
 #include "nap_time.h"
 namespace process
 {
+    std::vector<std::string> Arguments::args;
     void SystemProcess::work()
     {
+        Arguments::populate();
         std::thread workerThread([&]() {
-            const Arguments arguments;
-            SpawnChild spawnChild(this, arguments.args);
+            SpawnChild spawnChild(this, Arguments::args);
         });
         workerThread.detach();
     }
@@ -92,14 +93,17 @@ namespace process
         posix_spawnattr_destroy(&attrs);
     }
 
-    Arguments::Arguments()
+    void Arguments::populate()
     {
-        const auto file = ProcessController::configReader().getValue("process_file");
-        args.push_back(file);
-        auto params = ProcessController::configReader().getConsecutiveParameters();
-        for (const auto& param : params)
+        if (args.empty())
         {
-            args.push_back(param);
+            const auto file = ProcessController::configReader().getValue("process_file");
+            args.push_back(file);
+            auto params = ProcessController::configReader().getConsecutiveParameters();
+            for (const auto& param : params)
+            {
+                args.push_back(param);
+            }
         }
     }
 

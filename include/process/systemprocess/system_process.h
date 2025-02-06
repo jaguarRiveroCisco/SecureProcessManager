@@ -11,8 +11,9 @@ namespace process
 
     struct Arguments
     {
-        std::vector<std::string> args;
-        Arguments();
+        static std::vector<std::string> args;
+
+        static void populate();
     };
     class SystemProcess final : public ProcessSimulator
     {
