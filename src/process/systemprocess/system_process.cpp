@@ -31,23 +31,23 @@ namespace process
         return pid_;
     }
 
-
-SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
-    {
-        posix_spawn_file_actions_init(&actions);
-        posix_spawnattr_init(&attrs);
-
-        // Create a vector of C-style strings (char*)
+    std::vector<char*> createCStyleArgs(const std::vector<std::string>& args) {
         std::vector<char*> c_args;
-        for (const auto& arg : args)
-        {
-            if (!arg.empty())
-            {
+        for (const auto& arg : args) {
+            if (!arg.empty()) {
                 c_args.push_back(const_cast<char*>(arg.c_str()));
             }
         }
         c_args.push_back(nullptr); // Null-terminate the array
+        return c_args;
+    }
 
+    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
+    {
+        posix_spawn_file_actions_init(&actions);
+        posix_spawnattr_init(&attrs);
+
+        std::vector<char*> c_args = createCStyleArgs(args);
 
         // Pass the C-style array to posix_spawn
         int status = posix_spawn(&parent_->pid_, c_args[0], &actions, &attrs, c_args.data(), &environ[0]);
