@@ -11,7 +11,8 @@
 
 namespace api
 {
-    void execute(const int &numProcesses, const std::string &processType);
+    void initialize(const int &numProcesses, const std::string &processType);
+    void execute();
     void respawn(bool);
     void loggerType(const std::string &);
     void SleepType(tools::NapType);

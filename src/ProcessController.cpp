@@ -3,6 +3,7 @@
 #include "console_control.h"
 #include "nap_time.h"
 #include <thread>
+#include "console_loop.h"
 void displayCompilationInfo(const char *appName)
 {
     std::cout << "*******************************************" << std::endl;
@@ -28,7 +29,13 @@ auto main(int argc, char *argv[]) -> int
 
     cli::driver::printCommands(); // Call to printHelp
 
-    api::execute(numProcesses, processType);
+    api::initialize(numProcesses, processType);
+
+    cli::driver::consoleLoop();
+
+    api::execute();
+
+    cli::driver::consoleLoop(false);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
 
