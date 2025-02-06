@@ -38,4 +38,19 @@ namespace tools::string
         }
         return pid;
     }
+
+
+    std::vector<char*> createCStyleArgs(const std::vector<std::string>& args)
+    {
+        std::vector<char*> c_args;
+        for (const auto& arg : args) {
+            if (!arg.empty()) {
+                c_args.push_back(const_cast<char*>(arg.c_str()));
+            }
+        }
+        c_args.push_back(nullptr); // Null-terminate the array
+        return c_args;
+    }
+
+
 }

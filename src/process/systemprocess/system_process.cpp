@@ -3,6 +3,7 @@
 #include "communicator.h"
 #include "process_status.h"
 #include "process_controller.h"
+#include "string_tools.h"
 namespace process
 {
     void SystemProcess::work()
@@ -27,18 +28,6 @@ namespace process
         std::unique_lock<std::mutex> lock(pidMutex_);
         pidCondition_.wait(lock, [this]() { return pid_ != 0; });
         return pid_;
-    }
-
-    std::vector<char*> createCStyleArgs(const std::vector<std::string>& args)
-    {
-        std::vector<char*> c_args;
-        for (const auto& arg : args) {
-            if (!arg.empty()) {
-                c_args.push_back(const_cast<char*>(arg.c_str()));
-            }
-        }
-        c_args.push_back(nullptr); // Null-terminate the array
-        return c_args;
     }
 
     auto SystemProcess::SpawnChild::executeCommand(const std::vector<char*>& c_args) const -> void
@@ -88,7 +77,7 @@ namespace process
         posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
 
-        std::vector<char*> c_args = createCStyleArgs(args);
+        std::vector<char*> c_args = tools::string::createCStyleArgs(args);
         executeCommand(c_args);
     }
 
