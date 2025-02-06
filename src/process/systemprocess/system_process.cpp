@@ -42,28 +42,17 @@ namespace process
         return c_args;
     }
 
-    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
+    auto SystemProcess::SpawnChild::executeCommand(const std::vector<char*>& c_args) const -> int
     {
-        posix_spawn_file_actions_init(&actions);
-        posix_spawnattr_init(&attrs);
-
-        std::vector<char*> c_args = createCStyleArgs(args);
-
-        // Pass the C-style array to posix_spawn
         int status = posix_spawn(&parent_->pid_, c_args[0], &actions, &attrs, c_args.data(), &environ[0]);
 
         if (status != 0)
         {
-            if (status == ENOMEM)
-            {
+            if (status == ENOMEM) {
                 tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Insufficient memory to execute command");
-            }
-            else if (status == EINVAL)
-            {
+            } else if (status == EINVAL) {
                 tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Invalid arguments provided to posix_spawn");
-            }
-            else
-            {
+            } else {
                 tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Failed to execute command");
             }
         }
@@ -74,9 +63,11 @@ namespace process
                 parent_->pid_ = parent_->pid_; // Notify that pid_ is set
             }
             parent_->pidCondition_.notify_one();
-            if (const pid_t result = waitpid(parent_->pid_, &status, 0); result != parent_->pid_)
+            //parent_->preWork(parent_->pid_);
+
+            if (const pid_t pid = waitpid(parent_->pid_, &status, 0); pid != parent_->pid_)
             {
-                tools::displayProcessStatus(status, parent_->pid_);
+                tools::displayProcessStatus(status, parent_->pid_); // process ended
             }
             else
             {
@@ -91,6 +82,16 @@ namespace process
             }
             parent_->postWork();
         }
+        return status;
+    }
+
+    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
+    {
+        posix_spawn_file_actions_init(&actions);
+        posix_spawnattr_init(&attrs);
+
+        std::vector<char*> c_args = createCStyleArgs(args);
+        executeCommand(c_args);
     }
 
     SystemProcess::SpawnChild::~SpawnChild()
