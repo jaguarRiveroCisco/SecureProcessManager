@@ -2,8 +2,6 @@
 #include "logger_instance.h"
 #include "communicator.h"
 #include "process_status.h"
-#include <thread>
-#include "nap_time.h"
 #include "process_controller.h"
 namespace process
 {
@@ -31,7 +29,8 @@ namespace process
         return pid_;
     }
 
-    std::vector<char*> createCStyleArgs(const std::vector<std::string>& args) {
+    std::vector<char*> createCStyleArgs(const std::vector<std::string>& args)
+    {
         std::vector<char*> c_args;
         for (const auto& arg : args) {
             if (!arg.empty()) {
@@ -42,7 +41,7 @@ namespace process
         return c_args;
     }
 
-    auto SystemProcess::SpawnChild::executeCommand(const std::vector<char*>& c_args) const -> int
+    auto SystemProcess::SpawnChild::executeCommand(const std::vector<char*>& c_args) const -> void
     {
         int status = posix_spawn(&parent_->pid_, c_args[0], &actions, &attrs, c_args.data(), &environ[0]);
 
@@ -82,7 +81,6 @@ namespace process
             }
             parent_->postWork();
         }
-        return status;
     }
 
     SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
