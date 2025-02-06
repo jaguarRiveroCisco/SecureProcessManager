@@ -11,6 +11,8 @@ namespace process
     std::atomic<bool> ProcessController::respawn_      = true;
     // Initialize static members
     LoggingType ProcessController::loggingType_ = LoggingType::Console;
+    std::unique_ptr<config::ConfigReader> ProcessController::configReader_ {nullptr};
+
 
     // Implementation of the new method
     std::string ProcessController::loggingTypeToString()
@@ -119,5 +121,11 @@ namespace process
             tools::LoggerManager::getInstance() << "Process with PID: " << pid << " not found.";
             tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
         }
+    }
+
+    void ProcessController::readConfigFile(const std::string &configFilePath)
+    {
+        configReader_ = std::make_unique<config::ConfigReader>(configFilePath);
+        configReader_->printMap();
     }
 } // namespace process

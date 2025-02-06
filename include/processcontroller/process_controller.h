@@ -7,7 +7,7 @@
 #include <shared_mutex>
 #include <unordered_map>
 #include "process_monitor.h"
-
+#include "ConfigReader.h"
 namespace process
 {
     enum class LoggingType { Console, File };
@@ -31,6 +31,8 @@ namespace process
         static int  numProcesses() { return numProcesses_; }
         static std::string loggingTypeToString(); // New method
         static std::string &processType() { return processType_; }
+        static void readConfigFile(const std::string &configFilePath);
+
 
     protected:
         static int               numProcesses_;
@@ -42,6 +44,8 @@ namespace process
         static std::atomic<bool> running_;
         static std::atomic<bool> respawn_;
         static std::shared_mutex mutex_;
+        static std::unique_ptr<config::ConfigReader> configReader_;
+
     };
 } // namespace process
 

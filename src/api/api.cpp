@@ -114,7 +114,7 @@ namespace api
 
     void readConfigFile(const std::string &configFilePath)
     {
-        process::MainController::readConfigFile(configFilePath);
+        process::ProcessController::readConfigFile(configFilePath);
     }
 
 }
