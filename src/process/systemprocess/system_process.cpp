@@ -79,7 +79,6 @@ SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<s
                 }
             }
             parent_->postWork();
-            std::this_thread::sleep_for(std::chrono::seconds(tools::NapTimeSec::MEDIUMS));
         }
     }
 

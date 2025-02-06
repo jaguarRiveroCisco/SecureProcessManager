@@ -13,7 +13,6 @@ namespace process
     {
         std::vector<std::string> args;
         Arguments();
-        ~Arguments() = default;
     };
     class SystemProcess final : public ProcessSimulator
     {
