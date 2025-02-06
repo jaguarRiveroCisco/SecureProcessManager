@@ -1,31 +1,49 @@
 #include "base_process.h"
 #include <unistd.h>
+#include "communicator.h"
 #include "logger_instance.h"
 
 namespace process
 {
     std::atomic<bool> BaseProcess::continue_{true};
-    int              BaseProcess::exitCode_{-1};
- 
+    std::atomic<int>  BaseProcess::exitCode_{EXIT_SUCCESS};
+
+    BaseProcess::BaseProcess() : timeManager_() { setupSignalHandling(); }
+
     void BaseProcess::logLifetime() const
     {
-        auto endTime  = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime_).count();
-        tools::LoggerManager::getInstance().logInfo("[PROCESS FINISHED] | Lifetime: " + std::to_string(duration) + " ms" + " | " + reason_);
+        reason_ += " | exit code: " + std::to_string(exitCode_);
+        tools::LoggerManager::getInstance().logInfo(
+                "[PROCESS FINISHED]  | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + " | " + reason_);
+    }
+
+    void BaseProcess::preWork(pid_t pid)
+    {
+        pid_ = pid;
+        
+        timeManager_.setSleepDuration();
+        tools::LoggerManager::createLoggerType();
+
+        concurrency::Communicator::getInstance().sendCreationMessage(timeManager_.getSleepDurationStr(), pid_);
+    }
+
+    void BaseProcess::postWork()
+    {
+        logLifetime();
+        if (getppid() != 1)
+            concurrency::Communicator::getInstance().sendTerminationMessage(timeManager_.getFormattedElapsedTimeStr(),
+                                                                            pid_, exitCode_);
+        _exit(exitCode_); // Ensure the child process exits immediately
     }
 
     std::atomic<bool> &BaseProcess::continueFlag() { return continue_; }
-    int &BaseProcess::exitCode() { return exitCode_; }
 
-    BaseProcess::BaseProcess() { setupSignalHandling(); }
-
+    std::atomic<int>  &BaseProcess::exitCode() { return exitCode_; }
 
     void signalHandler(int signum)
     {
-        tools::LoggerManager::getInstance().logInfo("[SIGNAL] Received signal | " + std::to_string(signum));
         BaseProcess::continueFlag() = false;
         BaseProcess::exitCode()     = signum;
-    
     }
 
     void setupSignalHandling()
@@ -33,4 +51,4 @@ namespace process
         signal(SIGTERM, signalHandler);
         signal(SIGINT, signalHandler);
     }
-}
+} // namespace process

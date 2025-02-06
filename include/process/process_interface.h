@@ -1,5 +1,9 @@
+#pragma once
+
 #ifndef PROCESS_INTERFACE_H
 #define PROCESS_INTERFACE_H
+
+#include <sys/types.h>
 namespace process
 {
     class IProcess 
@@ -7,6 +11,11 @@ namespace process
     public:
         virtual ~IProcess() = default;
         virtual void work() = 0;
+        [[nodiscard]] virtual pid_t getPid() const = 0;
+
+    protected:
+        virtual void preWork(pid_t pid) = 0;
+        virtual void postWork() = 0;
     };
 
 } // namespace process

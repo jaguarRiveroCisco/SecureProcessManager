@@ -4,8 +4,9 @@
 for file in $(ls -lt1 logs/*.log | awk '{print $NF}')
 do
   # Print the file name
-  echo -e "\nFile: $file"
+  echo -e "\n##################################### File: $file #####################################"
   # Concatenate and print the file content
-  cat "$file"
+  cat "$file" | sed 's/\r/\n/g'
+  echo -e "\n"
 done
 echo

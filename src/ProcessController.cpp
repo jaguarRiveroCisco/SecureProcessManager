@@ -1,15 +1,8 @@
-#include <atomic>
-#include <chrono>
-#include <iostream>
-#include <string>
-#include <thread>
-#include "process.h"
-#include "process_handler.h"
-#include "simul_process.h"
-#include "console_control.h"
-#include "logger_instance.h"
-#include "semaphore_guard.h"
 
+#include "api.h"
+#include "console_control.h"
+#include "nap_time.h"
+#include <thread>
 void displayCompilationInfo(const char *appName)
 {
     std::cout << "*******************************************" << std::endl;
@@ -20,10 +13,6 @@ void displayCompilationInfo(const char *appName)
     std::cout << "*******************************************" << std::endl;
 }
 
-
-// Declare a static instance to trigger the display
-
-
 auto main(int argc, char *argv[]) -> int
 {
 
@@ -31,27 +20,19 @@ auto main(int argc, char *argv[]) -> int
 
     int         numProcesses = 4;
     std::string processType  = "simul";
-    int         rndUpper     = 10; // Default value for rndUpper
+    static tools::ConsoleLogger cl;
 
-    cli::driver::parseArguments(argc, argv, numProcesses, processType, rndUpper);
+    cli::driver::parseArguments(argc, argv, numProcesses, processType, cl);
 
-    tools::LoggerManager::createLoggerType();
+    cli::driver::printContext(numProcesses, processType);
 
-    cli::driver::printHelp(); // Call to printHelp
+    cli::driver::printCommands(); // Call to printHelp
 
-    process::ProcessSimulator::setRndUpper(rndUpper); // Call to setRndUpper with the parsed value
+    api::execute(numProcesses, processType);
 
-    std::thread readerThread(cli::driver::main);
+    std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
 
-    auto& sem = tools::SemaphoreGuard::getInstance();
-    process::Controller::run(processType, numProcesses);
-
-    readerThread.join(); // Ensure the reader thread is joined before exiting
-    sem.unlinkSemaphore(sem.getName());
-
-    cli::driver::printpid("[INFO] Main process exiting", "");
-
-    // cli::driver::LoggerExample(); // Call to example
+    cl.logInfo("[EXITING] Main process exiting");
 
     return 0;
 }

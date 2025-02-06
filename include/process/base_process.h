@@ -2,8 +2,8 @@
 #define BASE_PROCESS_H
 
 #include "process_interface.h"
-#include <memory>
 #include <string>
+#include "time_manager.h"
 namespace process
 {
 
@@ -13,23 +13,25 @@ namespace process
     class BaseProcess : public IProcess 
     {
     public:
-
         static std::atomic<bool> &continueFlag();
-        static int               &exitCode();
+        static std::atomic<int>  &exitCode();
+        pid_t getPid() const override { return pid_; }
+    protected:
+        pid_t pid_{0};
+
 
     protected:
-        virtual ~BaseProcess() = default;
-
-        std::chrono::time_point<std::chrono::high_resolution_clock> startTime_ =
-                std::chrono::high_resolution_clock::now();
-
+        ~BaseProcess() override = default;
         BaseProcess();
-
         void logLifetime() const;
+        void preWork(pid_t pid) override;
+        void postWork() override;
+
+        tools::TimeManager timeManager_;
 
         static std::atomic<bool> continue_;
-        static int exitCode_;
-        std::string reason_ = "End of life";
+        static std::atomic<int>  exitCode_;
+        mutable std::string reason_ = "End of life";
     };
 
 } // namespace process

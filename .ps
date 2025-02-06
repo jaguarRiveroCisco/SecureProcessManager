@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+clear
 # Default process name
 process_name="ProcessController"
 
@@ -9,27 +9,33 @@ if [ $# -gt 0 ]; then
 fi
 
 previous_output=""
+previous_line_count=0
 current_pid=$$
 
 while true; do
   # Capture the output excluding the script and its process
-  current_output=$(ps -ax -o pid,stat,comm,args | grep "$process_name" | grep -v grep | grep -v "$current_pid" | grep -v "$0")
+  current_output=$(ps -ax -o ppid,pid,comm,args | egrep "$process_name|lengthy_process" | egrep -v "grep|homebrew" | grep -v "$current_pid" | grep -v "$0")
   
   # Count the number of non-empty lines in current_output
   line_count=$(echo "$current_output" | grep -c '[^[:space:]]')
 
   if [[ "$current_output" != "$previous_output" ]]; then
     echo  # Print an empty line to indicate a change
-    
-    if [[ "$line_count" -eq 0 ]]; then
-      echo "Total number of $process_name processes: 0"
-    else
-      echo "$current_output"
-      echo "Total number of $process_name processes: $line_count"
+
+    # Play a beep sound
+    tput bel
+
+    if [[ "$line_count" -gt 0 ]]; then
+      # Print the header
+      echo "PARNT CHILD COMMAND       ARGS"
     fi
+    echo "$current_output"
+    echo "Total number of $process_name processes: $line_count"
 
     previous_output="$current_output"
+    previous_line_count="$line_count"
   fi
 
-  sleep 0.01  # Sleep for 100 milliseconds
+  sleep 0.1  # Sleep for 10 milliseconds
+
 done

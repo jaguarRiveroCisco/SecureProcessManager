@@ -1,25 +1,76 @@
 #!/usr/bin/env bash
 
+say_message() {
+  local voice=$1
+  shift
+  say -r 200 -v "$voice" "$@"
+}
+
 clean() {
+  say_message "Anne" "Cleaning."
   rm -rf build > /dev/null 2>&1
 }
 
 conf() {
-  cmake -B build -S . > /dev/null 2>&1
+  say_message "Anne" "Configuring"
+  local generator=${1:-unix}
+  if [ "$generator" == "ninja" ]; then
+    say_message "Anne" "Ninja mode!" &
+    cmake -B build -S . -G Ninja
+  else
+    say_message "Anne" "Using Unix Makefiles" &
+    cmake -B build -S . -G "Unix Makefiles"
+  fi
+
+  if [ $? -ne 0 ]; then
+    say_message "Anne" "Configuration error!"
+    exit 1
+  fi
 }
 
 build() {
-  cmake --build build --parallel 3
-}
-clear
-rm logs/*.log > /dev/null 2>&1
-if [ "$1" == "clean" ]; then
-  clean
-elif [ "$1" == "conf" ]; then
-  conf
-else
-  if [ ! -d "build" ]; then
-    conf
+  say_message "Anne" "Building..." &
+  if ! cmake --build build --parallel 3; then
+    say_message "Anne" "Build failed!" &
+    exit 1
   fi
+}
+
+doall() {
+  local generator=${1:-unix}
+  say_message "Anne" "Doing it all"
+  clean
+  conf "$generator"
   build
+}
+
+# Clear terminal screen and remove old log files
+clear
+rm -f logs/*.log > /dev/null 2>&1
+
+case "$1" in
+  clean)
+    clean
+    ;;
+  conf)
+    conf "$2"
+    ;;
+  build)
+    build
+    ;;
+  doall)
+    doall "$2"
+    ;;
+  *)
+    [ ! -d "build" ] && conf "unix"
+    build
+    ;;
+esac
+
+if [ $? -ne 0 ]; then
+  say_message "Anne" "Build failed" &
+  exit 1
+else
+  say_message "Anne" "Build sucessful" &
+  exit 0
 fi
