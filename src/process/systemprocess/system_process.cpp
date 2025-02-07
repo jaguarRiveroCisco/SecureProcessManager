@@ -17,7 +17,8 @@ namespace process
     void SystemProcess::work()
     {
         Arguments::populate();
-        std::thread workerThread([&]() {
+        std::thread workerThread([&]()
+        {
             SpawnChild spawnChild(this, Arguments::args);
         });
         workerThread.detach();
@@ -31,9 +32,9 @@ namespace process
                                                                             pid_, exitCode_);
     }
 
-    auto timeout = std::chrono::milliseconds(tools::NapTimeMs::MEDIUM); // Adjust the duration as needed
     pid_t SystemProcess::getPid() const
     {
+        constexpr auto timeout = std::chrono::milliseconds(tools::NapTimeMs::MEDIUM); // Adjust the duration as needed
         std::unique_lock<std::mutex> lock(pidMutex_);
         if (!pidCondition_.wait_for(lock, timeout, [this]() { return pid_ != 0; }))
         {
@@ -132,7 +133,7 @@ namespace process
             }
 
             // Extract the file name without the extension
-            fileNameWithoutExt_ = path.stem().string()  + "_" + std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) + ".log";
+            fileNameWithoutExt_ = path.stem().string();//  + "_" + std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) + ".log";
 
             args.push_back(file);
             auto params = ProcessController::configReader().getConsecutiveParameters();
