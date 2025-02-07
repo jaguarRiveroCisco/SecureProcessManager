@@ -8,12 +8,10 @@
 
 namespace process
 {
-    class MainControllerTest;
     using HandlerFactory = std::function<ProcessMonitorPtr()>;
     using FactoryMap     = std::unordered_map<std::string, HandlerFactory>;
     class MainController final
     {
-        friend class MainControllerTest;
     public:
         static void initializeController(const std::string &processType, int numProcesses);
         static void processLifecycleLoop();

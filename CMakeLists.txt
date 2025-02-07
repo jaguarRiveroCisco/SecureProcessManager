@@ -87,6 +87,8 @@ include_directories(
         tests/test_main.cpp
         tests/test_logger.cpp
         tests/tests_maincontroller.cpp
+        tests/test_base_process.cpp
+        tests/test_string_tools.cpp
     )
 
     # Link the library to the test executable

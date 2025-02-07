@@ -18,9 +18,6 @@ namespace process
         pid_t getPid() const override { return pid_; }
     protected:
         pid_t pid_{0};
-
-
-    protected:
         ~BaseProcess() override = default;
         BaseProcess();
         void logLifetime() const;

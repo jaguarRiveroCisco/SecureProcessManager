@@ -15,6 +15,21 @@ class LoggerTest : public ::testing::Test {
 };
 
 TEST_F(LoggerTest, LogInfo) {
-    tools::LoggerManager::getInstance().logInfo("Test message");
+    tools::LoggerManager::getInstance().logInfo("LogInfo: Test message");
+    // Add assertions to verify the behavior
+}
+
+TEST_F(LoggerTest, LogWarning) {
+    tools::LoggerManager::getInstance().logWarning("LogWarning: Test message");
+    // Add assertions to verify the behavior
+}
+
+TEST_F(LoggerTest, LogError) {
+    tools::LoggerManager::getInstance().logError("LogError: Test message");
+    // Add assertions to verify the behavior
+}
+
+TEST_F(LoggerTest, LogException) {
+    tools::LoggerManager::getInstance().logException("LogException: Test message");
     // Add assertions to verify the behavior
 }
