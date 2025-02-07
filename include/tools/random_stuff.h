@@ -10,6 +10,8 @@ namespace tools
     int  randomMs();
     int  randomSec();
     int  randomMin();
+    void sleepMs(int);
+    void sleepSec(int);
 }
 
 #endif // TOOLS_RANDOM_STUFF_H
