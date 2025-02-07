@@ -86,6 +86,7 @@ include_directories(
     add_executable(ProcessControllerTests
         tests/test_main.cpp
         tests/test_logger.cpp
+        tests/tests_maincontroller.cpp
     )
 
     # Link the library to the test executable
