@@ -2,6 +2,13 @@
 
 namespace cli::driver
 {
+
+    bool validateInput(const std::string &input)
+    {
+        // Perform input validation
+        return !input.empty(); // Example validation
+    }
+
     void CLIController::runThread()
     {
         std::string input;
@@ -30,9 +37,5 @@ namespace cli::driver
         }
     }
 
-    bool CLIController::validateInput(const std::string &input)
-    {
-        // Perform input validation
-        return !input.empty(); // Example validation
-    }
+
 } // namespace cli::driver
