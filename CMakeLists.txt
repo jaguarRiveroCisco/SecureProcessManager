@@ -37,6 +37,7 @@ include_directories(
         src/process/base_process.cpp
         src/process/networkprocess/network_process.cpp
         src/process/systemprocess/system_process.cpp
+        src/process/systemprocess/file_descriptor.cpp
 
         src/processcontroller/process_controller.cpp
         src/processcontroller/ProcessRegistry.cpp

@@ -7,6 +7,7 @@
 #include "nap_time.h"
 #include <filesystem>
 #include <sys/fcntl.h>
+#include "file_descriptor.h"
 
 namespace process
 {
@@ -85,25 +86,28 @@ namespace process
 
     SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
     {
-    posix_spawn_file_actions_init(&actions);
+        posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
 
-        // Open the file for writing
-        int fd;
-        if ((fd = open("output.log", O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1) {
-            throw std::runtime_error("Failed to open output file");
+        try
+        {
+            const FileDescriptor fd(Arguments::fileNameWithoutExt_);
+
+            // Redirect stdout and stderr to the file
+            posix_spawn_file_actions_adddup2(&actions, fd.get(), STDOUT_FILENO);
+            posix_spawn_file_actions_adddup2(&actions, fd.get(), STDERR_FILENO);
+
+            // Convert arguments to C-style and execute the command
+            const std::vector<char*> c_args = tools::string::createCStyleArgs(args);
+            executeCommand(c_args);
         }
-
-        // Redirect stdout and stderr to the file
-        posix_spawn_file_actions_adddup2(&actions, fd, STDOUT_FILENO);
-        posix_spawn_file_actions_adddup2(&actions, fd, STDERR_FILENO);
-
-        std::vector<char*> c_args = tools::string::createCStyleArgs(args);
-        executeCommand(c_args);
-
-        // Close the file descriptor
-        close(fd);
+        catch (const std::exception &e)
+        {
+            tools::LoggerManager::getInstance().logException("[SYSTEM PROCESS] Exception: " + std::string(e.what()));
+            throw;
+        }
     }
+
 
     SystemProcess::SpawnChild::~SpawnChild()
     {
@@ -128,7 +132,7 @@ namespace process
             }
 
             // Extract the file name without the extension
-            fileNameWithoutExt_ = path.stem().string();
+            fileNameWithoutExt_ = path.stem().string()  + "_" + std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) + ".log";
 
             args.push_back(file);
             auto params = ProcessController::configReader().getConsecutiveParameters();
