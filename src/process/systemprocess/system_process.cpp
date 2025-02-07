@@ -5,9 +5,13 @@
 #include "process_controller.h"
 #include "string_tools.h"
 #include "nap_time.h"
+#include <filesystem>
+
 namespace process
 {
     std::vector<std::string> Arguments::args;
+    std::string Arguments::fileNameWithoutExt_;
+
     void SystemProcess::work()
     {
         Arguments::populate();
@@ -98,6 +102,20 @@ namespace process
         if (args.empty())
         {
             const auto file = ProcessController::configReader().getValue("process_file");
+
+            // Ensure the path is valid and points to a regular file
+            std::filesystem::path path(file);
+            if (!std::filesystem::exists(path)) {
+                throw std::runtime_error("File does not exist: " + file);
+            }
+
+            if (!std::filesystem::is_regular_file(path)) {
+                throw std::runtime_error("Path is not a regular file: " + file);
+            }
+
+            // Extract the file name without the extension
+            fileNameWithoutExt_ = path.stem().string();
+
             args.push_back(file);
             auto params = ProcessController::configReader().getConsecutiveParameters();
             for (const auto& param : params)

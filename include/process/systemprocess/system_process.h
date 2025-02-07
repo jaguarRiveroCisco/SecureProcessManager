@@ -12,7 +12,7 @@ namespace process
     struct Arguments
     {
         static std::vector<std::string> args;
-
+        static std::string fileNameWithoutExt_;
         static void populate();
     };
     class SystemProcess final : public ProcessSimulator
