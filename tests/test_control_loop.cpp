@@ -5,7 +5,7 @@
 #include "logger_instance.h"
 
 namespace {
-    class TestThreadController : public cli::driver::ThreadController {
+    class TestThreadController final : public cli::driver::ThreadController {
     public:
         void runThread() override {
             std::unique_lock<std::mutex> lock(mutex);
