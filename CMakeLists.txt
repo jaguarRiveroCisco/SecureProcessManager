@@ -89,6 +89,7 @@ include_directories(
         tests/tests_maincontroller.cpp
         tests/test_base_process.cpp
         tests/test_string_tools.cpp
+                   tests/test_control_loop.cpp
     )
 
     # Link the library to the test executable
