@@ -1,4 +1,5 @@
 #include "cli_controller.h"
+#include <iostream>
 
 namespace cli::driver
 {

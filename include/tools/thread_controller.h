@@ -5,7 +5,6 @@
 
 #include <atomic>
 #include <functional>
-#include <iostream>
 #include <thread>
 
 namespace cli::driver
