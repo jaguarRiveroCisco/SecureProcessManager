@@ -90,6 +90,7 @@ include_directories(
         tests/test_base_process.cpp
         tests/test_string_tools.cpp
                    tests/test_control_loop.cpp
+                   tests/test_system_process.cpp
     )
 
     # Link the library to the test executable

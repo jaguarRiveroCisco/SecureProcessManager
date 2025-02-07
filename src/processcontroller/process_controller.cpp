@@ -126,6 +126,7 @@ namespace process
     void ProcessController::readConfigFile(const std::string &configFilePath)
     {
         configReader_ = std::make_unique<config::ConfigReader>(configFilePath);
-        configReader_->printMap();
+        // uncomment for debug
+        // configReader_->printMap();
     }
 } // namespace process
