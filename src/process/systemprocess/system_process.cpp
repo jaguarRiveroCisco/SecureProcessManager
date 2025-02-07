@@ -6,6 +6,7 @@
 #include "string_tools.h"
 #include "nap_time.h"
 #include <filesystem>
+#include <sys/fcntl.h>
 
 namespace process
 {
@@ -84,11 +85,24 @@ namespace process
 
     SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
     {
-        posix_spawn_file_actions_init(&actions);
+    posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
+
+        // Open the file for writing
+        int fd;
+        if ((fd = open("output.log", O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1) {
+            throw std::runtime_error("Failed to open output file");
+        }
+
+        // Redirect stdout and stderr to the file
+        posix_spawn_file_actions_adddup2(&actions, fd, STDOUT_FILENO);
+        posix_spawn_file_actions_adddup2(&actions, fd, STDERR_FILENO);
 
         std::vector<char*> c_args = tools::string::createCStyleArgs(args);
         executeCommand(c_args);
+
+        // Close the file descriptor
+        close(fd);
     }
 
     SystemProcess::SpawnChild::~SpawnChild()
