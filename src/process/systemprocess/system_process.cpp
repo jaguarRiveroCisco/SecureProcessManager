@@ -8,6 +8,8 @@
 #include <filesystem>
 #include <sys/fcntl.h>
 #include "file_descriptor.h"
+#include <thread>
+#include <sstream>
 
 namespace process
 {
@@ -92,7 +94,11 @@ namespace process
 
         try
         {
-            const FileDescriptor fd(Arguments::fileNameWithoutExt_);
+            // Create a unique filename by appending the thread ID
+            std::ostringstream uniqueFileName;
+            uniqueFileName << Arguments::fileNameWithoutExt_ << "_" << std::this_thread::get_id() << ".log";
+
+            const FileDescriptor fd(uniqueFileName.str());
 
             // Redirect stdout and stderr to the file
             posix_spawn_file_actions_adddup2(&actions, fd.get(), STDOUT_FILENO);
@@ -133,7 +139,7 @@ namespace process
             }
 
             // Extract the file name without the extension
-            fileNameWithoutExt_ = path.stem().string();//  + "_" + std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) + ".log";
+            fileNameWithoutExt_ = path.stem().string();
 
             args.push_back(file);
             auto params = ProcessController::configReader().getConsecutiveParameters();
