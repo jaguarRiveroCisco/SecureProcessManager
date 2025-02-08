@@ -14,13 +14,16 @@ namespace api
 {
     static tools::ConsoleLogger cl;
 
-    void execute(const int &numProcesses, const std::string &processType)
+    void initialize(const int &numProcesses, const std::string &processType)
     {
         tools::LoggerManager::createLoggerType();
         process::MainController::initializeController(processType, numProcesses);
-        cli::driver::consoleLoop();;
+
+    }
+
+    void execute()
+    {
         process::MainController::processLifecycleLoop();
-        cli::driver::consoleLoop(false);;
     }
 
     void respawn(const bool val)

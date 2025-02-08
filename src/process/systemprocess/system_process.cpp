@@ -5,13 +5,22 @@
 #include "process_controller.h"
 #include "string_tools.h"
 #include "nap_time.h"
+#include <filesystem>
+#include <sys/fcntl.h>
+#include "file_descriptor.h"
+#include <thread>
+#include <sstream>
+
 namespace process
 {
     std::vector<std::string> Arguments::args;
+    std::string Arguments::fileNameWithoutExt_;
+
     void SystemProcess::work()
     {
         Arguments::populate();
-        std::thread workerThread([&]() {
+        std::thread workerThread([&]()
+        {
             SpawnChild spawnChild(this, Arguments::args);
         });
         workerThread.detach();
@@ -25,9 +34,9 @@ namespace process
                                                                             pid_, exitCode_);
     }
 
-    auto timeout = std::chrono::milliseconds(tools::NapTimeMs::MEDIUM); // Adjust the duration as needed
     pid_t SystemProcess::getPid() const
     {
+        constexpr auto timeout = std::chrono::milliseconds(tools::NapTimeMs::MEDIUM); // Adjust the duration as needed
         std::unique_lock<std::mutex> lock(pidMutex_);
         if (!pidCondition_.wait_for(lock, timeout, [this]() { return pid_ != 0; }))
         {
@@ -83,9 +92,29 @@ namespace process
         posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);
 
-        std::vector<char*> c_args = tools::string::createCStyleArgs(args);
-        executeCommand(c_args);
+        try
+        {
+            // Create a unique filename by appending the thread ID
+            std::ostringstream uniqueFileName;
+            uniqueFileName << Arguments::fileNameWithoutExt_ << "_" << std::this_thread::get_id() << ".log";
+
+            const FileDescriptor fd(uniqueFileName.str());
+
+            // Redirect stdout and stderr to the file
+            posix_spawn_file_actions_adddup2(&actions, fd.get(), STDOUT_FILENO);
+            posix_spawn_file_actions_adddup2(&actions, fd.get(), STDERR_FILENO);
+
+            // Convert arguments to C-style and execute the command
+            const std::vector<char*> c_args = tools::string::createCStyleArgs(args);
+            executeCommand(c_args);
+        }
+        catch (const std::exception &e)
+        {
+            tools::LoggerManager::getInstance().logException("[SYSTEM PROCESS] Exception: " + std::string(e.what()));
+            throw;
+        }
     }
+
 
     SystemProcess::SpawnChild::~SpawnChild()
     {
@@ -98,6 +127,20 @@ namespace process
         if (args.empty())
         {
             const auto file = ProcessController::configReader().getValue("process_file");
+
+            // Ensure the path is valid and points to a regular file
+            std::filesystem::path path(file);
+            if (!std::filesystem::exists(path)) {
+                throw std::runtime_error("File does not exist: " + file);
+            }
+
+            if (!std::filesystem::is_regular_file(path)) {
+                throw std::runtime_error("Path is not a regular file: " + file);
+            }
+
+            // Extract the file name without the extension
+            fileNameWithoutExt_ = path.stem().string();
+
             args.push_back(file);
             auto params = ProcessController::configReader().getConsecutiveParameters();
             for (const auto& param : params)

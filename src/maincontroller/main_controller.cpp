@@ -1,8 +1,7 @@
 #include "main_controller.h"
 #include <thread>
 #include <condition_variable>
-#include "ConfigReader.h"
-
+#include "logger_instance.h"
 namespace process
 {
 
@@ -17,10 +16,18 @@ namespace process
 
     void MainController::initializeController(const std::string &processType, int numProcesses)
     {
-        ProcessController::setProcessType(processType);
-        ProcessController::setNumProcesses(numProcesses);
-        initializeFactory();
-        createHandlers(ProcessController::numProcesses());
+        try
+        {
+            ProcessController::setProcessType(processType);
+            ProcessController::setNumProcesses(numProcesses);
+            initializeFactory();
+            createHandlers(ProcessController::numProcesses());
+        }
+        catch (const std::exception &e)
+        {
+            tools::LoggerManager::getInstance().logException("Initialization failed: " + std::string(e.what()));
+            std::exit(EXIT_FAILURE);
+        };
     }
 
     void MainController::startThreads()

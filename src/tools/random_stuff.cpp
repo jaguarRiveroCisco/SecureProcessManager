@@ -40,23 +40,33 @@ namespace tools
         return disMin(gen);
     }
 
-    void sleepRandomMs(bool display)
+    void sleepMs(const int ms)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+    }
+
+    void sleepSec(const int sec)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(sec));
+    }
+
+    void sleepRandomMs(const bool display)
     {
         auto nappy = randomMs();
         if (display)
         {
             tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " mS.");
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(nappy));
+        sleepMs(nappy);
     }
 
-    void sleepRandomSec(bool display)
+    void sleepRandomSec(const bool display)
     {
         auto nappy = randomSec();
         if (display)
         {
             tools::LoggerManager::getInstance().logInfo("Sleeping for: " + std::to_string(nappy) + " s.");
         }
-        std::this_thread::sleep_for(std::chrono::seconds(nappy));
+        sleepSec(nappy);
     }
 }

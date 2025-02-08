@@ -5,9 +5,9 @@
 
 #include <atomic>
 #include <functional>
-#include <iostream>
 #include <thread>
-
+#include <condition_variable>
+#include <mutex>
 namespace cli::driver
 {
     class ThreadController 
@@ -16,8 +16,8 @@ namespace cli::driver
         virtual ~ThreadController() = default;
 
         void run(std::function<void(const std::string &)> commandFunc);
-
         void stop();
+        virtual bool hasStopped();
 
     protected:
         virtual void runThread() = 0;
@@ -25,8 +25,10 @@ namespace cli::driver
         std::atomic<bool>                        stopFlag{false};
         std::function<void(const std::string &)> commandFunc;
 
-    private:
         std::thread readerThread;
+        std::mutex mutex;
+        std::condition_variable cv;
+        bool stopped = false;
     };
 
 } // namespace cli::driver

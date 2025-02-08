@@ -79,8 +79,9 @@ namespace process
             catch (const std::exception &e)
             {
 
-                tools::LoggerManager::getInstance() << "Error creating process handler: " << e.what();
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::ERROR);
+                tools::LoggerManager::getInstance().logException("Error creating process handler: " + std::string(e.what()));
+                throw;
+
             }
         }
     }

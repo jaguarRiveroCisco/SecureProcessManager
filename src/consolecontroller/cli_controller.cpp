@@ -1,7 +1,15 @@
 #include "cli_controller.h"
+#include <iostream>
 
 namespace cli::driver
 {
+
+    bool validateInput(const std::string &input)
+    {
+        // Perform input validation
+        return !input.empty(); // Example validation
+    }
+
     void CLIController::runThread()
     {
         std::string input;
@@ -14,7 +22,14 @@ namespace cli::driver
                     std::getline(std::cin, input);
                     if (validateInput(input))
                     {
-                        commandFunc(input);
+                        if (commandFunc)
+                        {
+                            commandFunc(input);
+                        }
+                        else
+                        {
+                            stopFlag = true;
+                        }
                     }
                     else
                     {
@@ -28,11 +43,9 @@ namespace cli::driver
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
+        stopped = true;
+        cv.notify_one();
     }
 
-    bool CLIController::validateInput(const std::string &input)
-    {
-        // Perform input validation
-        return !input.empty(); // Example validation
-    }
+
 } // namespace cli::driver
