@@ -170,6 +170,6 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Copyright
 
-© 2023 Cisco Systems, Inc. All rights reserved. Unauthorized use, distribution, and reproduction are strictly prohibited.
+© 2025 Cisco Systems, Inc. All rights reserved. Unauthorized use, distribution, and reproduction are strictly prohibited.
 
 
