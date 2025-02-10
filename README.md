@@ -50,13 +50,16 @@ To build the project, you can use the provided `build.sh` script to clean and bu
 ```
 #### Script Options
 
-1. **Clean Debug**: Clean the debug build.
-2. **Clean Release**: Clean the release build.
-3. **Clean Debug-Coverage**: Clean the debug-coverage build.
-4. **Build Debug**: Build the debug configuration.
-5. **Build Release**: Build the release configuration.
-6. **Build Debug-Coverage**: Build the debug-coverage configuration.
-7. **Clean and Build All**: Clean and build all configurations.
+- **Clean Debug**: Clean the debug build.
+- **Clean Release**: Clean the release build.
+- **Clean Debug-Coverage**: Clean the debug-coverage build.
+- **Build Debug**: Build the debug configuration.
+- **Build Release**: Build the release configuration.
+- **Build Debug-Coverage**: Build the debug-coverage configuration.
+- **Clean and Build All**: Clean and build all configurations.
+- **Install Debug**: Install the debug build.
+- **Install Release**: Install the release build.
+- **Install Debug-Coverage**: Install the debug-coverage build.
 
 To use the script, simply run it and select the desired option from the menu.
 ## Project Structure
