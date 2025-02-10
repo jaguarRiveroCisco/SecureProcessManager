@@ -43,23 +43,7 @@ The Process Management Program is a C++ application designed to handle and monit
 
 ### Building the Project
 
-To build the project, follow these steps:
-
-1. **Install CMake**: Ensure CMake is installed on your system. The minimum required version is 3.10.
-
-2. **Navigate to Project Directory**: Open a terminal and go to the project root directory.
-
-3. **Configure the Project**:
-    ```bash
-    cmake -B build -S .
-    ```
-
-4. **Build the Project**:
-    ```bash
-    cmake --build build --parallel 3
-    ```
-
-Alternatively, you can use the provided `build.sh` script to clean and build the project. The script offers several options:
+To build the project, you can use the provided `build.sh` script to clean and build the project. The script offers several options:
 
 ```bash
 ./build.sh
@@ -123,6 +107,7 @@ The project builds a static library and two executables:
 - **Test Executable**: `ProcessControllerTests`
   - Contains test cases for various components of the application.
 
+
 ## Linking Libraries
 
 The main executable and test executable link against the `ProcessControllerLib` library. The test executable also links against the Google Test libraries and pthread.
@@ -145,8 +130,136 @@ The project is set to use the C++20 standard.
 
 Execute the program using the command below. This will run the executable located in the `build` directory:
 
+# Creating a Simple Program to Leverage the Library
 
-### Command-Line Options
+This guide will help you set up a new project that utilizes the `ProcessControllerLib` library.
+
+## Prerequisites
+
+0. **Install the Library**: Ensure that the library is installed by executing `build.sh` in the `ProcessController` directory.
+
+## Steps to Set Up the New Project
+
+**Make sure you have executed build.sh in the ProcessController directory to install the library.**
+
+### 1. Create the Directory Structure
+
+```sh
+mkdir -p ~/dev/programs/testprogs/progcontrol
+cd ~/dev/programs/testprogs/progcontrol
+mkdir src include
+```
+
+```cmake
+
+cmake_minimum_required(VERSION 3.30)
+project(ProgControl)
+
+set(CMAKE_CXX_STANDARD 20)
+
+# Base directory for installed headers
+set(BASE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../../ProcessController/install/include)
+
+# Include the installed headers
+include_directories(
+${BASE_INCLUDE_DIR}
+${BASE_INCLUDE_DIR}/consolecontroller
+${BASE_INCLUDE_DIR}/maincontroller
+${BASE_INCLUDE_DIR}/processcontroller
+${BASE_INCLUDE_DIR}/processmonitors
+${BASE_INCLUDE_DIR}/process
+${BASE_INCLUDE_DIR}/process/networkprocess
+${BASE_INCLUDE_DIR}/process/systemprocess
+${BASE_INCLUDE_DIR}/concurrency
+${BASE_INCLUDE_DIR}/tools
+${BASE_INCLUDE_DIR}/logger
+${BASE_INCLUDE_DIR}/networkprocess
+${BASE_INCLUDE_DIR}/systemprocess
+${BASE_INCLUDE_DIR}/config
+${BASE_INCLUDE_DIR}/api
+)
+
+# Link the installed library
+link_directories(${CMAKE_SOURCE_DIR}/../../ProcessController/install/lib)
+
+# Create an executable
+add_executable(prog_control src/progcontrol.cpp)
+
+# Link the ProcessControllerLib library
+target_link_libraries(prog_control ProcessControllerLib)
+
+```
+
+### 2. Create the Main Program File
+
+```cpp
+
+### 3. Create the Main Program File
+
+#include "api/api.h"
+#include "consolecontroller/console_control.h"
+#include "tools/nap_time.h"
+#include <thread>
+#include "consolecontroller/console_loop.h"
+
+void displayCompilationInfo(const char *appName)
+{
+    std::cout << "*******************************************" << std::endl;
+    std::cout << "*                                         *" << std::endl;
+    std::cout << "*  Application Name: " << appName << std::endl;
+    std::cout << "*  Compiled on: " << __DATE__ << " at " << __TIME__ << std::endl;
+    std::cout << "*                                         *" << std::endl;
+    std::cout << "*******************************************" << std::endl;
+}
+
+auto main(int argc, char *argv[]) -> int
+{
+    displayCompilationInfo(argv[0]);
+
+    int         numProcesses = 4;
+    std::string processType  = "simul";
+    static tools::ConsoleLogger cl;
+
+    cli::driver::parseArguments(argc, argv, numProcesses, processType, cl);
+
+    cli::driver::printContext(numProcesses, processType);
+
+    cli::driver::printCommands(); // Call to printHelp
+
+    api::initialize(numProcesses, processType);
+
+    cli::driver::consoleLoop();
+
+    api::execute();
+
+    cli::driver::consoleLoop(false);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(tools::NapTimeMs::LONG));
+
+    cl.logInfo("[EXITING] Main process exiting");
+
+    return 0;
+}
+
+```
+
+### 3. Build the Project
+
+```sh
+
+cd ~/dev/programs/testprogs/progcontrol
+cmake -S . -B cmake-build-debug
+cmake --build cmake-build-debug --target prog_control -j 6
+
+ ```
+
+### 4. Run the Program
+
+```sh
+./prog_control
+```
+
+### Command-Line Options for the sample program
 
 - **`-n <number of processes>`**:  
   Specify the number of child processes to create. Defaults to 4 if not provided.  
