@@ -41,7 +41,7 @@ The Process Management Program is a C++ application designed to handle and monit
 - **`monitor off`**: Turn off monitoring: end monitoring threads.
 - **`help`**: Display the help message with available commands.
 
-## Building the Project
+### Building the Project
 
 To build the project, follow these steps:
 
@@ -59,6 +59,22 @@ To build the project, follow these steps:
     cmake --build build --parallel 3
     ```
 
+Alternatively, you can use the provided `build.sh` script to clean and build the project. The script offers several options:
+
+```bash
+./build.sh
+```
+#### Script Options
+
+1. **Clean Debug**: Clean the debug build.
+2. **Clean Release**: Clean the release build.
+3. **Clean Debug-Coverage**: Clean the debug-coverage build.
+4. **Build Debug**: Build the debug configuration.
+5. **Build Release**: Build the release configuration.
+6. **Build Debug-Coverage**: Build the debug-coverage configuration.
+7. **Clean and Build All**: Clean and build all configurations.
+
+To use the script, simply run it and select the desired option from the menu.
 ## Project Structure
 
 The project is organized into several directories, each containing specific components of the application:
