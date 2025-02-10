@@ -43,23 +43,7 @@ The Process Management Program is a C++ application designed to handle and monit
 
 ### Building the Project
 
-To build the project, follow these steps:
-
-1. **Install CMake**: Ensure CMake is installed on your system. The minimum required version is 3.10.
-
-2. **Navigate to Project Directory**: Open a terminal and go to the project root directory.
-
-3. **Configure the Project**:
-    ```bash
-    cmake -B build -S .
-    ```
-
-4. **Build the Project**:
-    ```bash
-    cmake --build build --parallel 3
-    ```
-
-Alternatively, you can use the provided `build.sh` script to clean and build the project. The script offers several options:
+To build the project, you can use the provided `build.sh` script to clean and build the project. The script offers several options:
 
 ```bash
 ./build.sh

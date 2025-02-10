@@ -24,3 +24,20 @@ target_link_libraries(ProcessController ProcessControllerLib)
 
 # Include Google Test configuration
 include(cmake/gtest_config.cmake)
+
+# Set default install prefix if not specified
+if(NOT CMAKE_INSTALL_PREFIX)
+    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+endif()
+
+# Installation rules
+install(TARGETS ProcessController ProcessControllerLib
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        )
+
+# Optionally install header files
+install(DIRECTORY include/ DESTINATION include)
+
+# Include additional install rules if needed
