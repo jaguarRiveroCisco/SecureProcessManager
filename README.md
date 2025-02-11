@@ -196,14 +196,23 @@ target_link_libraries(prog_control ProcessControllerLib)
 ### 2. Create the Main Program File
 
 ```cpp
-
-### 3. Create the Main Program File
-
 #include "api/api.h"
 #include "consolecontroller/console_control.h"
 #include "tools/nap_time.h"
 #include <thread>
 #include "consolecontroller/console_loop.h"
+#include "process/process.h"
+#include "processmonitors/process_monitor.h"
+
+struct CustomMonitor final : process::ProcessMonitor
+{
+};
+
+struct CustomProcess final : process::Process
+{
+
+};
+
 
 void displayCompilationInfo(const char *appName)
 {
@@ -217,10 +226,11 @@ void displayCompilationInfo(const char *appName)
 
 auto main(int argc, char *argv[]) -> int
 {
+
     displayCompilationInfo(argv[0]);
 
     int         numProcesses = 4;
-    std::string processType  = "simul";
+    std::string processType  = "custom";
     static tools::ConsoleLogger cl;
 
     cli::driver::parseArguments(argc, argv, numProcesses, processType, cl);
@@ -228,6 +238,9 @@ auto main(int argc, char *argv[]) -> int
     cli::driver::printContext(numProcesses, processType);
 
     cli::driver::printCommands(); // Call to printHelp
+
+    // Initialize controller with new type and number of processes
+    api::registerHandler<CustomMonitor,CustomProcess>(processType);
 
     api::initialize(numProcesses, processType);
 
