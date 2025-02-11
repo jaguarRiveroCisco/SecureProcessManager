@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include "nap_time.h"
+#include "main_controller.h"
 
 namespace api
 {
@@ -24,6 +25,12 @@ namespace api
     void intPid(pid_t pid);
     void displayAllPids();
     void readConfigFile(const std::string &configFilePath);
+    template<typename MonitorType, typename ProcessType>
+    void registerHandler(const std::string& key)
+    {
+        process::MainController::registerHandler<MonitorType, ProcessType>(key);
+    }
+
 }
 
 #endif //API_H

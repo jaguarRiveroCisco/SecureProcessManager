@@ -10,6 +10,7 @@
 #include "file_descriptor.h"
 #include <thread>
 #include <sstream>
+#include "file_system.h"
 
 namespace process
 {
@@ -94,11 +95,12 @@ namespace process
 
         try
         {
+            filesystem::fs::ensureDirectoryExists("logs");
             // Create a unique filename by appending the thread ID
             std::ostringstream uniqueFileName;
-            uniqueFileName << Arguments::fileNameWithoutExt_ << "_" << std::this_thread::get_id() << ".log";
+            uniqueFileName << "logs/" << Arguments::fileNameWithoutExt_ << "_" << std::this_thread::get_id() << ".log";
 
-            const FileDescriptor fd(uniqueFileName.str());
+            const filesystem::FileDescriptor fd(uniqueFileName.str());
 
             // Redirect stdout and stderr to the file
             posix_spawn_file_actions_adddup2(&actions, fd.get(), STDOUT_FILENO);

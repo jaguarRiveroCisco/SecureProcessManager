@@ -32,7 +32,14 @@ namespace process
         static std::string loggingTypeToString(); // New method
         static std::string &processType() { return processType_; }
         static void readConfigFile(const std::string &configFilePath);
-        static config::ConfigReader &configReader() { return *configReader_; }
+        static config::ConfigReader &configReader()
+        {
+            if (!configReader_)
+            {
+                throw std::runtime_error("configReader_ is not initialized.");
+            }
+            return *configReader_;
+        }
 
 
     protected:

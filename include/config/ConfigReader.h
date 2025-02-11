@@ -15,7 +15,7 @@ namespace config
     {
     public:
         explicit ConfigReader(const std::string& filePath);
-        const std::string& getValue(const std::string& key) const;
+        [[nodiscard]] const std::string& getValue(const std::string& key) const;
         void printMap() const;
         [[nodiscard]] std::vector<std::string> getConsecutiveParameters() const { return consecutiveParameters_; }
 

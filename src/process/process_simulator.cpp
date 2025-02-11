@@ -9,7 +9,7 @@
 
 namespace process
 {
-    bool ProcessSimulator::proceed()
+    bool ProcessSimulator::proceed() const
     {
         bool res = continue_;
         if (res)

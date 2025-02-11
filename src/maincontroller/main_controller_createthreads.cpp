@@ -20,13 +20,15 @@ namespace process
     FactoryMap MainController::handlerFactoryMap_;
 
     std::atomic<int> MainController::counter_ = 0;
+
     // Initialize the factory map
     void MainController::initializeFactory()
     {
-        handlerFactoryMap_["real"]    = []() { return manufacture<ProcessMonitor, Process>(); };
-        handlerFactoryMap_["simul"]   = []() { return manufacture<ProcessMonitor, ProcessSimulator>(); };
-        handlerFactoryMap_["network"] = []() { return manufacture<ProcessMonitor, NetworkProcess>(); };
-        handlerFactoryMap_["system"]  = []() { return manufacture<SystemMonitor, SystemProcess>(); };
+        // Initial handlers
+        registerHandler<ProcessMonitor, Process>("real");
+        registerHandler<ProcessMonitor, ProcessSimulator>("simul");
+        registerHandler<ProcessMonitor, NetworkProcess>("network");
+        registerHandler<SystemMonitor, SystemProcess>("system");
     }
 
     void MainController::restoreHandlerCount()
@@ -59,7 +61,8 @@ namespace process
             ProcessMonitorPtr handler = it->second();
             ++counter_;
             auto pid = std::to_string(handler->getPid());
-            tools::LoggerManager::getInstance().logInfo("[HANDLER CREATED] | PID: " + pid);
+            tools::LoggerManager::getInstance().logInfo("[HANDLER CREATED] | "
+                + std::string("[") + processType + "] | PID: " + pid);
             ProcessRegistry::addMonitorProcess(handler->getPid(), std::move(handler));
         }
         else

@@ -13,7 +13,7 @@ namespace process
         ~ProcessSimulator() override = default;
 
     protected:
-        bool proceed();
+        bool proceed() const;
 
     };
 } // namespace process
