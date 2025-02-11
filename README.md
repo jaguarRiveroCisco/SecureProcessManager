@@ -272,7 +272,7 @@ cmake --build cmake-build-debug --target prog_control -j 6
 ### 4. Run the Program
 
 ```sh
-./prog_control
+./prog_control  -t system -n 1 -c /Users/jrivero/dev/programs/ProcessController/exampleConfigFile.conf
 ```
 
 ### Command-Line Options for the sample program
