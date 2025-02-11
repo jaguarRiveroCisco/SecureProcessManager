@@ -61,7 +61,8 @@ namespace process
             ProcessMonitorPtr handler = it->second();
             ++counter_;
             auto pid = std::to_string(handler->getPid());
-            tools::LoggerManager::getInstance().logInfo("[HANDLER CREATED] | PID: " + pid);
+            tools::LoggerManager::getInstance().logInfo("[HANDLER CREATED] | "
+                + std::string("[") + processType + "] | PID: " + pid);
             ProcessRegistry::addMonitorProcess(handler->getPid(), std::move(handler));
         }
         else
