@@ -301,6 +301,54 @@ cmake --build cmake-build-debug --target prog_control -j 6
 
 ```
 
+## Using the Arguments Class to Manage Process Execution
+
+We leverage the \`Arguments\` class to handle the configuration and 
+parameterization of the posix_spawn-created processes, making it easier to handle the process' parameters.
+
+### Key Components
+
+**Arguments Class:**
+
+- **Purpose**: Manages the command-line arguments for the process being executed.
+- **Functionality**:
+  - Reads configuration from a file.
+  - Populates the arguments vector (\`args\`) with the executable path and its parameters.
+  - Extracts and stores the filename without its extension for logging purposes.
+
+**SystemProcess Class:**
+
+- **Purpose**: Represents a system process that can be started and managed.
+- **work Method**: Initiates a new thread to spawn a child process using the \`SpawnChild\` class.
+
+**SpawnChild Class:**
+
+- **Purpose**: Encapsulates the logic for spawning a child process with \`posix\_spawn\`.
+- **Constructor**:
+  - Initializes file actions and attributes for process spawning.
+  - Redirects stdout and stderr to a uniquely named log file.
+  - Converts command-line arguments to C-style strings for \`posix\_spawn\`.
+- **executeCommand Method**:
+  - Executes the command using \`posix\_spawn\`.
+  - Waits for the process to complete and captures its exit status.
+  - Notifies the parent process of completion and handles logging.
+
+### Configuration File
+
+The configuration file specifies the executable and its parameters, which are used by the \`Arguments\` class to populate the arguments vector. A sample configuration file might look like this:
+```sh
+process_file=/Users/jrivero/dev/programs/testprogs/lengthy/lengthy_process
+s=30
+v=1
+#username=admin
+#password=securepassword123
+#server=localhost
+#port=8080
+#database=mydatabase
+#max_connections=77
+#timeout=33
+#log_level=debug
+```
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
