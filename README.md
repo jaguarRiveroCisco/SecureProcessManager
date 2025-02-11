@@ -292,6 +292,15 @@ cmake --build cmake-build-debug --target prog_control -j 6
   Display usage information and exit the program.  
   Example: `-h` to show the help message with usage instructions.
 
+## Examples of command line usage of the sample program
+
+```sh
+ ./ProcessController -t system -n 2
+ ./ProcessController -l file
+ ./ProcessController -c path/to/ConfigFile.conf -t system -l file
+
+```
+
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
