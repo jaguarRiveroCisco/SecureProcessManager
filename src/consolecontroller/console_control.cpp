@@ -86,7 +86,7 @@ void parseArguments(int argc, char *argv[], int &numProcesses, std::string &proc
                             << "\n"
                             << "Usage:\n"
                             << "-n <number of processes> (max " << MAX_PROCESSES << ")\n"
-                            << "-t <process type 'real', 'network', 'system' or 'simul' (default)>\n"
+                            << "-t <process type 'real', 'network', 'system', 'custom' or 'simul' (default)>\n"
                             << "-s <respawn (0 or 1)>\n"
                             << "-l <logging type 'console' or 'file'>\n"
                             << "-T <nap time type 'MS', 'SEC', 'MIN'>\n"
