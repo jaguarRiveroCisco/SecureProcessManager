@@ -16,6 +16,9 @@ namespace process
         static void initializeController(const std::string &processType, int numProcesses);
         static void processLifecycleLoop();
         static void stop();
+        template<typename MonitorType, typename ProcessType>
+        static void registerHandler(const std::string& key);
+
     private:
         static void restoreHandlerCount();
         static void createHandlers(int numHandlers);
@@ -47,6 +50,11 @@ namespace process
         return handler;
     }
 
+    template<typename MonitorType, typename ProcessType>
+    void MainController::registerHandler(const std::string& key)
+    {
+        handlerFactoryMap_[key] = []() { return manufacture<MonitorType, ProcessType>(); };
+    }
 
 } // namespace process
 

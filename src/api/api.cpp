@@ -8,7 +8,6 @@
 #include "process_controller.h"
 #include "main_controller.h"
 #include "console_logger.h"
-#include "console_loop.h"
 
 namespace api
 {
@@ -119,6 +118,5 @@ namespace api
     {
         process::ProcessController::readConfigFile(configFilePath);
     }
-
 }
 
