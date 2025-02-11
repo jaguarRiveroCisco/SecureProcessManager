@@ -31,9 +31,9 @@ void parseArguments(int argc, char *argv[], int &numProcesses, std::string &proc
                     // Set the process type from the argument
                     processType = optarg;
                     if (processType != "real" && processType != "simul" && processType != "network" &&
-                        processType != "system")
+                        processType != "system" && processType != "custom")
                     {
-                        cl << "Valid process types are: real, network, system, simul. Defaulting to simul.";
+                        cl << "Valid process types are: real, network, system, simul, custom. Defaulting to simul.";
                         cl.flush(tools::LogLevel::WARNING);
                         processType = "simul";
                     }
