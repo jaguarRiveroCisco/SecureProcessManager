@@ -37,7 +37,8 @@ namespace process
             SystemProcess             *parent_ {nullptr};
             SpawnChild(SystemProcess *parent, const std::vector<std::string> &args);
             ~SpawnChild();
-            auto executeCommand(const std::vector<char *> &c_args) const -> void;
+            auto spawnProcess(const std::vector<char *> &c_args) const -> void;
+            auto launchProcess() -> void;
         };
     };
 }

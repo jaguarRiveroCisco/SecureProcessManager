@@ -23,6 +23,7 @@ namespace process
         std::thread workerThread([&]()
         {
             SpawnChild spawnChild(this, Arguments::args);
+            spawnChild.launchProcess();
         });
         workerThread.detach();
     }
@@ -47,7 +48,7 @@ namespace process
         return pid_;
     }
 
-    auto SystemProcess::SpawnChild::executeCommand(const std::vector<char*>& c_args) const -> void
+    auto SystemProcess::SpawnChild::spawnProcess(const std::vector<char*>& c_args) const -> void
     {
         int status = posix_spawn(&parent_->pid_, c_args[0], &actions, &attrs, c_args.data(), &environ[0]);
 
@@ -86,11 +87,8 @@ namespace process
         }
     }
 
-    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
+    auto SystemProcess::SpawnChild::launchProcess() -> void
     {
-        posix_spawn_file_actions_init(&actions);
-        posix_spawnattr_init(&attrs);
-
         try
         {
             filesystem::fs::ensureDirectoryExists("logs");
@@ -104,8 +102,8 @@ namespace process
             posix_spawn_file_actions_adddup2(&actions, fd.get(), STDERR_FILENO);
 
             // Convert arguments to C-style and execute the command
-            const std::vector<char*> c_args = tools::string::createCStyleArgs(args);
-            executeCommand(c_args);
+            const std::vector<char*> c_args = tools::string::createCStyleArgs(Arguments::args);
+            spawnProcess(c_args);
         }
         catch (const std::exception &e)
         {
@@ -113,7 +111,11 @@ namespace process
             throw;
         }
     }
-
+    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
+    {
+        posix_spawn_file_actions_init(&actions);
+        posix_spawnattr_init(&attrs);
+    }
 
     SystemProcess::SpawnChild::~SpawnChild()
     {
