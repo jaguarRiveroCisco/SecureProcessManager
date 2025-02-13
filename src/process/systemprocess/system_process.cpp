@@ -67,8 +67,6 @@ namespace process
                 std::unique_lock<std::mutex> lock(parent_->pidMutex_);
                 parent_->pidCondition_.notify_one();
             }
-            //parent_->preWork(parent_->pid_);
-
             if (const pid_t pid = waitpid(parent_->pid_, &status, 0); pid != parent_->pid_)
             {
                 tools::displayProcessStatus(status, parent_->pid_); // process ended
@@ -98,8 +96,7 @@ namespace process
             filesystem::fs::ensureDirectoryExists("logs");
             // Create a unique filename by appending the thread ID
             std::ostringstream uniqueFileName;
-            uniqueFileName << "logs/" << Arguments::fileNameWithoutExt_ << "_" << std::this_thread::get_id() << ".log";
-
+            uniqueFileName << "logs/" << Arguments::fileNameWithoutExt_ << "_" << std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) << "_" << std::this_thread::get_id() << ".log";
             const filesystem::FileDescriptor fd(uniqueFileName.str());
 
             // Redirect stdout and stderr to the file
