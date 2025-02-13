@@ -42,7 +42,6 @@ namespace process
         std::unique_lock<std::mutex> lock(pidMutex_);
         if (!pidCondition_.wait_for(lock, timeout, [this]() { return pid_ != 0; }))
         {
-            tools::LoggerManager::getInstance().logError("[SYSTEM PROCESS] Timeout waiting for pid to be set");
             throw std::runtime_error("[SYSTEM PROCESS] Timeout waiting for pid to be set");
         }
         return pid_;
