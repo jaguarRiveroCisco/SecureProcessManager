@@ -28,8 +28,28 @@ namespace config
         }
     }
 
+    bool isPathInRestrictedDirectory(const std::string& filePath) {
+        // List of restricted directories
+        static const std::vector<std::string> restrictedDirs = {
+            "/usr/lib", "/etc", "/bin", "/sbin", "/lib", "/lib64",
+            "/usr/bin", "/usr/sbin", "/var", "/boot", "/proc", "/sys",
+            "/dev", "/run", "/tmp", "/mnt", "/media", "/srv", "/opt",
+            "/home", "/root", "/lost+found", "/usr/local", "/usr/src",
+            "/usr/include", "/usr/share"
+        };
+
+        return std::any_of(restrictedDirs.begin(), restrictedDirs.end(), [&](const std::string& dir) {
+            return filePath.find(dir) == 0;
+        });
+    }
+
     void ConfigReader::parseConfigFile(const std::string& filePath)
     {
+        if (isPathInRestrictedDirectory(filePath))
+        {
+            throw std::runtime_error("Access to system folder is not allowed: " + filePath);
+        }
+
         std::ifstream file(filePath);
         if (!file.is_open())
         {
