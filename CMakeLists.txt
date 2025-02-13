@@ -40,4 +40,70 @@ install(TARGETS ProcessController ProcessControllerLib
 # Optionally install header files
 install(DIRECTORY include/ DESTINATION include)
 
-# Include additional install rules if needed
+# Add custom targets for cleaning, building, and installing
+add_custom_target(clean-debug
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug --target clean
+    COMMENT "Cleaning debug build..."
+)
+
+add_custom_target(build-debug
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug --target all
+    COMMENT "Building debug build..."
+)
+
+add_custom_target(install-debug
+    COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=../install --build ${CMAKE_BINARY_DIR}/cmake-build-debug --target install
+    COMMENT "Installing debug build..."
+)
+
+add_custom_target(clean-release
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-release --target clean
+    COMMENT "Cleaning release build..."
+)
+
+add_custom_target(build-release
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-release --target all
+    COMMENT "Building release build..."
+)
+
+add_custom_target(install-release
+    COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=../install --build ${CMAKE_BINARY_DIR}/cmake-build-release --target install
+    COMMENT "Installing release build..."
+)
+
+add_custom_target(clean-debug-coverage
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug-coverage --target clean
+    COMMENT "Cleaning debug-coverage build..."
+)
+
+add_custom_target(build-debug-coverage
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug-coverage --target all
+    COMMENT "Building debug-coverage build..."
+)
+
+add_custom_target(install-debug-coverage
+    COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=../install --build ${CMAKE_BINARY_DIR}/cmake-build-debug-coverage --target install
+    COMMENT "Installing debug-coverage build..."
+)
+
+# Add a custom target to clean and build all types
+add_custom_target(clean-all
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug --target clean
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-release --target clean
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug-coverage --target clean
+    COMMENT "Cleaning all builds..."
+)
+
+add_custom_target(build-all
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug --target all
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-release --target all
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/cmake-build-debug-coverage --target all
+    COMMENT "Building all builds..."
+)
+
+add_custom_target(install-all
+    COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=../install --build ${CMAKE_BINARY_DIR}/cmake-build-debug --target install
+    COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=../install --build ${CMAKE_BINARY_DIR}/cmake-build-release --target install
+    COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=../install --build ${CMAKE_BINARY_DIR}/cmake-build-debug-coverage --target install
+    COMMENT "Installing all builds..."
+)
