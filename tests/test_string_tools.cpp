@@ -1,3 +1,5 @@
+#include <string>
+#include <vector>
 #include <gtest/gtest.h>
 #include "string_tools.h"
 #include "logger_instance.h"
