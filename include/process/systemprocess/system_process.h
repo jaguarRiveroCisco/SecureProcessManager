@@ -5,6 +5,7 @@
 #include "process_simulator.h"
 #include <spawn.h>
 #include <condition_variable>
+#include <vector>
 
 namespace process
 {
