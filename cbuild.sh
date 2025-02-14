@@ -67,6 +67,9 @@
       # Function to initialize build directories
       initialize() {
           echo "Initializing build directories..."
+          rm -rf cmake-build-debug
+          rm -rf cmake-build-release
+          rm -rf cmake-build-debug-coverage
           cmake -S . -B cmake-build-debug
           cmake -S . -B cmake-build-release
           cmake -S . -B cmake-build-debug-coverage
