@@ -3,8 +3,8 @@
 #include <condition_variable>
 #include "logger_instance.h"
 
-namespace process {
-
+namespace process
+{
     std::thread monitoringThread;
     std::thread terminationThread;
     std::thread restoreHandlerCountThread;
