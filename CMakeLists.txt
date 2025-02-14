@@ -10,8 +10,41 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wunused-variable -Wunused-function")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
+# Check if the platform is not macOS
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    message(STATUS "Setting compilers.")
+    # Check if the desired compilers exist
+    find_program(GCC_PATH gcc PATHS /usr/bin NO_DEFAULT_PATH)
+    find_program(GXX_PATH g++ PATHS /usr/bin NO_DEFAULT_PATH)
+
+    # Set the C compiler if not already set correctly
+    if(NOT CMAKE_C_COMPILER STREQUAL "/usr/bin/gcc")
+        if(GCC_PATH)
+            set(CMAKE_C_COMPILER ${GCC_PATH} CACHE STRING "C compiler" FORCE)
+        else()
+            message(FATAL_ERROR "GCC not found at /usr/bin/gcc.")
+        endif()
+    endif()
+
+    # Set the C++ compiler if not already set correctly
+    if(NOT CMAKE_CXX_COMPILER STREQUAL "/usr/bin/g++")
+        if(GXX_PATH)
+            set(CMAKE_CXX_COMPILER ${GXX_PATH} CACHE STRING "C++ compiler" FORCE)
+        else()
+            message(FATAL_ERROR "G++ not found at /usr/bin/g++.")
+        endif()
+    endif()
+
+else()
+    message(STATUS "Skipping compiler settings on macOS.")
+endif()
+
+# Print the compilers being used
+message(STATUS "C Compiler: ${CMAKE_C_COMPILER}")
 message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
 
+
+# Continue with the rest of your CMake configuration
 # Include directories
 include(cmake/include_directories.cmake)
 
