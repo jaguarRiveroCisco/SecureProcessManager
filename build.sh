@@ -9,6 +9,7 @@
                         echo "  -i, --install [debug|release|debug-coverage]  Install the specified build type."
                         echo "  -a, --all                                     Clean, build, and install all types."
                         echo "  -h, --help                                    Show this help message."
+                        echo "  -z, --initialize                              Initialize the build directories."
                         exit 0
                     }
 
@@ -61,12 +62,22 @@
                         echo "Install finished for all builds."
                     }
 
-                    # Check if build directories exist
-                    if [ ! -d "cmake-build-debug" ] || [ ! -d "cmake-build-release" ] || [ ! -d "cmake-build-debug-coverage" ]; then
-                        echo "Build directories do not exist. Configuring project with CMake..."
+                    # Function to initialize build directories
+                    initialize() {
+                        echo "Initializing build directories..."
+                        rm -rf cmake-build-debug
+                        rm -rf cmake-build-release
+                        rm -rf cmake-build-debug-coverage
                         cmake -S . -B cmake-build-debug
                         cmake -S . -B cmake-build-release
                         cmake -S . -B cmake-build-debug-coverage
+                        echo "Initialization finished."
+                    }
+
+                    # Check if build directories exist
+                    if [ ! -d "cmake-build-debug" ] || [ ! -d "cmake-build-release" ] || [ ! -d "cmake-build-debug-coverage" ]; then
+                        echo "Build directories do not exist. Configuring project with CMake..."
+                        initialize
                     fi
 
                     # Function to enter interactive mode
@@ -83,7 +94,8 @@
                         echo "9) Install Release"
                         echo "10) Install Debug-Coverage"
                         echo "11) Install All"
-                        read -r -p "Enter your choice [1-11]: " choice
+                        echo "12) Initialize"
+                        read -r -p "Enter your choice [1-12]: " choice
 
                         case $choice in
                             1) clean_build "debug" ;;
@@ -104,6 +116,7 @@
                             9) install_build "release" ;;
                             10) install_build "debug-coverage" ;;
                             11) install_all ;;
+                            12) initialize ;;
                             *)
                                 echo "Invalid choice. Exiting."
                                 exit 1
@@ -138,6 +151,10 @@
                                     clean_build "debug-coverage"
                                     compile_build "debug-coverage"
                                     install_all
+                                    shift
+                                    ;;
+                                -z|--initialize)
+                                    initialize
                                     shift
                                     ;;
                                 -h|--help)

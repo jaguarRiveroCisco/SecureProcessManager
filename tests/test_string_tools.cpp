@@ -1,3 +1,5 @@
+#include <string>
+#include <vector>
 #include <gtest/gtest.h>
 #include "string_tools.h"
 #include "logger_instance.h"
@@ -15,8 +17,8 @@ protected:
 };
 
 TEST_F(StringToolsTest, SplitString) {
-    constexpr std::string        input     = "one,two,three";
-    constexpr char           delimiter = ',';
+    const std::string        input     = "one,two,three";
+    const char           delimiter = ',';
     std::vector<std::string> expected  = {"one", "two", "three"};
     std::vector<std::string> result    = tools::string::splitString(input, delimiter);
     ASSERT_EQ(result, expected);
@@ -24,21 +26,21 @@ TEST_F(StringToolsTest, SplitString) {
 
 TEST_F(StringToolsTest, StrToPidValid) {
     const std::string pidStr   = "12345";
-    constexpr pid_t   expected = 12345;
+    const pid_t   expected = 12345;
     const pid_t       result   = tools::string::strToPid(pidStr);
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(StringToolsTest, StrToPidInvalid) {
-    constexpr std::string pidStr   = "invalid";
-    constexpr pid_t   expected = -1;
+    const std::string pidStr   = "invalid";
+    const pid_t   expected = -1;
     const pid_t       result   = tools::string::strToPid(pidStr);
     ASSERT_EQ(result, expected);
 }
 
 TEST_F(StringToolsTest, StrToPidOutOfRange) {
     const std::string pidStr = "999999999999999999999999999999";
-    constexpr pid_t expected = -1;
+    const pid_t expected = -1;
     const pid_t result = tools::string::strToPid(pidStr);
     ASSERT_EQ(result, expected);
 }

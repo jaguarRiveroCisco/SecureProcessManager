@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include "communicator.h"
 #include "logger_instance.h"
+#include <csignal>
 
 namespace process
 {

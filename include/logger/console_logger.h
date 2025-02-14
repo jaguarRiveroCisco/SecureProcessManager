@@ -5,6 +5,10 @@
 #include "logger.h"
 #include <semaphore.h>
 #include <iostream>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 namespace tools
 {
     class ConsoleLogger final : public Logger 

@@ -7,7 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include <algorithm> // For std::any_of
 namespace config
 {
     ConfigReader::ConfigReader(const std::string& filePath)

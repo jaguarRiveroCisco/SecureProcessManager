@@ -5,13 +5,14 @@
 #include "communicator.h"
 #include "logger_instance.h"
 #include "random_stuff.h"
+#include <utility>
 
 namespace process
 {
     struct network_process
     {
-        network_process(bool log = false) { network(log); };
-        void network(bool log)
+        explicit network_process(const bool log = false) { network(log); };
+        static void network(bool log)
         {
             try
             {

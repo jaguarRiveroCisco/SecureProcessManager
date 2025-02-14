@@ -11,6 +11,8 @@
 #include <thread>
 #include <sstream>
 #include "file_system.h"
+#include <sys/types.h>
+#include <sys/wait.h>
 
 namespace process
 {
@@ -22,7 +24,7 @@ namespace process
         Arguments::populate();
         std::thread workerThread([&]()
         {
-            SpawnChild spawnChild(this, Arguments::args);
+            SpawnChild spawnChild(this);
             spawnChild.launchProcess();
         });
         workerThread.detach();
@@ -110,7 +112,7 @@ namespace process
             throw;
         }
     }
-    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent, const std::vector<std::string> &args) : parent_(parent)
+    SystemProcess::SpawnChild::SpawnChild(SystemProcess *parent) : parent_(parent)
     {
         posix_spawn_file_actions_init(&actions);
         posix_spawnattr_init(&attrs);

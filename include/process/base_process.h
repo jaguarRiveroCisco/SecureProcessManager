@@ -4,6 +4,8 @@
 #include "process_interface.h"
 #include <string>
 #include "time_manager.h"
+#include <atomic>
+
 namespace process
 {
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <filesystem>
+#include <atomic>
 
 namespace filesystem
 {
@@ -10,7 +11,7 @@ namespace filesystem
     {
         static void ensureDirectoryExists(const std::string &dirName)
         {
-            static std::atomic exists = false;
+            static std::atomic<bool> exists = false;
             if (!exists)
             {
                 // Check if the directory exists
