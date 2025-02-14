@@ -10,6 +10,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wunused-variable -Wunused-function")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
+message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
+
 # Include directories
 include(cmake/include_directories.cmake)
 
