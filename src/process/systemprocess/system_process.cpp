@@ -11,6 +11,8 @@
 #include <thread>
 #include <sstream>
 #include "file_system.h"
+#include <sys/types.h>
+#include <sys/wait.h>
 
 namespace process
 {
