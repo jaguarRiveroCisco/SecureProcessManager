@@ -3,6 +3,7 @@
 
 #include <string>
 #include <filesystem>
+#include <atomic>
 
 namespace filesystem
 {
