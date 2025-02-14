@@ -36,7 +36,7 @@ namespace process
             posix_spawn_file_actions_t actions{};
             posix_spawnattr_t          attrs{};
             SystemProcess             *parent_ {nullptr};
-            SpawnChild(SystemProcess *parent, const std::vector<std::string> &args);
+            explicit SpawnChild(SystemProcess *parent);
             ~SpawnChild();
             auto spawnProcess(const std::vector<char *> &c_args) const -> void;
             auto launchProcess() -> void;

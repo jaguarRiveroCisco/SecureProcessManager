@@ -7,7 +7,6 @@ else()
     set(IS_MACOS FALSE)
 endif()
 
-
 # Include the set_compilers.cmake file
 include(cmake/set_compilers.cmake)
 
@@ -21,10 +20,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Add -Wall flag for the C++ compiler
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wunused-variable -Wunused-function")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wunused-variable -Wunused-function -Wextra")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
-
-
 
 # Print the compilers being used
 message(STATUS "C Compiler: ${CMAKE_C_COMPILER}")
