@@ -30,7 +30,7 @@ message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
 # Continue with the rest of your CMake configuration
 # Include directories
 include(cmake/include_directories.cmake)
-
+include_directories(/usr/local/include/asio)
 # Include common sources
 include(cmake/common_sources.cmake)
 

@@ -34,7 +34,15 @@ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt-get install g++-12
 sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 60
 
-sudo apt-get install libasio-dev
+#ASIO
+sudo apt-get remove --purge libasio-dev
+git clone https://github.com/chriskohlhoff/asio.git
+cd asio
+sudo mkdir -p /usr/local/include/asio
+sudo cp -r asio/include/* /usr/local/include/asio
+sudo chmod -R a+r /usr/local/include/asio
+sudo chown -R root:root /usr/local/include/asio
+sudo chmod -R a+rx /usr/local/include
 
 sudo apt-get install libgtest-dev
 ```
