@@ -13,6 +13,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 # Include the set_compilers.cmake file
 include(cmake/set_compilers.cmake)
 
+# Call the function
+set_compilers()
+
 # Print the compilers being used
 message(STATUS "C Compiler: ${CMAKE_C_COMPILER}")
 message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
