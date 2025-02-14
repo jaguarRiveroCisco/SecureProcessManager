@@ -11,8 +11,8 @@ namespace process
 {
     struct network_process
     {
-        network_process(bool log = false) { network(log); };
-        void network(bool log)
+        explicit network_process(const bool log = false) { network(log); };
+        static void network(bool log)
         {
             try
             {
