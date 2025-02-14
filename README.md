@@ -22,29 +22,59 @@ The program can be executed in two modes:
 - ASIO 1.30.2 or higher
 
 ```bash
+#!/bin/bash
+
+# Update package list
 sudo apt-get update
+
+# Install basic tools
 sudo apt-get install -y wget gnupg
-wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+
+# Install CMake (Option A: from Kitware APT repository)
+sudo rm /etc/apt/trusted.gpg.d/kitware-archive.gpg
 wget -qO - https://apt.kitware.com/keys/kitware-archive-latest.asc | gpg --dearmor -o kitware-archive-keyring.gpg
 sudo mv kitware-archive-keyring.gpg /etc/apt/trusted.gpg.d/
-echo 'deb https://apt.kitware.com/ubuntu/ jammy main' | sudo tee /etc/apt/sources.list.d/kitware.list
+sudo chmod 644 /etc/apt/trusted.gpg.d/kitware-archive-keyring.gpg
+sudo apt update
+
 sudo apt-get install cmake
 
+# Alternatively, install CMake (Option B: using Snap)
+# sudo apt install snapd
+# sudo snap install cmake --classic
+
+# Install GTest
+sudo apt-get install libgtest-dev
+
+# Add Toolchain PPA for latest GCC and G++
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
 sudo apt-get install g++-12
+
+# Set G++ 12 as default
 sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 60
 
-#ASIO
+# Install ASIO
 sudo apt-get remove --purge libasio-dev
-git clone https://github.com/chriskohlhoff/asio.git
+git config --global http.postBuffer 524288000
+git clone --depth 1 https://github.com/chriskohlhoff/asio.git
+# ...or
+git clone git@github.com:chriskohlhoff/asio.git
+# then...
 cd asio
+git fetch --unshallow
+#..or
+git fetch --depth 1 origin master
+
 sudo mkdir -p /usr/local/include/asio
 sudo cp -r asio/include/* /usr/local/include/asio
 sudo chmod -R a+r /usr/local/include/asio
 sudo chown -R root:root /usr/local/include/asio
 sudo chmod -R a+rx /usr/local/include
 
-sudo apt-get install libgtest-dev
+echo "Installation complete."
+
+
 ```
 
 ### Features
