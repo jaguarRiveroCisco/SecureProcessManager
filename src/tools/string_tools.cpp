@@ -1,6 +1,5 @@
 #include "string_tools.h"
 #include <sstream>
-#include <vector>
 #include "logger_instance.h"
 
 namespace tools::string
