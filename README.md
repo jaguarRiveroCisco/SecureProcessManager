@@ -14,6 +14,31 @@ The program can be executed in two modes:
 - **Console-Driven**: The user interacts with the program via the console.
 - **Library Mode**: The user can integrate the library into another program to manage processes.
 
+## Requirements
+
+- cmake 3.30 or higher
+- g++ 12.0 or higher
+- Google Test 1.11.0 or higher
+- ASIO 1.30.2 or higher
+
+```bash
+sudo apt-get update
+sudo apt-get install -y wget gnupg
+wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+wget -qO - https://apt.kitware.com/keys/kitware-archive-latest.asc | gpg --dearmor -o kitware-archive-keyring.gpg
+sudo mv kitware-archive-keyring.gpg /etc/apt/trusted.gpg.d/
+echo 'deb https://apt.kitware.com/ubuntu/ jammy main' | sudo tee /etc/apt/sources.list.d/kitware.list
+sudo apt-get install cmake
+
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get install g++-12
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 60
+
+sudo apt-get install libasio-dev
+
+sudo apt-get install libgtest-dev
+```
+
 ### Features
 
 - **Dynamic Process Creation**: Spawns and manages multiple child processes.
