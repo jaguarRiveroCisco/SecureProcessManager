@@ -1,5 +1,5 @@
 function(set_compilers)
-    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    if(NOT IS_MACOS)
         message(STATUS "Setting compilers.")
         # Check if the desired compilers exist
         find_program(GCC_PATH gcc PATHS /usr/bin NO_DEFAULT_PATH)

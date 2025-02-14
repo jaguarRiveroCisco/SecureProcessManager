@@ -1,5 +1,19 @@
 cmake_minimum_required(VERSION 3.30)
 
+# Detect platform before setting compilers
+if(APPLE)
+    set(IS_MACOS TRUE)
+else()
+    set(IS_MACOS FALSE)
+endif()
+
+
+# Include the set_compilers.cmake file
+include(cmake/set_compilers.cmake)
+
+# Call the function
+set_compilers()
+
 project(DynamicControlOfChildProcesses)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -10,11 +24,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wunused-variable -Wunused-function")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
-# Include the set_compilers.cmake file
-include(cmake/set_compilers.cmake)
 
-# Call the function
-set_compilers()
 
 # Print the compilers being used
 message(STATUS "C Compiler: ${CMAKE_C_COMPILER}")
