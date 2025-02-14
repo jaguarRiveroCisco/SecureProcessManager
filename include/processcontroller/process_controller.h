@@ -3,7 +3,6 @@
 #ifndef PROCESS_CONTROLLER_H
 #define PROCESS_CONTROLLER_H
 
-#include <functional>
 #include <shared_mutex>
 #include <unordered_map>
 #include "process_monitor.h"
@@ -27,7 +26,7 @@ namespace process
         static void pauseMonitoring();
         static void continueMonitoring();
         static void setProcessType(const std::string &processType);
-        static void setNumProcesses(int numProcesses) { numProcesses_ = numProcesses; }
+        static void setNumProcesses(const int numProcesses) { numProcesses_ = numProcesses; }
         static int  numProcesses() { return numProcesses_; }
         static std::string loggingTypeToString(); // New method
         static std::string &processType() { return processType_; }

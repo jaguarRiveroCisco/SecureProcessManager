@@ -8,7 +8,7 @@
 namespace process
 {
 
-    class NetworkProcess : public ProcessSimulator
+    class NetworkProcess final : public ProcessSimulator
     {
     public:
         ~NetworkProcess() override = default;

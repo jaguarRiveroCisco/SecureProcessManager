@@ -21,13 +21,12 @@ namespace concurrency
             static Communicator instance;
             return instance;
         }
-
+        Communicator(const Communicator &)            = delete;
+        Communicator(Communicator &&)                 = delete;
+        Communicator &operator=(const Communicator &) = delete;
     protected:
         Communicator()                                = default;
-        Communicator(const Communicator &)            = delete;
-        Communicator &operator=(const Communicator &) = delete;
-        Communicator(Communicator &&)                 = delete;
-        Messenger messenger_;
+        Messenger messenger_{};
     private:
         void sendMessage(const std::string &text, int msgType);
         std::string receiveMessage(int msgType);

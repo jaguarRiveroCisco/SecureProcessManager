@@ -6,7 +6,6 @@ namespace tools
 {
     struct LoggerManager 
     {
-    public:
         static void         createLoggerType();
         static std::string &loggerType();
         static Logger      &getInstance();

@@ -8,7 +8,6 @@
 namespace cli::driver
 {
     void                      consoleLoop(bool run = true);
-
 }
 
 #endif //CONSOLE_LOOP_H
