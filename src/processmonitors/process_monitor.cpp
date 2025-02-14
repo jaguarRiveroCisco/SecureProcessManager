@@ -7,6 +7,9 @@
 #include "nap_time.h"
 #include "communicator.h"
 #include "process_status.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+
 namespace process
 {
 
