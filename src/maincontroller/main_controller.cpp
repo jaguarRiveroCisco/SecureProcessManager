@@ -2,8 +2,8 @@
 #include <thread>
 #include <condition_variable>
 #include "logger_instance.h"
-namespace process
-{
+
+namespace process {
 
     std::thread monitoringThread;
     std::thread terminationThread;
@@ -11,8 +11,6 @@ namespace process
 
     std::mutex mtx;
     std::condition_variable cv;
-    std::atomic<bool> processRunning = true;
-
 
     void MainController::initializeController(const std::string &processType, int numProcesses)
     {
@@ -27,7 +25,7 @@ namespace process
         {
             tools::LoggerManager::getInstance().logException("Initialization failed: " + std::string(e.what()));
             std::exit(EXIT_FAILURE);
-        };
+        }
     }
 
     void MainController::startThreads()
@@ -50,10 +48,6 @@ namespace process
     void MainController::stop()
     {
         ProcessController::running() = false;
-        {
-            std::lock_guard<std::mutex> lock(mtx);
-            processRunning = false;
-        }
         cv.notify_all();
     }
 
@@ -62,7 +56,7 @@ namespace process
         startThreads();
         {
             std::unique_lock<std::mutex> lock(mtx);
-            cv.wait(lock, []{ return  !processRunning; });
+            cv.wait(lock, []{ return !ProcessController::running(); });
         }
         joinThreads();
     }

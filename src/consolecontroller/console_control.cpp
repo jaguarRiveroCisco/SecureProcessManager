@@ -111,6 +111,7 @@ namespace cli::driver
             std::exit(EXIT_FAILURE);
         }
     }
+
     void printContext(const int numProcesses, const std::string &processType)
     {
         // Static variables to store the latest values
