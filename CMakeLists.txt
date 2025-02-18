@@ -54,6 +54,8 @@ if(NOT CMAKE_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
 endif()
 
+message(STATUS "Install Prefix: ${CMAKE_INSTALL_PREFIX}")
+
 # Installation rules
 install(TARGETS ProcessController ProcessControllerLib
         RUNTIME DESTINATION bin

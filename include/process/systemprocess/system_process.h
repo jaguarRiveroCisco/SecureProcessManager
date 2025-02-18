@@ -14,7 +14,7 @@ namespace process
     {
         static std::vector<std::string> args;
         static std::string fileNameWithoutExt_;
-        static void populate();
+        static bool populate();
     };
     class SystemProcess final : public ProcessSimulator
     {
