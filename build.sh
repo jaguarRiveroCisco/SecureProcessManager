@@ -92,17 +92,17 @@
         echo "Tests executed for all builds."
     }
 
-    # Function to initialize build directories
-    initialize() {
-        echo "Initializing build directories with install prefix: ${INSTALL_PREFIX}..."
-        rm -rf cmake-build-debug
-        rm -rf cmake-build-release
-        rm -rf cmake-build-debug-coverage
-        cmake -S . -B cmake-build-debug -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
-        cmake -S . -B cmake-build-release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
-        cmake -S . -B cmake-build-debug-coverage -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
-        echo "Initialization finished."
-    }
+# Function to initialize build directories
+initialize() {
+    echo "Initializing build directories with install prefix: ${INSTALL_PREFIX}..."
+    rm -rf cmake-build-debug
+    rm -rf cmake-build-release
+    rm -rf cmake-build-debug-coverage
+    cmake -S . -B cmake-build-debug -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
+    cmake -S . -B cmake-build-release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release
+    cmake -S . -B cmake-build-debug-coverage -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
+    echo "Initialization finished."
+}
 
     # Check if build directories exist
     if [ ! -d "cmake-build-debug" ] || [ ! -d "cmake-build-release" ] || [ ! -d "cmake-build-debug-coverage" ]; then
