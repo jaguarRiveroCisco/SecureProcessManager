@@ -13,6 +13,7 @@
         echo "  -a, --all                                     Clean, build, and install all types."
         echo "  -h, --help                                    Show this help message."
         echo "  -z, --initialize                              Initialize the build directories."
+        echo "  -T, --test-all                                Execute tests for all build types."
         exit 0
     }
 
@@ -82,6 +83,15 @@
         echo "Install finished for all builds."
     }
 
+    # Function to execute tests for all builds
+    test_all() {
+        echo "Executing tests for all builds..."
+        execute_tests "debug"
+        execute_tests "release"
+        execute_tests "debug-coverage"
+        echo "Tests executed for all builds."
+    }
+
     # Function to initialize build directories
     initialize() {
         echo "Initializing build directories with install prefix: ${INSTALL_PREFIX}..."
@@ -118,7 +128,8 @@
         echo "13) Execute Tests Debug"
         echo "14) Execute Tests Release"
         echo "15) Execute Tests Debug-Coverage"
-        read -r -p "Enter your choice [1-15]: " choice
+        echo "16) Execute Tests All"
+        read -r -p "Enter your choice [1-16]: " choice
 
         case $choice in
             1) clean_build "debug" ;;
@@ -139,6 +150,7 @@
             13) execute_tests "debug" ;;
             14) execute_tests "release" ;;
             15) execute_tests "debug-coverage" ;;
+            16) test_all ;;
             *)
                 echo "Invalid choice. Exiting."
                 exit 1
@@ -177,6 +189,10 @@
                     ;;
                 -z|--initialize)
                     initialize
+                    shift
+                    ;;
+                -T|--test-all)
+                    test_all
                     shift
                     ;;
                 -h|--help)
