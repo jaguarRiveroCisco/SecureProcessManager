@@ -14,6 +14,7 @@
         echo "  -h, --help                                    Show this help message."
         echo "  -z, --initialize                              Initialize the build directories."
         echo "  -T, --test-all                                Execute tests for all build types."
+        echo "  -d, --debug                                   Debug the ProcessController."
         exit 0
     }
 
@@ -92,17 +93,28 @@
         echo "Tests executed for all builds."
     }
 
-# Function to initialize build directories
-initialize() {
-    echo "Initializing build directories with install prefix: ${INSTALL_PREFIX}..."
-    rm -rf cmake-build-debug
-    rm -rf cmake-build-release
-    rm -rf cmake-build-debug-coverage
-    cmake -S . -B cmake-build-debug -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
-    cmake -S . -B cmake-build-release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release
-    cmake -S . -B cmake-build-debug-coverage -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
-    echo "Initialization finished."
-}
+    # Function to initialize build directories
+    initialize() {
+        echo "Initializing build directories with install prefix: ${INSTALL_PREFIX}..."
+        rm -rf cmake-build-debug
+        rm -rf cmake-build-release
+        rm -rf cmake-build-debug-coverage
+        cmake -S . -B cmake-build-debug -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
+        cmake -S . -B cmake-build-release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release
+        cmake -S . -B cmake-build-debug-coverage -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
+        echo "Initialization finished."
+    }
+
+    # Function to debug the ProcessController
+    debug_build() {
+        echo "Debugging ProcessController..."
+        (
+            cd cmake-build-debug || exit
+            cmake -DCMAKE_BUILD_TYPE=Debug ..
+            make
+            gdb ./ProcessController
+        )
+    }
 
     # Check if build directories exist
     if [ ! -d "cmake-build-debug" ] || [ ! -d "cmake-build-release" ] || [ ! -d "cmake-build-debug-coverage" ]; then
@@ -129,7 +141,8 @@ initialize() {
         echo "14) Execute Tests Release"
         echo "15) Execute Tests Debug-Coverage"
         echo "16) Execute Tests All"
-        read -r -p "Enter your choice [1-16]: " choice
+        echo "17) Debug ProcessController"
+        read -r -p "Enter your choice [1-17]: " choice
 
         case $choice in
             1) clean_build "debug" ;;
@@ -151,6 +164,7 @@ initialize() {
             14) execute_tests "release" ;;
             15) execute_tests "debug-coverage" ;;
             16) test_all ;;
+            17) debug_build ;;
             *)
                 echo "Invalid choice. Exiting."
                 exit 1
@@ -193,6 +207,10 @@ initialize() {
                     ;;
                 -T|--test-all)
                     test_all
+                    shift
+                    ;;
+                -d|--debug)
+                    debug_build
                     shift
                     ;;
                 -h|--help)
