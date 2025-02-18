@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -e # Exit immediately if a command exits with a non-zero status.
+
+
     INSTALL_PREFIX="../install"
 
     # Function to display help information
@@ -57,41 +60,35 @@
         echo "Tests executed for ${build_type} build."
     }
 
-    # Function to clean all builds
-    clean_all() {
-        echo "Cleaning all builds..."
-        clean_build "debug"
-        clean_build "release"
-        clean_build "debug-coverage"
-        echo "Clean finished for all builds."
-    }
+build_types=("debug" "release" "debug-coverage")
 
-    # Function to build all builds
-    build_all() {
-        echo "Building all builds..."
-        compile_build "debug"
-        compile_build "release"
-        compile_build "debug-coverage"
-        echo "Build finished for all builds."
-    }
+clean_all() {
+    for build_type in "${build_types[@]}"; do
+        clean_build "$build_type"
+    done
+    echo "Clean finished for all builds."
+}
 
-    # Function to install all builds
-    install_all() {
-        echo "Installing all builds..."
-        install_build "debug"
-        install_build "release"
-        install_build "debug-coverage"
-        echo "Install finished for all builds."
-    }
+build_all() {
+    for build_type in "${build_types[@]}"; do
+        compile_build "$build_type"
+    done
+    echo "Build finished for all builds."
+}
 
-    # Function to execute tests for all builds
-    test_all() {
-        echo "Executing tests for all builds..."
-        execute_tests "debug"
-        execute_tests "release"
-        execute_tests "debug-coverage"
-        echo "Tests executed for all builds."
-    }
+install_all() {
+    for build_type in "${build_types[@]}"; do
+        install_build "$build_type"
+    done
+    echo "Install finished for all builds."
+}
+
+test_all() {
+    for build_type in "${build_types[@]}"; do
+        execute_tests "$build_type"
+    done
+    echo "Tests executed for all builds."
+}
 
     # Function to initialize build directories
     initialize() {
