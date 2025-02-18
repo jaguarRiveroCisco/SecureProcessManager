@@ -21,13 +21,15 @@ namespace process
 
     void SystemProcess::work()
     {
-        Arguments::populate();
-        std::thread workerThread([&]()
+        if (Arguments::populate())
         {
-            SpawnChild spawnChild(this);
-            spawnChild.launchProcess();
-        });
-        workerThread.detach();
+            std::thread workerThread([&]()
+            {
+                SpawnChild spawnChild(this);
+                spawnChild.launchProcess();
+            });
+            workerThread.detach();
+        }
     }
 
     void SystemProcess::postWork()
@@ -124,32 +126,42 @@ namespace process
         posix_spawnattr_destroy(&attrs);
     }
 
-    void Arguments::populate()
+    bool Arguments::populate()
     {
         if (args.empty())
         {
-            const auto file = ProcessController::configReader().getValue("process_file");
-
-            // Ensure the path is valid and points to a regular file
-            std::filesystem::path path(file);
-            if (!std::filesystem::exists(path)) {
-                throw std::runtime_error("File does not exist: " + file);
-            }
-
-            if (!std::filesystem::is_regular_file(path)) {
-                throw std::runtime_error("Path is not a regular file: " + file);
-            }
-
-            // Extract the file name without the extension
-            fileNameWithoutExt_ = path.stem().string();
-
-            args.push_back(file);
-            auto params = ProcessController::configReader().getConsecutiveParameters();
-            for (const auto& param : params)
+            try
             {
-                args.push_back(param);
+                const auto file = ProcessController::configReader().getValue("process_file");
+
+                // Ensure the path is valid and points to a regular file
+                std::filesystem::path path(file);
+                if (!std::filesystem::exists(path)) {
+                    tools::LoggerManager::getInstance().logError("File does not exist: " + file);
+                    return false;
+                }
+
+                if (!std::filesystem::is_regular_file(path)) {
+                    tools::LoggerManager::getInstance().logError("Path is not a regular file: " + file);
+                    return false;
+                }
+
+                // Extract the file name without the extension
+                fileNameWithoutExt_ = path.stem().string();
+
+                args.push_back(file);
+                auto params = ProcessController::configReader().getConsecutiveParameters();
+                for (const auto& param : params)
+                {
+                    args.push_back(param);
+                }
+            }
+            catch (const std::exception &e)
+            {
+                tools::LoggerManager::getInstance().logException("Exception in populate: " + std::string(e.what()));
             }
         }
+        return true;
     }
 
 } // namespace process
