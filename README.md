@@ -21,6 +21,8 @@ The program can be executed in two modes:
 - Google Test 1.11.0 or higher
 - ASIO 1.30.2 or higher
 
+### Installing Dependencies
+
 ```bash
 #!/bin/bash
 
@@ -30,7 +32,7 @@ sudo apt-get update
 # Install basic tools
 sudo apt-get install -y wget gnupg
 
-# Install CMake (Option A: from Kitware APT repository)
+# Install CMake \(Option A: from Kitware APT repository\)
 sudo rm /etc/apt/trusted.gpg.d/kitware-archive.gpg
 wget -qO - https://apt.kitware.com/keys/kitware-archive-latest.asc | gpg --dearmor -o kitware-archive-keyring.gpg
 sudo mv kitware-archive-keyring.gpg /etc/apt/trusted.gpg.d/
@@ -38,10 +40,6 @@ sudo chmod 644 /etc/apt/trusted.gpg.d/kitware-archive-keyring.gpg
 sudo apt update
 
 sudo apt-get install cmake
-
-# Alternatively, install CMake (Option B: using Snap)
-# sudo apt install snapd
-# sudo snap install cmake --classic
 
 # Install GTest
 sudo apt-get install libgtest-dev
@@ -73,37 +71,26 @@ sudo chown -R root:root /usr/local/include/asio
 sudo chmod -R a+rx /usr/local/include
 
 echo "Installation complete."
-
-
 ```
-#### For d3bugging purposes:
-
-```bash
-cd cmake-build-debug
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-make
-gdb ./ProcessController
-````
-
-### Features
+## Features
 
 - **Dynamic Process Creation**: Spawns and manages multiple child processes.
 - **Threaded Monitoring**: Uses threads to monitor the status of each child process.
 - **IPC and Synchronization**: Ensures smooth communication and synchronization between processes.
 - **Logging**: Logs important events and errors for debugging and monitoring.
 
-### Types of Processes
+## Types of Processes
 
-#### Already Implemented
+### Already Implemented
 
 - **System Processes**: Execute system commands and require a configuration file with the executable path and parameters. No user extension needed, only a configuration file.
 - **Network Processes**: Perform network activities and do not require a configuration file. Currently simulated by the program.
 - **Simulated Processes**: Simulated by the program for testing purposes. Do not require a configuration file.
 - **Real Processes**: Simulate real-life processes that do not finish randomly. They need to be terminated/killed by the user.
 
-#### To Be Extended by the Developer
+### To Be Extended by the Developer
 
-- **Custom Processes**: Created by the user. The user must provide the implementation of the process and, if required, the monitor. See the example below.
+- **Custom Processes**: Created by the user. The user must provide the implementation of the process and, if required, the monitor.
 
 ## Console-driven User Commands
 
@@ -122,10 +109,10 @@ gdb ./ProcessController
 - **`monitor off`**: Turn off monitoring: end monitoring threads.
 - **`help`**: Display the help message with available commands.
 
-##### NOTE: The program will not exit until all processes are terminated.
-##### NOTE: Most command line options can be accessed via the api (see api.h).
+**NOTE**: The program will not exit until all processes are terminated.  
+**NOTE**: Most command line options can be accessed via the API (see `api.h`).
 
-### Command-Line Options
+## Command-Line Options
 
 - **`-n <number of processes>`**:  
   Specify the number of child processes to create. Defaults to 4 if not provided.  
@@ -155,14 +142,13 @@ gdb ./ProcessController
   Display usage information and exit the program.  
   Example: `-h` to show the help message with usage instructions.
 
-### Building the Project
+## Building the Project
 
-To build the project, you can use the provided `build.sh` script to clean and build the project. The script offers several options:
-
+To build the project, you can use the provided `build.sh` script to clean, build, install, test, and debug the project. The script offers several options:
 ```bash
 ./build.sh
 ```
-#### Script Options
+## Script Options
 
 - **Clean Debug**: Clean the debug build.
 - **Clean Release**: Clean the release build.
@@ -174,21 +160,26 @@ To build the project, you can use the provided `build.sh` script to clean and bu
 - **Install Debug**: Install the debug build.
 - **Install Release**: Install the release build.
 - **Install Debug-Coverage**: Install the debug-coverage build.
+- **Execute Tests Debug**: Execute tests for the debug build.
+- **Execute Tests Release**: Execute tests for the release build.
+- **Execute Tests Debug-Coverage**: Execute tests for the debug-coverage build.
+- **Execute Tests All**: Execute tests for all builds.
+- **Debug ProcessController**: Debug the ProcessController.
 
-##### NOTE: To use the script, simply run it and select the desired option from the menu. Alternatively it can be executed by passing the desired option as argument (type ./build.sh -h for help).
+**NOTE**: To use the script, simply run it and select the desired option from the menu. it can be executed by passing the desired option as an argument (type `./build.sh -h` for help).
 
 ## Building the Library and Executables
 
 The project builds a static library and two executables:
 
-- **Library**: `ProcessControllerLib`
-  - Contains common source files used across the application.
+- **Library**: `ProcessControllerLib`  
+  Contains common source files used across the application.
 
-- **Main Executable**: `ProcessController`
-  - The main application executable.
+- **Main Executable**: `ProcessController`  
+  The main application executable.
 
-- **Test Executable**: `ProcessControllerTests`
-  - Contains test cases for various components of the application.
+- **Test Executable**: `ProcessControllerTests`  
+  Contains test cases for various components of the application.
 
 ## Linking Libraries
 
@@ -208,9 +199,14 @@ The project uses the following compiler flags:
 ## Setting C++ Standard
 
 The project is set to use the C++20 standard.
+
 ## Running the Program
 
-Execute the program using the command below. This will run the executable located in the `build` directory:
+Execute the program using the command below. This will run the executable located in the build directory:
+
+```bash
+./ProcessController -t system -n 2 # example
+```
 
 # Creating a Simple Program to Leverage the Library
 
@@ -366,7 +362,7 @@ cmake --build cmake-build-debug --target prog_control -j 6
 
 The configuration file specifies the executable and its parameters, which are used by the \`Arguments\` class to populate the arguments vector. A sample configuration file might look like this:
 ```sh
-process_file=/Users/jrivero/dev/programs/testprogs/lengthy/lengthy_process
+process_file=../lengthy_process
 s=30
 v=1
 #username=admin
