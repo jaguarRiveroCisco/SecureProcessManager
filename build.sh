@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -e # Exit immediately if a command exits with a non-zero status.
+
+
     INSTALL_PREFIX="../install"
 
     # Function to display help information
@@ -13,6 +16,8 @@
         echo "  -a, --all                                     Clean, build, and install all types."
         echo "  -h, --help                                    Show this help message."
         echo "  -z, --initialize                              Initialize the build directories."
+        echo "  -T, --test-all                                Execute tests for all build types."
+        echo "  -d, --debug                                   Debug the ProcessController."
         exit 0
     }
 
@@ -55,32 +60,35 @@
         echo "Tests executed for ${build_type} build."
     }
 
-    # Function to clean all builds
-    clean_all() {
-        echo "Cleaning all builds..."
-        clean_build "debug"
-        clean_build "release"
-        clean_build "debug-coverage"
-        echo "Clean finished for all builds."
-    }
+build_types=("debug" "release" "debug-coverage")
 
-    # Function to build all builds
-    build_all() {
-        echo "Building all builds..."
-        compile_build "debug"
-        compile_build "release"
-        compile_build "debug-coverage"
-        echo "Build finished for all builds."
-    }
+clean_all() {
+    for build_type in "${build_types[@]}"; do
+        clean_build "$build_type"
+    done
+    echo "Clean finished for all builds."
+}
 
-    # Function to install all builds
-    install_all() {
-        echo "Installing all builds..."
-        install_build "debug"
-        install_build "release"
-        install_build "debug-coverage"
-        echo "Install finished for all builds."
-    }
+build_all() {
+    for build_type in "${build_types[@]}"; do
+        compile_build "$build_type"
+    done
+    echo "Build finished for all builds."
+}
+
+install_all() {
+    for build_type in "${build_types[@]}"; do
+        install_build "$build_type"
+    done
+    echo "Install finished for all builds."
+}
+
+test_all() {
+    for build_type in "${build_types[@]}"; do
+        execute_tests "$build_type"
+    done
+    echo "Tests executed for all builds."
+}
 
     # Function to initialize build directories
     initialize() {
@@ -88,10 +96,21 @@
         rm -rf cmake-build-debug
         rm -rf cmake-build-release
         rm -rf cmake-build-debug-coverage
-        cmake -S . -B cmake-build-debug -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
-        cmake -S . -B cmake-build-release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
-        cmake -S . -B cmake-build-debug-coverage -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
+        cmake -S . -B cmake-build-debug -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
+        cmake -S . -B cmake-build-release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release
+        cmake -S . -B cmake-build-debug-coverage -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
         echo "Initialization finished."
+    }
+
+    # Function to debug the ProcessController
+    debug_build() {
+        echo "Debugging ProcessController..."
+        (
+            cd cmake-build-debug || exit
+            cmake -DCMAKE_BUILD_TYPE=Debug ..
+            make
+            gdb ./ProcessController
+        )
     }
 
     # Check if build directories exist
@@ -118,7 +137,9 @@
         echo "13) Execute Tests Debug"
         echo "14) Execute Tests Release"
         echo "15) Execute Tests Debug-Coverage"
-        read -r -p "Enter your choice [1-15]: " choice
+        echo "16) Execute Tests All"
+        echo "17) Debug ProcessController"
+        read -r -p "Enter your choice [1-17]: " choice
 
         case $choice in
             1) clean_build "debug" ;;
@@ -139,6 +160,8 @@
             13) execute_tests "debug" ;;
             14) execute_tests "release" ;;
             15) execute_tests "debug-coverage" ;;
+            16) test_all ;;
+            17) debug_build ;;
             *)
                 echo "Invalid choice. Exiting."
                 exit 1
@@ -177,6 +200,14 @@
                     ;;
                 -z|--initialize)
                     initialize
+                    shift
+                    ;;
+                -T|--test-all)
+                    test_all
+                    shift
+                    ;;
+                -d|--debug)
+                    debug_build
                     shift
                     ;;
                 -h|--help)
