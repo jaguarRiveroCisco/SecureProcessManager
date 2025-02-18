@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Default values
+seconds=30
+verbose=1
+
+# Parse command-line options
+while getopts "s:v:" opt; do
+    case ${opt} in
+        s)
+            seconds=${OPTARG}
+            ;;
+        v)
+            verbose=${OPTARG}
+            ;;
+        *)
+            echo "Usage: $0 -s <number of seconds> -v <0 or 1>"
+            exit 1
+            ;;
+    esac
+done
+
+# Function to display verbose messages
+log_verbose() {
+    if [ "$verbose" -ne 0 ]; then
+        echo "$1"
+    fi
+}
+
+# Main process
+log_verbose "Lengthy process started with PID $$ . Sleeping for $seconds seconds..."
+
+parent_pid=$PPID
+
+for ((i=1; i<=seconds; i++)); do
+    # Check if the parent process is still alive
+    if ! kill -0 $parent_pid 2>/dev/null; then
+        log_verbose "Parent process died. Exiting. PID $$"
+        break
+    fi
+
+    log_verbose "Progress: $i seconds elapsed. PID $$"
+    sleep 1
+done
+
+log_verbose "Lengthy process completed. PID $$"
