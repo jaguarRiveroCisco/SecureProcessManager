@@ -1,20 +1,24 @@
-# Process Management Program
+# Process Management Library and Program
 
 ## Overview
 
-The Process Management Program is a C++ application designed to handle and monitor multiple child processes. It utilizes threading, inter-process communication (IPC), and synchronization to efficiently manage process creation and lifecycle events.
+The Process Management Library and Program is a C++ library along with a C++ application designed to spawn, control and 
+monitor multiple child processes. 
+
+The library leverages threading, inter-process communication (IPC), and synchronization mechanisms to manage process creation and 
+lifecycle events. The code comes with an example program to utilize for library testing and integration.
 
 ## Introduction
 
-This program can spawn and monitor child processes. It supports two types of processes:
-- **System Processes**: Require a configuration/parameters file.
-- **Other Processes**: Do not require a configuration/parameters file.
+This library is capable of spawning and monitoring child processes. It supports two categories of processes:
+- **System Processes**: These processes require a configuration or parameters file to function.
+- **Other Processes**: These processes require to extend the functionality of the base classes.
 
-The program can be executed in two modes:
-- **Console-Driven**: The user interacts with the program via the console.
-- **Library Mode**: The user can integrate the library into another program to manage processes.
+The library and its program can be executed in two distinct modes:
+- **Console-Driven Mode**: Users interact with the library via the ProcessController program directly through the console interface.
+- **Library Mode**: The library can be integrated into other applications, allowing users to manage processes programmatically.
 
-## Requirements
+## Requirements and dependencies
 
 - cmake 3.30 or higher
 - g++ 12.0 or higher
@@ -74,77 +78,80 @@ echo "Installation complete."
 ```
 ## Features
 
-- **Dynamic Process Creation**: Spawns and manages multiple child processes.
-- **Threaded Monitoring**: Uses threads to monitor the status of each child process.
-- **IPC and Synchronization**: Ensures smooth communication and synchronization between processes.
-- **Logging**: Logs important events and errors for debugging and monitoring.
+- **Dynamic Process Creation**: Capable of spawning and managing multiple child processes efficiently.
+- **Threaded Monitoring**: Utilizes threads to continuously monitor the status of each child process.
+- **IPC and Synchronization**: Facilitates smooth communication and synchronization between processes.
+- **Logging**: Records important events and errors to aid in debugging and monitoring.
 
 ## Types of Processes
 
-### Already Implemented
+### Existing Implementations
 
-- **System Processes**: Execute system commands and require a configuration file with the executable path and parameters. No user extension needed, only a configuration file.
-- **Network Processes**: Perform network activities and do not require a configuration file. Currently simulated by the program.
-- **Simulated Processes**: Simulated by the program for testing purposes. Do not require a configuration file.
-- **Real Processes**: Simulate real-life processes that do not finish randomly. They need to be terminated/killed by the user.
+- **System Processes**: These execute predefined system commands and rely on a configuration file to specify the executable path and necessary parameters. Once the configuration file is provided, no further user intervention is required.
 
-### To Be Extended by the Developer
+- **Network Processes**: These engage in network-related activities and are currently simulated by the program, meaning they do not require a configuration file for operation. A sample network process is provided.
 
-- **Custom Processes**: Created by the user. The user must provide the implementation of the process and, if required, the monitor.
+- **Simulated Processes**: These serve as test cases within the program, allowing examination of process management without actual execution. They are completely simulated and do not require a configuration file.
 
-## Console-driven User Commands
+- **Real Processes**: These represent ongoing, real-world operations that do not conclude automatically. These processes must be manually terminated or stopped by the user using the provided interface, or externally, when necessary. Extend from this class for your processes. See below for Custom classes.
 
-- **`context`**: Display the current context.
-- **`quit`**: Signals the program to gracefully quit at the next loop.
-- **`term all`**: Terminate (SIGTERM) all processes and exit the program.
-- **`term <pid>`**: Terminate (SIGTERM) a specific process by PID.
-- **`int all`**: Interrupt (SIGINT) all processes and exit the program.
-- **`int <pid>`**: Interrupt (SIGINT) a specific process by PID.
-- **`kill all`**: Kill all (SIGKILL) processes and exit the program.
-- **`kill <pid>`**: Kill a (SIGKILL) specific process by PID.
-- **`display pids`**: Display all current PIDs.
-- **`respawn on`**: Turn on respawn.
-- **`respawn off`**: Turn off respawn.
-- **`monitor on`**: Turn on monitoring: spawn monitoring threads.
-- **`monitor off`**: Turn off monitoring: end monitoring threads.
-- **`help`**: Display the help message with available commands.
+### Custom Development
+
+- **Custom Processes**: Developers have the flexibility to create custom processes by extending the base functionality (extend from Process class and ProcessMonitor, see example below). This includes implementing specific behavior and, if necessary, integrating a custom monitor to meet unique requirements.
+
+## ProcessController Program Console-Driven User Commands
+
+- **`context`**: Displays the current context of the program.
+- **`quit`**: Gracefully exits the program during the next loop iteration.
+- **`term all`**: Sends a SIGTERM signal to terminate all processes and exits the program.
+- **`term <pid>`**: Sends a SIGTERM signal to terminate a specific process by its PID.
+- **`int all`**: Sends a SIGINT signal to interrupt all processes and exits the program.
+- **`int <pid>`**: Sends a SIGINT signal to interrupt a specific process by its PID.
+- **`kill all`**: Sends a SIGKILL signal to terminate all processes and exits the program.
+- **`kill <pid>`**: Sends a SIGKILL signal to terminate a specific process by its PID.
+- **`display pids`**: Lists all current process IDs.
+- **`respawn on`**: Enables automatic respawning of processes.
+- **`respawn off`**: Disables automatic respawning of processes.
+- **`monitor on`**: Activates monitoring by spawning monitoring threads.
+- **`monitor off`**: Deactivates monitoring by terminating monitoring threads.
+- **`help`**: Shows the help message with a list of available commands.
 
 **NOTE**: The program will not exit until all processes are terminated.  
-**NOTE**: Most command line options can be accessed via the API (see `api.h`).
+**NOTE**: Many command-line options are accessible via the API (see `api.h`) when utilizing the library.
 
-## Command-Line Options
+## ProcessController Program Command-Line Options
 
 - **`-n <number of processes>`**:  
-  Specify the number of child processes to create. Defaults to 4 if not provided.  
+  Defines the number of child processes to create. Defaults to 4 if unspecified.  
   Example: `-n 5` to create 5 child processes.
 
 - **`-t <process type>`**:  
-  Specify the process type ('real', 'network', 'system', or 'simul'). Defaults to 'simul'.  
-  Example: `-t real` to use real processes instead of simulated ones.
+  Specifies the type of process to create ('real', 'network', 'system', or 'simul'). Defaults to 'simul'.  
+  Example: `-t real` to select real processes instead of simulated ones.
 
 - **`-s <respawn>`**:  
-  Enable or disable respawn (0 for off, 1 for on).  
+  Toggles respawn functionality (0 for off, 1 for on).  
   Example: `-s 1` to enable respawn.
 
 - **`-l <logging type>`**:  
-  Specify the logging type ('console' or 'file'). Defaults to 'console'.  
-  Example: `-l file` to log to a file.
+  Sets the logging type ('console' or 'file'). Defaults to 'console'.  
+  Example: `-l file` to output logs to a file.
 
 - **`-T <nap time type>`**:  
-  Specify the nap time type ('MS', 'SEC', 'MIN'). Defaults to 'MS'.  
-  Example: `-T SEC` to set nap time type to seconds.
+  Sets the nap time type ('MS', 'SEC', 'MIN'). Defaults to 'MS'.  
+  Example: `-T SEC` to use seconds as the nap time type.
 
 - **`-c <configuration file path>`**:  
-  Specify the path to the configuration file.  
-  Example: `-c /path/to/config/file` to use the specified configuration file.
+  Specifies the path to the configuration file.  
+  Example: `-c /path/to/config/file` to use the designated configuration file.
 
 - **`-h`**:  
-  Display usage information and exit the program.  
-  Example: `-h` to show the help message with usage instructions.
-
+  Displays usage information and exits the program.  
+  Example: `-h` to view the help message with usage instructions.
 ## Building the Project
 
-To build the project, you can use the provided `build.sh` script to clean, build, install, test, and debug the project. The script offers several options:
+To build the project, you can use the provided `build.sh` script to clean, build, install, test, and debug the project. 
+The script offers several options:
 ```bash
 ./build.sh
 ```
@@ -183,11 +190,13 @@ The project builds a static library and two executables:
 
 ## Linking Libraries
 
-The main executable and test executable link against the `ProcessControllerLib` library. The test executable also links against the Google Test libraries and pthread.
+The main executable and test executable link against the `ProcessControllerLib` library. The test executable also links 
+against the Google Test libraries and pthread.
 
 ## Adding Google Test
 
-Google Test is required for running the tests. Ensure it is installed and available on your system. The CMake configuration will find and include the necessary Google Test directories.
+Google Test is required for running the tests. Ensure it is installed and available on your system. The CMake 
+configuration will find and include the necessary Google Test directories.
 
 ## Compiler Flags
 
@@ -208,25 +217,27 @@ Execute the program using the command below. This will run the executable locate
 ./ProcessController -t system -n 2 # example
 ```
 
-# Creating a Simple Program to Leverage the Library
+# Creating a Simple Program to Leverage the Library (prog_control)
 
-This guide will help you set up a new project that utilizes the `ProcessControllerLib` library.
+This guide provides a walkthrough for setting up a new project, `prog_control`, that leverages the `ProcessControllerLib` library. In this example, you'll learn how to extend the `Process` and `ProcessMonitor` classes to create custom process and monitor implementations. It also shows you how to spawn external processes to monitor, specifically those requiring a configuration file.
+
+Notably, the code for extending these classes is straightforward, demonstrating how easily you can build upon the base classes. By overriding or implementing the necessary methods, you can customize the behavior as needed. Otherwise, due to polymorphism, the derived classes will function like standard `Process` and `ProcessMonitor` classes, ensuring seamless integration and behavior consistency.
 
 ## Prerequisites
 
-0. **Install the Library**: Ensure that the library is installed by executing `build.sh` in the `ProcessController` directory.
-
-## Steps to Set Up the New Project
-
-**Make sure you have executed build.sh in the ProcessController directory to install the library.**
-
-### 1. Create the Directory Structure
+- **Compile the Process Controller Library**: Make sure the library is compiled by running the `build.sh` script in the `ProcessController` directory.
+- **Install the Process Controller Library**: Ensure the library is installed by executing the same `build.sh` script in the `ProcessController` directory.
+- **Create the Sample Program Directory Structure**: Set up the directory structure for the sample program.
+- **Create the Sample Program CMake File**: Create a CMake file for the sample program.
+- **Ensure your include and library paths are consistent with the installation directory**. See the CMake file below.
+### 1. Create the Sample program Directory Structure
 
 ```sh
 mkdir -p ~/dev/programs/testprogs/progcontrol
 cd ~/dev/programs/testprogs/progcontrol
 mkdir src include
 ```
+### Sample program CMake file
 
 ```cmake
 
@@ -235,7 +246,7 @@ project(ProgControl)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# Base directory for installed headers
+# Base directory for installed headers THIS PATH IS IMPORTANT
 set(BASE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../../ProcessController/install/include)
 
 # Include the installed headers
@@ -257,7 +268,7 @@ ${BASE_INCLUDE_DIR}/config
 ${BASE_INCLUDE_DIR}/api
 )
 
-# Link the installed library
+# Link the installed library THIS PATH IS ALSO IMPORTANT
 link_directories(${CMAKE_SOURCE_DIR}/../../ProcessController/install/lib)
 
 # Create an executable
@@ -268,9 +279,10 @@ target_link_libraries(prog_control ProcessControllerLib)
 
 ```
 
-### 2. Create the Main Program File
+### 2. Create the Sample program Main Program File
 
 ```cpp
+// progcontrol.cpp
 #include "api/api.h"
 #include "consolecontroller/console_control.h"
 #include "tools/nap_time.h"
@@ -334,7 +346,7 @@ auto main(int argc, char *argv[]) -> int
 
 ```
 
-### 3. Build the Project
+### 3. Build the Sample Project
 
 ```sh
 
@@ -344,7 +356,7 @@ cmake --build cmake-build-debug --target prog_control -j 6
 
  ```
 
-### 4. Run the Program
+### 4. Run the Sample Program
 
 ```sh
 ./prog_control  -t system -n 1 -c /Users/jrivero/dev/programs/ProcessController/exampleConfigFile.conf
@@ -353,14 +365,14 @@ cmake --build cmake-build-debug --target prog_control -j 6
 ## Examples of command line usage of the sample program
 
 ```sh
- ./ProcessController -t system -n 2
- ./ProcessController -l file
- ./ProcessController -c path/to/ConfigFile.conf -t system -l file
+ ./prog_control -t system -n 2
+ ./prog_control -l file
+ ./prog_control -c path/to/ConfigFile.conf -t system -l file
 
 ```
-### Configuration File
+### System process configuration file
 
-The configuration file specifies the executable and its parameters, which are used by the \`Arguments\` class to populate the arguments vector. A sample configuration file might look like this:
+The system process configuration file specifies the system process executable and its parameters. A sample configuration file might look like this:
 ```sh
 process_file=../lengthy_process
 s=30
@@ -375,7 +387,9 @@ v=1
 #log_level=debug
 ```
 
-## Key Components
+### Appendix
+
+#### Process Controller Key Components
 
 - **API**: Provides the main interface for interacting with the process management system.
 - **Concurrency**: Handles communication and synchronization between processes.
@@ -388,7 +402,7 @@ v=1
 - **ProcessMonitors**: Monitors the status and health of processes.
 - **Tools**: Provides utility functions and classes used throughout the application.
 
-## Project Structure
+#### Project Structure
 
 The project is organized into several directories, each containing specific components of the application:
 
@@ -423,12 +437,10 @@ The project is organized into several directories, each containing specific comp
 
 - **`tests`**: Contains test files for the application.
 
-### Appendix
-
-#### Using the Arguments Class to Manage Process Execution
+#### Using the Arguments Class to Manage System Process Execution
 
 We leverage the \`Arguments\` class to handle the configuration and
-parameterization of the posix_spawn-created processes, making it easier to handle the process' parameters.
+parameterization of the posix_spawn-created processes (system processes) , making it easier to handle the process' parameters.
 
 **Arguments Class:**
 
