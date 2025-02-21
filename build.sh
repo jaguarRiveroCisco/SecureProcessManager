@@ -146,8 +146,8 @@ debug_build() {
 }
 
 # Check if build directories exist
-for build_dir in "cmake-build-debug" "cmake-build-release" "cmake-build-debug-coverage"; do
-    if [ ! -d "$build_dir" ]; then
+for build_dir in "${build_types[@]}"; do
+    if [ ! -d "cmake-build-${build_dir}" ]; then
         echo "Build directories do not exist. Configuring project with CMake..."
         initialize
         break
