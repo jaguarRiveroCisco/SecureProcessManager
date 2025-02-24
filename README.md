@@ -87,7 +87,7 @@ echo "Installation complete."
 
 ### Existing Implementations
 
-- **System Processes**: These execute predefined system commands and rely on a configuration file to specify the executable path and necessary parameters. Once the configuration file is provided, no further user intervention is required.
+- ***System Processes***: (```posix_spawn()```) These execute predefined system commands and rely on a configuration file to specify the executable path and necessary parameters. Once the configuration file is provided, no further user intervention is required.
 
 - **Network Processes**: These engage in network-related activities and are currently simulated by the program, meaning they do not require a configuration file for operation. A sample network process is provided.
 
