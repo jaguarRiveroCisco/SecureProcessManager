@@ -239,36 +239,48 @@ mkdir src include
 ```
 ### Sample program CMake file
 
-```cmake
+Make sure that this sample program is linked against the proper library and includes the necessary headers. The CMake file should look like this:
+(Dont link vs the code coverage build, if needed use:
 
+```cmake
+            # Enable code coverage flags
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+```
+
+
+)
+```cmake
 cmake_minimum_required(VERSION 3.30)
 project(ProgControl)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# Base directory for installed headers THIS PATH IS IMPORTANT
+# Enable code coverage flags if needed
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+
+# Base directory for installed headers
 set(BASE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../../ProcessController/install/include)
 
 # Include the installed headers
 include_directories(
-${BASE_INCLUDE_DIR}
-${BASE_INCLUDE_DIR}/consolecontroller
-${BASE_INCLUDE_DIR}/maincontroller
-${BASE_INCLUDE_DIR}/processcontroller
-${BASE_INCLUDE_DIR}/processmonitors
-${BASE_INCLUDE_DIR}/process
-${BASE_INCLUDE_DIR}/process/networkprocess
-${BASE_INCLUDE_DIR}/process/systemprocess
-${BASE_INCLUDE_DIR}/concurrency
-${BASE_INCLUDE_DIR}/tools
-${BASE_INCLUDE_DIR}/logger
-${BASE_INCLUDE_DIR}/networkprocess
-${BASE_INCLUDE_DIR}/systemprocess
-${BASE_INCLUDE_DIR}/config
-${BASE_INCLUDE_DIR}/api
-)
+        ${BASE_INCLUDE_DIR}
+        ${BASE_INCLUDE_DIR}/consolecontroller
+        ${BASE_INCLUDE_DIR}/maincontroller
+        ${BASE_INCLUDE_DIR}/processcontroller
+        ${BASE_INCLUDE_DIR}/processmonitors
+        ${BASE_INCLUDE_DIR}/process
+        ${BASE_INCLUDE_DIR}/process/networkprocess
+        ${BASE_INCLUDE_DIR}/process/systemprocess
+        ${BASE_INCLUDE_DIR}/concurrency
+        ${BASE_INCLUDE_DIR}/tools
+        ${BASE_INCLUDE_DIR}/logger
+        ${BASE_INCLUDE_DIR}/networkprocess
+        ${BASE_INCLUDE_DIR}/systemprocess
+        ${BASE_INCLUDE_DIR}/config
+        ${BASE_INCLUDE_DIR}/api
+        )
 
-# Link the installed library THIS PATH IS ALSO IMPORTANT
+# Link the installed library
 link_directories(${CMAKE_SOURCE_DIR}/../../ProcessController/install/lib)
 
 # Create an executable
@@ -282,15 +294,11 @@ target_link_libraries(prog_control ProcessControllerLib)
 ### 2. Create the Sample program Main Program File
 
 ```cpp
-// progcontrol.cpp
+
 #include "api/api.h"
-#include "consolecontroller/console_control.h"
-#include "tools/nap_time.h"
-#include <thread>
-#include "consolecontroller/console_loop.h"
 #include "process/process.h"
 #include "processmonitors/process_monitor.h"
-
+#include "consolecontroller/console.h"
 struct CustomMonitor final : process::ProcessMonitor
 {
 };
@@ -343,6 +351,7 @@ auto main(int argc, char *argv[]) -> int
 
     return 0;
 }
+
 
 ```
 
