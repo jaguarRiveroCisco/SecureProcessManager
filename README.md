@@ -296,9 +296,10 @@ target_link_libraries(prog_control ProcessControllerLib)
 ```cpp
 
 #include "api/api.h"
+#include "consolecontroller/console.h"
+
 #include "process/process.h"
 #include "processmonitors/process_monitor.h"
-#include "consolecontroller/console.h"
 struct CustomMonitor final : process::ProcessMonitor
 {
 };
@@ -352,6 +353,27 @@ auto main(int argc, char *argv[]) -> int
     return 0;
 }
 
+
+```
+
+The most important part is the extension of Process and ProcessMonitor, and the initizlization of the controller with the new types.
+
+```cpp
+
+#include "process/process.h"
+#include "processmonitors/process_monitor.h"
+struct CustomMonitor final : process::ProcessMonitor
+{
+};
+
+struct CustomProcess final : process::Process
+{
+
+};
+
+...
+    // Initialize controller with new type and number of processes
+    api::registerHandler<CustomMonitor,CustomProcess>(processType);
 
 ```
 
