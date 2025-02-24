@@ -11,7 +11,7 @@ lifecycle events. The code comes with an example program to utilize for library 
 ## Introduction
 
 This library is capable of spawning and monitoring child processes. It supports two categories of processes:
-- **System Processes**: These processes require a configuration or parameters file to function.
+- **System Processes**: (```posix_spawn() ```) These processes require a configuration or parameters file to function.
 - **Other Processes**: These processes require to extend the functionality of the base classes.
 
 The library and its program can be executed in two distinct modes:
