@@ -9,6 +9,8 @@
 #include "process_status.h"
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sched.h> // For clone
+#include <sys/mman.h> // For mmap
 
 namespace process
 {
@@ -102,32 +104,80 @@ namespace process
         launchChildProcess();
     }
 
+#ifdef __linux__
+    // Child function for clone
+    static int child_func(void *arg)
+    {
+        auto *process = static_cast<IProcess *>(arg);
+        try
+        {
+            process->work();
+        }
+        catch (const std::exception &e)
+        {
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Exception in child process: " << e.what();
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
+            _exit(EXIT_FAILURE); // Use _exit in clone child
+        }
+        _exit(EXIT_SUCCESS); // Ensure exit
+        return 0; // Never reached, but required by clone
+    }
+#endif
+
+    constexpr size_t stack_size = 65536;
+
     void ProcessMonitor::launchChildProcess()
     {
-        pid_ = fork();
-        if (pid_ == 0)
+        try
         {
-            try
+            if (ProcessController::processType() == "clone")
             {
-                process_->work();
+#ifdef __linux__
+                stack_ = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+                                  MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+                if (stack_ == MAP_FAILED)
+                {
+                    perror("mmap");
+                    throw std::runtime_error("[PARENT PROCESS] Failed to allocate stack");
+                }
+                pid_ = clone(child_func, (char *)stack_ + stack_size, CLONE_NEWPID | SIGCHLD, process_.get());
+                if (pid_ == -1)
+                {
+                    perror("clone");
+                    munmap(stack_, stack_size);
+                    throw std::runtime_error("[PARENT PROCESS] Failed to clone process");
+                }
+#endif
             }
-            catch (const std::exception &e)
+            else
             {
-                // Handle exceptions in child process
-                tools::LoggerManager::getInstance() << "[PARENT PROCESS] Exception in child process: " << e.what();
-                tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
-                exit(EXIT_FAILURE); // Ensure child process exits
+                pid_ = fork();
+                if (pid_ == 0)
+                {
+                    process_->work();
+                }
+                else if (pid_ < 0)
+                {
+                    perror("fork");
+                    throw std::runtime_error("[PARENT PROCESS] Failed to fork process");
+                }
             }
         }
-        else if (pid_ < 0)
+        catch (const std::exception &e)
         {
-            // Fork failed
-            perror("fork");
-            throw std::runtime_error("[PARENT PROCESS] Failed to fork process");
-        }
-        else
-        {
+            // Handle exceptions in child process
+            tools::LoggerManager::getInstance() << "[PARENT PROCESS] Exception in child process: " << e.what();
+            tools::LoggerManager::getInstance().flush(tools::LogLevel::EXCEPTION);
+            exit(EXIT_FAILURE); // Ensure child process exits
         }
     }
 
+    ProcessMonitor::~ProcessMonitor()
+    {
+        if (stack_)
+        {
+            munmap(stack_, stack_size); // Match stack_size
+            stack_ = nullptr;
+        }
+    }
 } // namespace process

@@ -12,7 +12,7 @@ namespace process
     {
     public:
         ProcessMonitor()          = default;
-        virtual ~ProcessMonitor() = default;
+        virtual ~ProcessMonitor();
         std::atomic<bool> &monitoring();
         pid_t              getPid() const;
         void               createMonitorProcessThread();
@@ -27,6 +27,7 @@ namespace process
 
         pid_t                     pid_{0};
         std::unique_ptr<IProcess> process_;
+        void* stack_ = nullptr;
 
     private:
         std::atomic<bool> monitor_{false};
