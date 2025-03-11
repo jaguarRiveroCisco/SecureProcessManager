@@ -40,8 +40,9 @@ namespace cli::driver
                         // Set the process type from the argument
                         processType = optarg;
                         if (processType != "real" && processType != "simul" && processType != "network" &&
-                            processType != "system" && processType != "custom") {
-                            cl << "Valid process types are: real, network, system, simul, custom. Defaulting to simul.";
+                            processType != "system" && processType != "custom" && processType != "clone")
+                        {
+                            cl << "Valid process types are: real, network, system, simul, custom, clone. Defaulting to simul.";
                             cl.flush(tools::LogLevel::WARNING);
                             processType = "simul";
                         }
@@ -85,7 +86,7 @@ namespace cli::driver
                            << "\n"
                            << "Usage:\n"
                            << "-n <number of processes> (max " << MAX_PROCESSES << ")\n"
-                           << "-t <process type 'real', 'network', 'system', 'custom' or 'simul' (default)>\n"
+                           << "-t <process type 'real', 'network', 'system', 'custom', 'clone' or 'simul' (default)>\n"
                            << "-s <respawn (0 or 1)>\n"
                            << "-l <logging type 'console' or 'file'>\n"
                            << "-T <nap time type 'MS', 'SEC', 'MIN'>\n"
