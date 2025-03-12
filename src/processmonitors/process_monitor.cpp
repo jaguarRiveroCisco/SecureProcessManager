@@ -153,9 +153,9 @@ namespace process
         return 0;
     }
 
-#endif
-
     constexpr size_t stack_size = 65536;
+
+#endif
 
     void ProcessMonitor::launchChildProcess()
     {
@@ -232,6 +232,7 @@ namespace process
        // Cleanup in destructor
     ProcessMonitor::~ProcessMonitor()
     {
+#ifdef __linux__
         if (stack_)
         {
             munmap(stack_, stack_size);
@@ -242,5 +243,6 @@ namespace process
             munmap(args_, sizeof(ChildArgs));
             args_ = nullptr;
         }
+#endif
     }
 } // namespace process

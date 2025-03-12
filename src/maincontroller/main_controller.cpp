@@ -49,7 +49,7 @@ namespace process
     {
         ProcessController::running() = false;
         ProcessController::terminateAll();
-        usleep(100000);
+        std::this_thread::sleep_for(std::chrono::microseconds(100000));
         ProcessController::killAll();
         cv.notify_all();
     }

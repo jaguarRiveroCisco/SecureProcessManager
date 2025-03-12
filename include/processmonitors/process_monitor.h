@@ -30,8 +30,10 @@ namespace process
 
     private:
         std::atomic<bool> monitor_{false};
+#ifdef __linux__
         void* stack_ = nullptr;
         void* args_ = nullptr;
+#endif
     };
 
 } // namespace process

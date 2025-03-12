@@ -37,25 +37,27 @@ namespace cli::driver
                         }
                         break;
                     case 't':
-                        // Set the process type from the argument
-                        processType = optarg;
-                        const bool isValidProcessType =
-                            (processType == "real" || processType == "simul" || processType == "network" ||
-                             processType == "system" || processType == "custom"
-                        #if defined(__linux__)
-                             || processType == "clone"
-                        #endif
-                            );
-
-                        if (!isValidProcessType)
                         {
-                            cl << "Valid process types are: real, network, system, simul, custom"
-                        #if defined(__linux__)
-                               << ", clone"
-                        #endif
-                               << ". Defaulting to simul.";
-                            cl.flush(tools::LogLevel::WARNING);
-                            processType = "simul";
+                            // Set the process type from the argument
+                            processType = optarg;
+                            const bool isValidProcessType =
+                                (processType == "real" || processType == "simul" || processType == "network" ||
+                                 processType == "system" || processType == "custom"
+                            #if defined(__linux__)
+                                 || processType == "clone"
+                            #endif
+                                );
+
+                            if (!isValidProcessType)
+                            {
+                                cl << "Valid process types are: real, network, system, simul, custom"
+                            #if defined(__linux__)
+                                   << ", clone"
+                            #endif
+                                   << ". Defaulting to simul.";
+                                cl.flush(tools::LogLevel::WARNING);
+                                processType = "simul";
+                            }
                         }
                         break;
                     case 's':
@@ -97,7 +99,12 @@ namespace cli::driver
                            << "\n"
                            << "Usage:\n"
                            << "-n <number of processes> (max " << MAX_PROCESSES << ")\n"
-                           << "-t <process type 'real', 'network', 'system', 'custom', 'clone' or 'simul' (default)>\n"
+                            << "-t <process type 'real', 'network', 'system', 'custom'"
+                            #if defined(__linux__)
+                            << ", 'clone'"
+                            #endif
+                            << " or 'simul' (default)>\n"
+                            << "-s <respawn (0 or 1)>\n"
                            << "-s <respawn (0 or 1)>\n"
                            << "-l <logging type 'console' or 'file'>\n"
                            << "-T <nap time type 'MS', 'SEC', 'MIN'>\n"
