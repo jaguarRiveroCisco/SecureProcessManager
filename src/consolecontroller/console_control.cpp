@@ -39,10 +39,21 @@ namespace cli::driver
                     case 't':
                         // Set the process type from the argument
                         processType = optarg;
-                        if (processType != "real" && processType != "simul" && processType != "network" &&
-                            processType != "system" && processType != "custom" && processType != "clone")
+                        const bool isValidProcessType =
+                            (processType == "real" || processType == "simul" || processType == "network" ||
+                             processType == "system" || processType == "custom"
+                        #if defined(__linux__)
+                             || processType == "clone"
+                        #endif
+                            );
+
+                        if (!isValidProcessType)
                         {
-                            cl << "Valid process types are: real, network, system, simul, custom, clone. Defaulting to simul.";
+                            cl << "Valid process types are: real, network, system, simul, custom"
+                        #if defined(__linux__)
+                               << ", clone"
+                        #endif
+                               << ". Defaulting to simul.";
                             cl.flush(tools::LogLevel::WARNING);
                             processType = "simul";
                         }
