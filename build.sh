@@ -16,7 +16,7 @@ show_help() {
     echo "  -h, --help                                    Show this help message."
     echo "  -z, --initialize                              Initialize the build directories."
     echo "  -T, --test-all                                Execute tests for all build types."
-    echo "  -d, --debug                                   Debug the ProcessController."
+    echo "  -d, --debug                                   Debug the SecureProcessManager."
     exit 0
 }
 
@@ -92,7 +92,7 @@ execute_tests()
     directory_exists "cmake-build-${build_type}"
     (
         cd "cmake-build-${build_type}" || exit
-        ./ProcessControllerTests
+        ./SecureProcessManagerTests
     )
     echo "Tests executed for ${build_type} build."
 }
@@ -144,16 +144,16 @@ initialize()
     echo "Initialization finished."
 }
 
-# Function to debug the ProcessController
+# Function to debug the SecureProcessManager
 debug_build()
 {
-    echo "Debugging ProcessController..."
+    echo "Debugging SecureProcessManager..."
     directory_exists "cmake-build-debug"
     (
         cd "cmake-build-debug" || exit
         cmake -DCMAKE_BUILD_TYPE=Debug ..
         make
-        gdb ./ProcessController
+        gdb ./SecureProcessManager
     )
 }
 
@@ -186,7 +186,7 @@ interactive_mode()
     echo "14) Execute Tests Release"
     echo "15) Execute Tests Debug-Coverage"
     echo "16) Execute Tests All"
-    echo "17) Debug ProcessController"
+    echo "17) Debug SecureProcessManager"
     read -r -p "Enter your choice [1-17]: " choice
 
     case $choice in

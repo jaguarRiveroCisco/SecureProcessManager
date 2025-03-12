@@ -119,7 +119,7 @@ echo "Installation complete."
 **NOTE**: The program will not exit until all processes are terminated.  
 **NOTE**: Many command-line options are accessible via the API (see `api.h`) when utilizing the library.
 
-## ProcessController Program Command-Line Options
+## SecureProcessManager Program Command-Line Options
 
 - **`-n <number of processes>`**:  
   Defines the number of child processes to create. Defaults to 4 if unspecified.  
@@ -171,7 +171,7 @@ The script offers several options:
 - **Execute Tests Release**: Execute tests for the release build.
 - **Execute Tests Debug-Coverage**: Execute tests for the debug-coverage build.
 - **Execute Tests All**: Execute tests for all builds.
-- **Debug ProcessController**: Debug the ProcessController.
+- **Debug SecureProcessManager**: Debug the SecureProcessManager.
 
 **NOTE**: To use the script, simply run it and select the desired option from the menu. it can be executed by passing the desired option as an argument (type `./build.sh -h` for help).
 
@@ -179,18 +179,18 @@ The script offers several options:
 
 The project builds a static library and two executables:
 
-- **Library**: `ProcessControllerLib`  
+- **Library**: `SecureProcessManagerLib`  
   Contains common source files used across the application.
 
-- **Main Executable**: `ProcessController`  
+- **Main Executable**: `SecureProcessManager`  
   The main application executable.
 
-- **Test Executable**: `ProcessControllerTests`  
+- **Test Executable**: `SecureProcessManagerTests`  
   Contains test cases for various components of the application.
 
 ## Linking Libraries
 
-The main executable and test executable link against the `ProcessControllerLib` library. The test executable also links 
+The main executable and test executable link against the `SecureProcessManagerLib` library. The test executable also links 
 against the Google Test libraries and pthread.
 
 ## Adding Google Test
@@ -214,7 +214,7 @@ The project is set to use the C++20 standard.
 Execute the program using the command below. This will run the executable located in the build directory:
 
 ```bash
-./ProcessController -t system -n 2 # example
+./SecureProcessManager -t system -n 2 # example
 ```
 
 # Creating a Simple Program to Leverage the Library (prog_control)
@@ -243,8 +243,8 @@ Make sure that this sample program is linked against the proper library and incl
 (Dont link vs the code coverage build, if needed use:
 
 ```cmake
-            # Enable code coverage flags
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+# Enable code coverage flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
 ```
 
 
@@ -259,7 +259,7 @@ set(CMAKE_CXX_STANDARD 20)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
 
 # Base directory for installed headers
-set(BASE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../../ProcessController/install/include)
+set(BASE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../../SecureProcessManager/install/include)
 
 # Include the installed headers
 include_directories(
@@ -281,13 +281,13 @@ include_directories(
         )
 
 # Link the installed library
-link_directories(${CMAKE_SOURCE_DIR}/../../ProcessController/install/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../../SecureProcessManager/install/lib)
 
 # Create an executable
 add_executable(prog_control src/progcontrol.cpp)
 
 # Link the ProcessControllerLib library
-target_link_libraries(prog_control ProcessControllerLib)
+target_link_libraries(prog_control SecureProcessManagerLib)
 
 ```
 
@@ -390,7 +390,7 @@ cmake --build cmake-build-debug --target prog_control -j 6
 ### 4. Run the Sample Program
 
 ```sh
-./prog_control  -t system -n 1 -c /Users/jrivero/dev/programs/ProcessController/exampleConfigFile.conf
+./prog_control  -t system -n 1 -c /Users/jrivero/dev/programs/SecureProcessManager/exampleConfigFile.conf
 ```
 
 ## Examples of command line usage of the sample program

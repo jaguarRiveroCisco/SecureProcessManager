@@ -21,7 +21,23 @@
     <option name="reloaded" value="true" />
   </component>
   <component name="CMakeRunConfigurationManager">
-    <generated />
+    <generated>
+      <config projectName="SecureProcessManager" targetName="clean-debug" />
+      <config projectName="SecureProcessManager" targetName="clean-all" />
+      <config projectName="SecureProcessManager" targetName="build-debug-coverage" />
+      <config projectName="SecureProcessManager" targetName="build-all" />
+      <config projectName="SecureProcessManager" targetName="install-debug-coverage" />
+      <config projectName="SecureProcessManager" targetName="install-release" />
+      <config projectName="SecureProcessManager" targetName="clean-release" />
+      <config projectName="SecureProcessManager" targetName="build-debug" />
+      <config projectName="SecureProcessManager" targetName="build-release" />
+      <config projectName="SecureProcessManager" targetName="SecureProcessManagerLib" />
+      <config projectName="SecureProcessManager" targetName="SecureProcessManager" />
+      <config projectName="SecureProcessManager" targetName="clean-debug-coverage" />
+      <config projectName="SecureProcessManager" targetName="SecureProcessManagerTests" />
+      <config projectName="SecureProcessManager" targetName="install-debug" />
+      <config projectName="SecureProcessManager" targetName="install-all" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -29,7 +45,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d9579ec1-c80f-42c6-9d70-d7381f9442d8" name="Changes" comment="Rename ProcessController to SecureProcessManager and update related build scripts" />
+    <list default="true" id="d9579ec1-c80f-42c6-9d70-d7381f9442d8" name="Changes" comment="Remove unnecessary blank line in main function for code clarity">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,6 +56,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="PREVIEW_PUSH_PROTECTED_ONLY" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -55,11 +74,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Users/jrivero/Documents/repos/dev/SecureProcessManager/include/processmonitors/process_monitor.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/jrivero/Documents/repos/dev/SecureProcessManager/include/processmonitors/process_monitor.h" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/jrivero/Documents/repos/dev/SecureProcessManager/src/maincontroller/main_controller_createthreads.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/jrivero/Documents/repos/dev/SecureProcessManager/src/processmonitors/process_monitor.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/jrivero/Documents/repos/dev/SecureProcessManager/src/processmonitors/process_monitor.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/jrivero/Documents/repos/dev/SecureProcessManager/src/SecureProcessManager.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -210,7 +225,7 @@
       <workItem from="1741727535223" duration="239000" />
       <workItem from="1741794943023" duration="76000" />
       <workItem from="1741796603865" duration="117000" />
-      <workItem from="1741810856192" duration="1897000" />
+      <workItem from="1741810856192" duration="2467000" />
     </task>
     <task id="LOCAL-00001" summary="Add support for process creation using clone in ProcessMonitor">
       <option name="closed" value="true" />
@@ -236,7 +251,23 @@
       <option name="project" value="LOCAL" />
       <updated>1741812723230</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Rename ProcessController to SecureProcessManager and update related configurations">
+      <option name="closed" value="true" />
+      <created>1741812777975</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741812777975</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Remove unnecessary blank line in main function for code clarity">
+      <option name="closed" value="true" />
+      <created>1741813016065</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1741813016065</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,6 +282,8 @@
     <MESSAGE value="Add support for process creation using clone in ProcessMonitor" />
     <MESSAGE value="Added detection of platform to allow clone types on Linux only" />
     <MESSAGE value="Rename ProcessController to SecureProcessManager and update related build scripts" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rename ProcessController to SecureProcessManager and update related build scripts" />
+    <MESSAGE value="Rename ProcessController to SecureProcessManager and update related configurations" />
+    <MESSAGE value="Remove unnecessary blank line in main function for code clarity" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove unnecessary blank line in main function for code clarity" />
   </component>
 </project>
