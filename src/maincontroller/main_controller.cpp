@@ -48,6 +48,9 @@ namespace process
     void MainController::stop()
     {
         ProcessController::running() = false;
+        ProcessController::terminateAll();
+        usleep(100000);
+        ProcessController::killAll();
         cv.notify_all();
     }
 

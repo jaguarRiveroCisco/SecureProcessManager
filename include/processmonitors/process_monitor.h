@@ -31,6 +31,7 @@ namespace process
     private:
         std::atomic<bool> monitor_{false};
         void* stack_ = nullptr;
+        void* args_ = nullptr;
     };
 
 } // namespace process

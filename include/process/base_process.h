@@ -18,6 +18,7 @@ namespace process
         static std::atomic<bool> &continueFlag();
         static std::atomic<int>  &exitCode();
         pid_t getPid() const override { return pid_; }
+        void setPid(pid_t pid) override { pid_ = pid;}
     protected:
         pid_t pid_{0};
         ~BaseProcess() override = default;

@@ -18,7 +18,7 @@ namespace process
                 "[PROCESS FINISHED]  | Lifetime: " + timeManager_.getFormattedElapsedTimeStr() + " | " + reason_);
     }
 
-    void BaseProcess::preWork(pid_t pid)
+    void BaseProcess::preWork(const pid_t pid)
     {
         pid_ = pid;
         
