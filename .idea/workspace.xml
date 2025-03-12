@@ -29,15 +29,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d9579ec1-c80f-42c6-9d70-d7381f9442d8" name="Changes" comment="Added detection of platform to allow clone types on Linux only">
-      <change beforePath="$PROJECT_DIR$/.ps" beforeDir="false" afterPath="$PROJECT_DIR$/.ps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake/gtest_config.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake/gtest_config.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake/install_rules.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake/install_rules.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/k" beforeDir="false" afterPath="$PROJECT_DIR$/k" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ProcessController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/SecureProcessManager.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="d9579ec1-c80f-42c6-9d70-d7381f9442d8" name="Changes" comment="Rename ProcessController to SecureProcessManager and update related build scripts" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -106,12 +98,105 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="CMake Application.SecureProcessManager">
+    <configuration name="SecureProcessManagerTests" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="SecureProcessManagerTests" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SecureProcessManager" RUN_TARGET_NAME="SecureProcessManagerTests" TEST_MODE="SUITE_TEST">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="BeforeTestRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SecureProcessManager" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="SecureProcessManager" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SecureProcessManager" RUN_TARGET_NAME="SecureProcessManager">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SecureProcessManagerLib" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="SecureProcessManagerLib" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="build-all" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="build-all" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="build-debug-coverage" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="build-debug-coverage" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="build-debug" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="build-debug" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="build-release" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="build-release" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="clean-all" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="clean-all" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="clean-debug-coverage" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="clean-debug-coverage" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="clean-debug" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="clean-debug" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="clean-release" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="clean-release" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="install-all" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="install-all" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="install-debug-coverage" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="install-debug-coverage" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="install-debug" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="install-debug" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="install-release" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SecureProcessManager" TARGET_NAME="install-release" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.SecureProcessManager" />
+      <item itemvalue="CMake Application.SecureProcessManagerLib" />
+      <item itemvalue="CMake Application.build-all" />
+      <item itemvalue="CMake Application.build-debug" />
+      <item itemvalue="CMake Application.build-debug-coverage" />
+      <item itemvalue="CMake Application.build-release" />
+      <item itemvalue="CMake Application.clean-all" />
+      <item itemvalue="CMake Application.clean-debug" />
+      <item itemvalue="CMake Application.clean-debug-coverage" />
+      <item itemvalue="CMake Application.clean-release" />
+      <item itemvalue="CMake Application.install-all" />
+      <item itemvalue="CMake Application.install-debug" />
+      <item itemvalue="CMake Application.install-debug-coverage" />
+      <item itemvalue="CMake Application.install-release" />
+      <item itemvalue="Google Test.SecureProcessManagerTests" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -125,7 +210,7 @@
       <workItem from="1741727535223" duration="239000" />
       <workItem from="1741794943023" duration="76000" />
       <workItem from="1741796603865" duration="117000" />
-      <workItem from="1741810856192" duration="1607000" />
+      <workItem from="1741810856192" duration="1897000" />
     </task>
     <task id="LOCAL-00001" summary="Add support for process creation using clone in ProcessMonitor">
       <option name="closed" value="true" />
@@ -143,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741811454795</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Rename ProcessController to SecureProcessManager and update related build scripts">
+      <option name="closed" value="true" />
+      <created>1741812723230</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741812723230</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,6 +250,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add support for process creation using clone in ProcessMonitor" />
     <MESSAGE value="Added detection of platform to allow clone types on Linux only" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added detection of platform to allow clone types on Linux only" />
+    <MESSAGE value="Rename ProcessController to SecureProcessManager and update related build scripts" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rename ProcessController to SecureProcessManager and update related build scripts" />
   </component>
 </project>
