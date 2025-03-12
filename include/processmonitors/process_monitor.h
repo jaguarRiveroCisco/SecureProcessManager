@@ -13,15 +13,15 @@ namespace process
     public:
         ProcessMonitor()          = default;
         virtual ~ProcessMonitor();
-        std::atomic<bool> &monitoring();
-        pid_t              getPid() const;
-        void               createMonitorProcessThread();
-        void               collectAndLaunch(std::unique_ptr<IProcess> process);
-        virtual void       launchChildProcess();
-        void               terminateProcess() const;
-        void               killProcess() const;
-        void               intProcess() const;
-        void               monitorProcessThread();
+        std::atomic<bool>   &monitoring();
+        [[nodiscard]] pid_t getPid() const;
+        void                createMonitorProcessThread();
+        void                collectAndLaunch(std::unique_ptr<IProcess> process);
+        virtual void        launchChildProcess();
+        void                terminateProcess() const;
+        void                killProcess() const;
+        void                intProcess() const;
+        void                monitorProcessThread();
 
     protected:
 
