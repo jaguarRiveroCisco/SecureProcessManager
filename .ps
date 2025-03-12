@@ -14,7 +14,7 @@ current_pid=$$
 
 while true; do
   # Capture the output excluding the script and its process
-  current_output=$(ps -ax -o ppid,pid,comm,args | egrep "$process_name|lengthy_process|prog_control" | egrep -v "grep|homebrew|tail" | grep -v "$current_pid" | grep -v "$0")
+  current_output=$(ps -ax -o ppid,pid,comm,args | egrep "$process_name|lengthy_process|prog_control" | egrep -v "JetBrains|grep|homebrew|tail" | grep -v "$current_pid" | grep -v "$0")
   
   # Count the number of non-empty lines in current_output
   line_count=$(echo "$current_output" | grep -c '[^[:space:]]')

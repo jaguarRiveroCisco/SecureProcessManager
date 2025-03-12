@@ -29,7 +29,7 @@ namespace process
         registerHandler<ProcessMonitor, ProcessSimulator>("simul");
         registerHandler<ProcessMonitor, NetworkProcess>("network");
         registerHandler<SystemMonitor, SystemProcess>("system");
-        registerHandler<ProcessMonitor, Process>("clone");
+        registerHandler<ProcessMonitor, ProcessSimulator>("clone");
     }
 
     void MainController::restoreHandlerCount()
