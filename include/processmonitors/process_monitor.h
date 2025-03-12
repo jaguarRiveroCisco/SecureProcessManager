@@ -12,16 +12,16 @@ namespace process
     {
     public:
         ProcessMonitor()          = default;
-        virtual ~ProcessMonitor() = default;
-        std::atomic<bool> &monitoring();
-        pid_t              getPid() const;
-        void               createMonitorProcessThread();
-        void               collectAndLaunch(std::unique_ptr<IProcess> process);
-        virtual void       launchChildProcess();
-        void               terminateProcess() const;
-        void               killProcess() const;
-        void               intProcess() const;
-        void               monitorProcessThread();
+        virtual ~ProcessMonitor();
+        std::atomic<bool>   &monitoring();
+        [[nodiscard]] pid_t getPid() const;
+        void                createMonitorProcessThread();
+        void                collectAndLaunch(std::unique_ptr<IProcess> process);
+        virtual void        launchChildProcess();
+        void                terminateProcess() const;
+        void                killProcess() const;
+        void                intProcess() const;
+        void                monitorProcessThread();
 
     protected:
 
@@ -30,6 +30,10 @@ namespace process
 
     private:
         std::atomic<bool> monitor_{false};
+#ifdef __linux__
+        void* stack_ = nullptr;
+        void* args_ = nullptr;
+#endif
     };
 
 } // namespace process

@@ -8,7 +8,14 @@ namespace process
 {
     void Process::work()
     {
-        preWork(getpid());  
+        if ( 1 == getpid())
+        {
+            // we have been cloned with CLONE_NEWPID flag so we think we are PID == 1
+            // At this point we should have pid_ set to the real pid
+            preWork(pid_);
+        }
+        else
+            preWork(getpid());
 
         // Add real process work code here
         while (continue_)

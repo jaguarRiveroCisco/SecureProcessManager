@@ -9,7 +9,7 @@ endif()
 include_directories(${GTEST_INCLUDE_DIRS})
 
 # Test executable
-add_executable(ProcessControllerTests
+add_executable(SecureProcessManagerTests
     tests/test_main.cpp
     tests/test_logger.cpp
     tests/tests_maincontroller.cpp
@@ -20,4 +20,4 @@ add_executable(ProcessControllerTests
 )
 
 # Link the library to the test executable
-target_link_libraries(ProcessControllerTests ProcessControllerLib ${GTEST_LIBRARIES} pthread)
+target_link_libraries(SecureProcessManagerTests SecureProcessManagerLib ${GTEST_LIBRARIES} pthread)

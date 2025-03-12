@@ -6,7 +6,7 @@ endif()
 message(STATUS "Install Prefix: ${CMAKE_INSTALL_PREFIX}")
 
 # Installation rules
-install(TARGETS ProcessController ProcessControllerLib
+install(TARGETS SecureProcessManager SecureProcessManagerLib
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib

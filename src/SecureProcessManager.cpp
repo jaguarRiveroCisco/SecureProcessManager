@@ -4,6 +4,7 @@
 #include "nap_time.h"
 #include <thread>
 #include "console_loop.h"
+
 void displayCompilationInfo(const char *appName)
 {
     std::cout << "*******************************************" << std::endl;
@@ -16,7 +17,6 @@ void displayCompilationInfo(const char *appName)
 
 auto main(int argc, char *argv[]) -> int
 {
-
     displayCompilationInfo(argv[0]);
 
     int         numProcesses = 4;

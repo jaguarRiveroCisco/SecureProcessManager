@@ -48,6 +48,9 @@ namespace process
     void MainController::stop()
     {
         ProcessController::running() = false;
+        ProcessController::terminateAll();
+        std::this_thread::sleep_for(std::chrono::microseconds(100000));
+        ProcessController::killAll();
         cv.notify_all();
     }
 

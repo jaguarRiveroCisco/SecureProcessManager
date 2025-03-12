@@ -16,17 +16,19 @@ show_help() {
     echo "  -h, --help                                    Show this help message."
     echo "  -z, --initialize                              Initialize the build directories."
     echo "  -T, --test-all                                Execute tests for all build types."
-    echo "  -d, --debug                                   Debug the ProcessController."
+    echo "  -d, --debug                                   Debug the SecureProcessManager."
     exit 0
 }
 
 # Function to check if a command exists
-command_exists() {
+command_exists()
+{
     command -v "$1" >/dev/null 2>&1
 }
 
 # Function to check if a directory exists
-directory_exists() {
+directory_exists()
+{
     if [ ! -d "$1" ]; then
         echo "Error: Directory $1 does not exist." >&2
         exit 1
@@ -49,7 +51,8 @@ if [ "${IS_MACOS}" = FALSE ]; then
 fi
 
 # Function to clean the build
-clean_build() {
+clean_build()
+{
     local build_type=$1
     echo "Cleaning ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
@@ -58,7 +61,8 @@ clean_build() {
 }
 
 # Function to compile the build
-compile_build() {
+compile_build()
+{
     local build_type=$1
     echo "Building ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
@@ -67,7 +71,8 @@ compile_build() {
 }
 
 # Function to install the build
-install_build() {
+install_build()
+{
     local build_type=$1
     echo "Installing ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
@@ -80,41 +85,46 @@ install_build() {
 }
 
 # Function to execute tests
-execute_tests() {
+execute_tests()
+{
     local build_type=$1
     echo "Executing tests for ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
     (
         cd "cmake-build-${build_type}" || exit
-        ./ProcessControllerTests
+        ./SecureProcessManagerTests
     )
     echo "Tests executed for ${build_type} build."
 }
 
 build_types=("debug" "release" "debug-coverage")
 
-clean_all() {
+clean_all()
+{
     for build_type in "${build_types[@]}"; do
         clean_build "$build_type"
     done
     echo "Clean finished for all builds."
 }
 
-build_all() {
+build_all()
+{
     for build_type in "${build_types[@]}"; do
         compile_build "$build_type"
     done
     echo "Build finished for all builds."
 }
 
-install_all() {
+install_all()
+{
     for build_type in "${build_types[@]}"; do
         install_build "$build_type"
     done
     echo "Install finished for all builds."
 }
 
-test_all() {
+test_all()
+{
     for build_type in "${build_types[@]}"; do
         execute_tests "$build_type"
     done
@@ -122,7 +132,8 @@ test_all() {
 }
 
 # Function to initialize build directories
-initialize() {
+initialize()
+{
     echo "Initializing build directories with install prefix: ${INSTALL_PREFIX}..."
     rm -rf cmake-build-debug
     rm -rf cmake-build-release
@@ -133,15 +144,16 @@ initialize() {
     echo "Initialization finished."
 }
 
-# Function to debug the ProcessController
-debug_build() {
-    echo "Debugging ProcessController..."
+# Function to debug the SecureProcessManager
+debug_build()
+{
+    echo "Debugging SecureProcessManager..."
     directory_exists "cmake-build-debug"
     (
         cd "cmake-build-debug" || exit
         cmake -DCMAKE_BUILD_TYPE=Debug ..
         make
-        gdb ./ProcessController
+        gdb ./SecureProcessManager
     )
 }
 
@@ -155,7 +167,8 @@ for build_dir in "${build_types[@]}"; do
 done
 
 # Function to enter interactive mode
-interactive_mode() {
+interactive_mode()
+{
     echo "Select an option:"
     echo "1) Clean Debug"
     echo "2) Clean Release"
@@ -173,7 +186,7 @@ interactive_mode() {
     echo "14) Execute Tests Release"
     echo "15) Execute Tests Debug-Coverage"
     echo "16) Execute Tests All"
-    echo "17) Debug ProcessController"
+    echo "17) Debug SecureProcessManager"
     read -r -p "Enter your choice [1-17]: " choice
 
     case $choice in
