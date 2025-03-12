@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -e # Exit immediately if a command exits with a non-zero status.
+set -e
 
-INSTALL_PREFIX="../install"
+BASE_INSTALL_PREFIX="../install"
 
 # Function to display help information
 show_help() {
@@ -21,14 +21,12 @@ show_help() {
 }
 
 # Function to check if a command exists
-command_exists()
-{
+command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
 # Function to check if a directory exists
-directory_exists()
-{
+directory_exists() {
     if [ ! -d "$1" ]; then
         echo "Error: Directory $1 does not exist." >&2
         exit 1
@@ -50,9 +48,14 @@ if [ "${IS_MACOS}" = FALSE ]; then
     fi
 fi
 
+# Function to get the install prefix for a build type
+get_install_prefix() {
+    local build_type=$1
+    echo "${BASE_INSTALL_PREFIX}/${build_type}"
+}
+
 # Function to clean the build
-clean_build()
-{
+clean_build() {
     local build_type=$1
     echo "Cleaning ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
@@ -61,8 +64,7 @@ clean_build()
 }
 
 # Function to compile the build
-compile_build()
-{
+compile_build() {
     local build_type=$1
     echo "Building ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
@@ -71,22 +73,22 @@ compile_build()
 }
 
 # Function to install the build
-install_build()
-{
+install_build() {
     local build_type=$1
+    local install_prefix
+    install_prefix=$(get_install_prefix "$build_type")
     echo "Installing ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
     (
         cd "cmake-build-${build_type}" || exit
-        cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" ..
+        cmake -DCMAKE_INSTALL_PREFIX="${install_prefix}" ..
         cmake --build . --target install -j 6
     )
-    echo "Install finished for ${build_type} build."
+    echo "Install finished for ${build_type} build at ${install_prefix}."
 }
 
 # Function to execute tests
-execute_tests()
-{
+execute_tests() {
     local build_type=$1
     echo "Executing tests for ${build_type} build..."
     directory_exists "cmake-build-${build_type}"
@@ -99,32 +101,28 @@ execute_tests()
 
 build_types=("debug" "release" "debug-coverage")
 
-clean_all()
-{
+clean_all() {
     for build_type in "${build_types[@]}"; do
         clean_build "$build_type"
     done
     echo "Clean finished for all builds."
 }
 
-build_all()
-{
+build_all() {
     for build_type in "${build_types[@]}"; do
         compile_build "$build_type"
     done
     echo "Build finished for all builds."
 }
 
-install_all()
-{
+install_all() {
     for build_type in "${build_types[@]}"; do
         install_build "$build_type"
     done
     echo "Install finished for all builds."
 }
 
-test_all()
-{
+test_all() {
     for build_type in "${build_types[@]}"; do
         execute_tests "$build_type"
     done
@@ -132,21 +130,17 @@ test_all()
 }
 
 # Function to initialize build directories
-initialize()
-{
-    echo "Initializing build directories with install prefix: ${INSTALL_PREFIX}..."
-    rm -rf cmake-build-debug
-    rm -rf cmake-build-release
-    rm -rf cmake-build-debug-coverage
-    cmake -S . -B cmake-build-debug -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
-    cmake -S . -B cmake-build-release -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release
-    cmake -S . -B cmake-build-debug-coverage -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Debug
+initialize() {
+    echo "Initializing build directories with install prefix base: ${BASE_INSTALL_PREFIX}..."
+    for build_type in "${build_types[@]}"; do
+        rm -rf "cmake-build-${build_type}"
+        cmake -S . -B "cmake-build-${build_type}" -DCMAKE_INSTALL_PREFIX="$(get_install_prefix "$build_type")" -DCMAKE_BUILD_TYPE=$(echo "$build_type" | tr '-' '_')
+    done
     echo "Initialization finished."
 }
 
 # Function to debug the SecureProcessManager
-debug_build()
-{
+debug_build() {
     echo "Debugging SecureProcessManager..."
     directory_exists "cmake-build-debug"
     (
@@ -167,8 +161,7 @@ for build_dir in "${build_types[@]}"; do
 done
 
 # Function to enter interactive mode
-interactive_mode()
-{
+interactive_mode() {
     echo "Select an option:"
     echo "1) Clean Debug"
     echo "2) Clean Release"
